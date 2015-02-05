@@ -1,0 +1,15 @@
+body {
+  min-height: 2000px;
+  padding-top: 70px; }
+  body .top-buffer-10 {
+    margin-top: 10px; }
+  body .top-buffer-20 {
+    margin-top: 20px; }
+  body .ta-noresize {
+    resize: none; }
+  body .ta-height-md {
+    height: 100px; }
+  body .ta-height-lg {
+    height: 150px; }
+  body .vendor-contact-form .form-group {
+    margin-top: 10px; }

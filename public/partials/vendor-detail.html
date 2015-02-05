@@ -1,0 +1,131 @@
+<div class="row top-buffer-20">
+
+    <!-- vendor details -->
+
+    <div class="col-md-8">
+        <form name="form" novalidate>
+            <!-- details panel -->
+            <div class="panel panel-primary">
+                <div class="panel-heading">Vendor Details</div>
+                <div class="panel-body">
+
+
+                    <div class="row">
+
+                        <!-- vendor name-->
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="company_name">Company Name</label>
+                                <input type="text" class="form-control" ng-model="vendor.company_name" required>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="row">
+
+                        <!-- billing address -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="company_name">Billing Address</label>
+                                <textarea class="form-control ta-noresize ta-height-md" ng-model="vendor.bill_address"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- shipping address-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="company_name">Shipping Address</label>
+                                <textarea type="text" class="form-control ta-noresize ta-height-md" ng-model="vendor.ship_address"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+
+                        <!-- phone number -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="company_name">Phone</label>
+                                <input type="text" class="form-control" ng-model="vendor.phone">
+                            </div>
+                        </div>
+
+                        <!-- fax -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="company_name">Fax</label>
+                                <input type="text" class="form-control" ng-model="vendor.fax">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- notes -->
+                    <div class="row">
+                        <div class=" col-md-12">
+                            <div class="form-group">
+                                <label for="company_name">Notes</label>
+                                <textarea class="form-control ta-noresize ta-height-lg" ng-model="vendor.notes"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- buttons -->
+                    <div class="row ">
+                        <div class=" col-md-6">
+                            <button ng-click="deleteVendor()" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+                        </div>
+                        <div class=" col-md-6 text-right">
+                            <span class="label label-danger" ng-show="form.$invalid"> Company name is required.</span>&nbsp;
+                            <a href="#/vendors" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Cancel</a>
+                            <button ng-click="updateVendor()" class="btn btn-default" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-ok"></span> Save</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- vendor contact list -->
+    <div class="col-md-4">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">Vendor Contacts</div>
+            <div class="panel-body">
+
+                <div class="list-group top-buffer">
+                    <div class="list-group-item"  ng-repeat="contact in vendorContacts">
+                        <strong>{{contact.first_name}} {{contact.last_name}}</strong>
+                        <br/>
+                        <span class="glyphicon glyphicon-earphone"></span>&nbsp;&nbsp;&nbsp;{{contact.phone }}
+                        <br/>
+                        <span class="glyphicon glyphicon-envelope"></span>&nbsp;&nbsp;&nbsp;<a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+                        <br/>
+                        <div class="btn-group pull-right top-buffer-10">
+                            <button class="btn btn-sm btn-default" ng-click="editVendorContact( contact );"> <span class="glyphicon glyphicon-edit"></span></button>
+                            <button class="btn btn-sm btn-default" ng-click="deleteVendorContact( contact );"> <span class="glyphicon glyphicon-trash"></span></button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="pull-right">
+                    <button title="Add Contact" class="btn btn-default" ng-click="addVendorContact()"><span class="glyphicon glyphicon-plus"></span> Add Contact</button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+

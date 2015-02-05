@@ -1,0 +1,61 @@
+<div class="panel panel-primary">
+    <div class="panel-heading"><span class="glyphicon glyphicon-user"></span> {{ dialogTitle }}</div>
+    <div class="panel-body">
+        <form name="form" class="form-horizontal vendor-contact-form">
+
+            <div class="form-group">
+                <label for="first_name" class="control-label col-xs-3">First</label>
+                <div class="col-xs-9">
+                    <input type="text" class="form-control" ng-model="contactCopy.first_name" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="last_name" class="control-label col-xs-3">Last</label>
+                <div class="col-xs-9">
+                    <input type="text" class="form-control" ng-model="contactCopy.last_name">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone" class="control-label col-xs-3">Phone</label>
+                <div class="col-xs-9">
+                    <input type="text" class="form-control" ng-model="contactCopy.phone">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="fax" class="control-label col-xs-3">Fax</label>
+                <div class="col-xs-9">
+                    <input type="text" class="form-control" ng-model="contactCopy.fax">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="control-label col-xs-3">Email</label>
+                <div class="col-xs-9">
+                    <input type="email" class="form-control" ng-model="contactCopy.email">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="notes" class="control-label col-xs-3">Notes</label>
+                <div class="col-xs-9">
+                    <textarea class="form-control ta-noresize ta-height-lg" ng-model="contactCopy.notes"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group pull-right">
+                <div class="col-xs-12">
+                    <button type="button" ng-click="closeThisDialog()" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                    <button type="submit" ng-click="confirm()" class="btn btn-primary" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-ok"></span> Save</button>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+
+        </form>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+

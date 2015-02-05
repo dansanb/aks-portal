@@ -1,0 +1,61 @@
+<div class="row top-buffer-20">
+
+    <!-- vendor details -->
+
+    <div class="col-md-12">
+        <form name="form" novalidate>
+            <!-- details panel -->
+            <div class="panel panel-primary">
+                <div class="panel-heading">Basic User Details</div>
+                <div class="panel-body">
+
+                    <!-- display name name-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="company_name">Display Name</label>
+                                <input type="text" class="form-control" ng-model="user.display_name" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- user name -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="company_name">User Name</label>
+                                <input type="text" class="form-control" ng-model="user.username" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- emai address-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="company_name">Email Address</label>
+                                <input type="text" class="form-control" ng-model="user.email" required>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- buttons -->
+
+                    <div class="row ">
+                        <div class=" col-md-6">
+                            <!-- space holder -->
+                        </div>
+                        <div class=" col-md-6 text-right">
+                            <span class="label label-danger" ng-show="form.$invalid">There are required fields which are empty.</span>&nbsp;
+                            <a href="#/customers" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Cancel</a>
+                            <button ng-click="updateCustomer()" class="btn btn-default" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-ok"></span> Save</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
