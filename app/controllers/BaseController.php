@@ -29,4 +29,19 @@ class BaseController extends Controller {
             ));
     }
 
+
+    /**
+     * @param   string   $message   simple message as to why the response failed.
+     * @return mixed                returns response object
+     */
+    protected function failedResponse($message)
+    {
+        // return success response
+        return Response::json(
+            array(
+                'success' => false,
+                'data' => $message
+            ));
+    }
+
 }

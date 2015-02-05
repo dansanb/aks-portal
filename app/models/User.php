@@ -17,11 +17,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	protected $table = 'users';
 
 	/**
-	 * List fields that are fillable during store / update operations
+	 * List fields that are mass-fillable during store / update operations
 	 *
 	 * @var array
      */
-	protected $fillable = array('email', 'password', 'display_name');
+	protected $fillable = array('email', 'display_name');
 
 
 	/**

@@ -11,7 +11,7 @@ class UserValidator extends APIValidator {
      * @var array
      */
     protected $rules = [
-        'password'  => 'required|min:8',
+        'display_name'  => 'required',
         'email'     => 'required|email'
     ];
 }

@@ -40,8 +40,8 @@ class UsersController extends \BaseController {
         $user = new User($data);
         $user->save();
 
-        // return id of newly created record
-        return $this->successfulResponse( array('id' => $user->id) );
+        // return newly created record
+        return $this->successfulResponse($user);
 	}
 
 	/**
@@ -54,12 +54,13 @@ class UsersController extends \BaseController {
 	public function show($id)
 	{
         $user = User::findOrFail($id);
+
         return $this->successfulResponse($user);
 	}
 
 
 	/**
-	 * Update the specified user in storage.
+	 * Update the specified user in storage
 	 *
 	 * @param  int  $id - id of the user to be updated
 	 * @return string json response containing 'success' to notify if user was updated (true/false).
@@ -67,19 +68,51 @@ class UsersController extends \BaseController {
 	public function update($id)
 	{
 
+        $data = Input::json()->all();
+        $user = User::findOrFail($id);
+
+        // validate all non-password fields
+        $this->validator->validate($data);
+
+        // keep password fields, remove them from
+        // the data array, and fill all non-password fields
+        $oldPassword = $data['old_password'];
+        $newPassword = $data['new_password'];
+        $confirmPassword = $data['confirm_password'];
+
+        unset($data['old_password']);
+        unset($data['new_password']);
+        unset($data['confirm_password']);
+
+        $user->fill($data);
+
+        // check if user wants to change password, and
+        if (empty($oldPassword)) {
+            // oldPassword is empty, user did not want to change password
+            $user->save();
+            return $this->successfulResponse($user);
+
+        }
+
+        // user wants to change password - check if passwords match
+        if (Hash::check($oldPassword, $user->password)) {
+            // old passwords match, check if new password and password confirmation match
+            if ($newPassword === $confirmPassword) {
+                $user->password = Hash::make($newPassword);
+                $user->save();
+                return $this->successfulResponse($user);
+            }
+            else {
+                return $this->failedResponse('The new passwords do not match.');
+            }
+        }
+        else {
+            return $this->failedResponse('The password provided is not the current password.');
+        }
+
 	}
 
-	/**
-	 * Remove the specified user from storage.
-	 *
-	 * @param  int  $id
-	 * @return string json response containing 'success' to notify if user was deleted (true/false).
-	 */
-	public function destroy($id)
-	{
 
-
-	}
 
     /*
      * Attempt to log user in. Returns a json response object with variable 'success'.
@@ -90,33 +123,35 @@ class UsersController extends \BaseController {
      */
     public function login()
     {
-        $username = Input::get('username');
+        $email = Input::get('email');
         $password = Input::get('password');
 
         // try to login user
-        if (Auth::attempt(array('username' => $username, 'password' => $password), true))
-        {
+        if (Auth::attempt(array('email' => $email, 'password' => $password), true)) {
+
+            // if successful, return user id and display name
             $user = array(
                 'id' => Auth::user()->id,
-                'username' => Auth::user()->username);
+                'display_name' => Auth::user()->display_name);
 
             return $this->successfulResponse($user);
         }
-        else
-        {
+        else {
             // return failure response
-            return Response::json(array('success' => false, 'errors' => 'Username or password is incorrect.'));
+            return $this->failedResponse('Could not validate your credentials');
         }
     }
 
     /*
      * Logs the user out
      *
+     * @return string json response
      */
     public function logout()
     {
         Auth::logout();
-        Log::info('user has been logged out!');
+
+        return $this->successfulResponse();
     }
 
 }

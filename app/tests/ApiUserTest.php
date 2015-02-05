@@ -60,8 +60,9 @@ class ApiUserTest extends TestCase {
     public function create_user()
     {
         $json = '{
-                "email":"email@address.com",
-                "password":"let-me-in"
+                "email":"foo@bar.com",
+                "display_name":"Foo_Bar",
+                "password":"some-password"
                 }';
 
         $request = $this->call('POST', 'users', array(), array(), array(), $json );
@@ -73,18 +74,138 @@ class ApiUserTest extends TestCase {
 
 
     /**
-     * test a post request (create/store) with invalid data, should throw exception
+     * Test a post request (create/store) with invalid data, should throw exception
+     *
+     * @test
      */
-    public function test_create_user_and_fail()
+    public function create_user_with_invalid_data()
     {
         $this->setExpectedException('\Acme\API\APIValidationException');
 
         $json = '{
-                "email":"",
-                "password":""
+                "email":"foo@bar.com",
+                "display_name":"",
+                "password":"some-password"
                 }';
 
         $request = $this->call('POST', 'users', array(), array(), array(), $json);
     }
+
+    /**
+     * Test a put request (update) with valid data
+     *
+     *  - $response->success should return true
+     *
+     * @test
+     */
+    public function update_user()
+    {
+        $json = '{
+                "email":"foo2@bar2.com",
+                "display_name":"Foo2_Bar2",
+                "old_password":"",
+                "new_password":"",
+                "confirm_password":""
+                }';
+
+
+        $request = $this->call('PUT', 'users/1', array(), array(), array(), $json );
+        $response = json_decode($request->getContent());
+
+        $this->assertEquals(true, $response->success);
+    }
+
+    /**
+     * Test a put request (update) with invalid data
+     *
+     *  - should throw APIValidationException
+     *
+     * @test
+     */
+    public function update_user_with_invalid_data()
+    {
+        $this->setExpectedException('\Acme\API\APIValidationException');
+
+        $json = '{
+                "email":"invalid-email",
+                "display_name":""
+                }';
+
+        $request = $this->call('PUT', 'vendors/1', array(), array(), array(), $json);
+    }
+
+    /**
+     * Test a put request (update) with valid data and password
+     *
+     *  - $response->success should return true
+     *
+     * @test
+     */
+    public function update_user_with_password()
+    {
+        $json = '{
+                "email":"foo2@bar2.com",
+                "display_name":"Foo2_Bar2",
+                "old_password":"1",
+                "new_password":"new-pass",
+                "confirm_password":"new-pass"
+                }';
+
+
+        $request = $this->call('PUT', 'users/1', array(), array(), array(), $json );
+        $response = json_decode($request->getContent());
+
+        $this->assertEquals(true, $response->success);
+    }
+
+    /**
+     * Test a put request (update) with invalid password
+     *
+     *  - $response->success should return false
+     *
+     * @test
+     */
+    public function update_user_with_invalid_password()
+    {
+        $json = '{
+                "email":"foo2@bar2.com",
+                "display_name":"Foo2_Bar2",
+                "old_password":"invalid-password",
+                "new_password":"new-pass",
+                "confirm_password":"new-pass"
+                }';
+
+
+        $request = $this->call('PUT', 'users/1', array(), array(), array(), $json );
+        $response = json_decode($request->getContent());
+
+        $this->assertEquals(false, $response->success);
+    }
+
+    /**
+     * Test a put request (update) with password but un-matching new passwords
+     *
+     *  - $response->success should return false
+     *
+     * @test
+     */
+    public function update_user_with_unmatching_new_passwords()
+    {
+        $json = '{
+                "email":"foo2@bar2.com",
+                "display_name":"Foo2_Bar2",
+                "old_password":"1",
+                "new_password":"new-password",
+                "confirm_password":"newpasswurd"
+                }';
+
+        $request = $this->call('PUT', 'users/1', array(), array(), array(), $json );
+        $response = json_decode($request->getContent());
+
+        $this->assertEquals(false, $response->success);
+    }
+
+
+
 
 }

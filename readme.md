@@ -2,6 +2,7 @@
 
 AKS-Portal is a web application written to facilitate the day to day operations of a small business. Features include:
 
+-- simple auth login system
 -- user profiles
 -- vendor directory
 -- customer directory
