@@ -1,70 +1,64 @@
 <?php
 
+use Acme\API\CustomerContactValidator;
+
 class CustomerContactsController extends \BaseController {
 
+    function __construct(CustomerContactValidator $validator)
+    {
+        $this->validator = $validator;
+    }
+
+
     /**
-     * Display a listing of the resource.
-     * GET /customercontacts
+     * Returns a list of contacts for a given customer
+     * GET /customer-contacts
      *
      * @return Response
      */
     public function index($customerId)
     {
-        $customerContacts = CustomerContact::where('customer_id', '=', $customerId)->get();
+        $data = CustomerContact::where('customer_id', '=', $customerId)->get();
 
-        return Response::json($customerContacts);
+        return $this->successfulResponse($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * GET /vendorcontacts/create
-     *
-     * @return Response
-     */
-    public function create()
-    {
-    }
 
     /**
-     * Store a newly created resource in storage.
-     * POST /vendorcontacts
+     * Store a newly created contact and return it
+     * PUT /customer-contacts
      *
-     * @return Response
+     * @return Response with new contact
      */
     public function store()
     {
         $data = Input::json()->all();
-        $contact = new CustomerContact ($data);
+        $this->validator->validate($data);
+
+        $contact = new CustomerContact($data);
         $contact->save();
+
+        return $this->successfulResponse($contact);
     }
 
     /**
      * Display the specified resource.
-     * GET /vendorcontacts/{id}
+     * GET /customer-contacts-single/{id}
      *
      * @param  int  $id
      * @return Response
      */
     public function show($id)
     {
-        //
+        $contact = CustomerContact::findOrFail($id);
+
+        return $this->successfulResponse($contact);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * GET /vendorcontacts/{id}/edit
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
-     * PUT /vendorcontacts/{id}
+     * PUT /customer-contacts/{id}
      *
      * @param  int  $id
      * @return Response
@@ -72,28 +66,33 @@ class CustomerContactsController extends \BaseController {
     public function update($id)
     {
         $data = Input::json()->all();
-        $contact = CustomerContact::find($id);
+        $contact = CustomerContact::findOrFail($id);
+
+        $this->validator->validate($data);
+
         $contact->fill($data);
         $contact->save();
+
+        return $this->successfulResponse($contact);
     }
+
 
     /**
      * Remove the specified resource from storage.
-     * DELETE /vendorcontacts/{id}
+     * DELETE /customer-contacts/{id}
      *
-     * @param  int  $id
+     * @param  int  $customerContactID
      * @return Response
      */
-    public function destroy($customerContactId)
+    public function destroy($customerContactID)
     {
-        $customerContact = CustomerContact::find($customerContactId);
-        $success = false;
-        if ($customerContact) {
-            $customerContact->delete();
-            $success = true;
-        }
+        // get customer
+        $contact = CustomerContact::findOrFail($customerContactID);
 
-        return Response::json($success);
+        // delete customer
+        $contact->delete();
+
+        return $this->successfulResponse();
     }
 
 }

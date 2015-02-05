@@ -15,7 +15,7 @@ class UsersController extends \BaseController {
 
 
     /**
-     * Code Injection
+     * Dependency-Inject the validator
      *
      * @param UserValidator $validator
      */
@@ -49,6 +49,7 @@ class UsersController extends \BaseController {
 	 *
 	 * @param  int  $id
 	 * @return string json response with the requested user record
+     * @throws ModelNotFoundException
 	 */
 	public function show($id)
 	{

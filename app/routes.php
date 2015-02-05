@@ -27,6 +27,7 @@ Route::group(array('before' => 'auth'), function()
 
     // vendor contacts
     Route::get('vendor-contacts/{vendorId}', 'VendorContactsController@index');
+    Route::get('vendor-contacts-single/{vendorId}', 'VendorContactsController@show');
     Route::delete('vendor-contacts/{vendorId}', 'VendorContactsController@destroy');
     Route::put('vendor-contacts/{contactId}', 'VendorContactsController@update');
     Route::post('vendor-contacts', 'VendorContactsController@store');
@@ -37,6 +38,7 @@ Route::group(array('before' => 'auth'), function()
 
     // customer contacts
     Route::get('customer-contacts/{customerId}', 'CustomerContactsController@index');
+    Route::get('customer-contacts-single/{customerId}', 'CustomerContactsController@show');
     Route::delete('customer-contacts/{customerId}', 'CustomerContactsController@destroy');
     Route::put('customer-contacts/{customerId}', 'CustomerContactsController@update');
     Route::post('customer-contacts', 'CustomerContactsController@store');

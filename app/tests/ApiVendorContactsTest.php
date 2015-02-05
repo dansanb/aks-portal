@@ -2,9 +2,9 @@
 
 
 /**
- * Tests Vendor Model Requests
+ * Tests Vendor Contacts Model Requests
  */
-class ApiVendorTest extends TestCase {
+class ApiVendorContactsTest extends TestCase {
 
 
     /**
@@ -26,9 +26,9 @@ class ApiVendorTest extends TestCase {
      *
      * @test
      */
-    public function get_all_vendors()
+    public function get_all_vendor_contacts()
     {
-        $request = $this->call('GET', 'vendors');
+        $request = $this->call('GET', 'vendor-contacts/1');
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
@@ -39,17 +39,17 @@ class ApiVendorTest extends TestCase {
      * Test valid single get request
      *
      * - $response->success should be true
-     * - $response->data->vendor_id should equal 1
+     * - $response->data->vendor_contact_id should equal 1
      *
      * @test
      */
-    public function get_vendor()
+    public function get_vendor_contact()
     {
-        $request = $this->call('GET', 'vendors/1');
+        $request = $this->call('GET', 'vendor-contacts-single/1');
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
-        $this->assertEquals(1, $response->data->vendor_id);
+        $this->assertEquals(1, $response->data->vendor_contact_id);
     }
 
 
@@ -60,12 +60,11 @@ class ApiVendorTest extends TestCase {
      *
      * @test
      */
-    public function get_vendor_that_doesnt_exist()
+    public function get_vendor_contact_that_doesnt_exist()
     {
         $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
-        $request = $this->call('GET', 'vendors/x');
+        $request = $this->call('GET', 'vendor-contacts-single/x');
     }
-
 
     /**
      * Test a post request (create/store) with valid data
@@ -75,19 +74,19 @@ class ApiVendorTest extends TestCase {
      *
      * @test
      */
-    public function create_vendor()
+    public function create_vendor_contact()
     {
         $json = '{
-                "company_name":"Microsoft"
+                "vendor_id":"1",
+                "first_name":"foo"
                 }';
 
-        $request = $this->call('POST', 'vendors', array(), array(), array(), $json );
+        $request = $this->call('POST', 'vendor-contacts', array(), array(), array(), $json );
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
-        $this->assertInternalType("int", $response->data->vendor_id);
+        $this->assertInternalType("int", $response->data->vendor_contact_id);
     }
-
 
     /**
      * Test a post request (create/store) with invalid data, should throw exception
@@ -96,12 +95,13 @@ class ApiVendorTest extends TestCase {
      *
      * @test
      */
-    public function create_vendor_with_invalid_data()
+    public function create_vendor_contact_with_invalid_data()
     {
         $this->setExpectedException('\Acme\API\APIValidationException');
 
+        // leave out required field
         $json = '{
-                "company_name":""
+                "vendor_id":"1"
                 }';
 
         $request = $this->call('POST', 'vendors', array(), array(), array(), $json);
@@ -114,19 +114,16 @@ class ApiVendorTest extends TestCase {
      *
      * @test
      */
-    public function update_vendor()
+    public function update_vendor_contact()
     {
         $json = '{
-                "company_name":"Microsoft",
-                "ship_address":"1 Redmond Ave",
-                "bill_address":"1 Redmond Ave",
-                "phone":"(714) 475-4521",
-                "fax":"(714) 475-4521",
-                "notes":"These are some sample notes"
+                "vendor_id":"1",
+                "first_name":"Bar",
+                "last_name":"Foo"
                 }';
 
 
-        $request = $this->call('PUT', 'vendors/1', array(), array(), array(), $json );
+        $request = $this->call('PUT', 'vendor-contacts/1', array(), array(), array(), $json );
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
@@ -139,20 +136,16 @@ class ApiVendorTest extends TestCase {
      *
      * @test
      */
-    public function update_vendor_with_invalid_data()
+    public function update_vendor_contact_with_invalid_data()
     {
         $this->setExpectedException('\Acme\API\APIValidationException');
 
         $json = '{
-                "company_name":"",
-                "ship_address":"1 Redmond Ave",
-                "bill_address":"1 Redmond Ave",
-                "phone":"(714) 475-4521",
-                "fax":"(714) 475-4521",
-                "notes":"These are some sample notes"
+                "vendor_id":"1",
+                "first_name":""
                 }';
 
-        $request = $this->call('PUT', 'vendors/1', array(), array(), array(), $json);
+        $request = $this->call('PUT', 'vendor-contacts/1', array(), array(), array(), $json);
     }
 
     /**
@@ -162,15 +155,15 @@ class ApiVendorTest extends TestCase {
      *
      * @test
      */
-    public function update_vendor_that_doesnt_exist()
+    public function update_vendor_contact_that_doesnt_exist()
     {
         $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
 
         $json = '{
-                "company_name":"Microsoft"
+                "first_name":"foo"
                 }';
 
-        $request = $this->call('PUT', 'vendors/x', array(), array(), array(), $json);
+        $request = $this->call('PUT', 'vendor-contacts/x', array(), array(), array(), $json);
     }
 
     /**
@@ -180,9 +173,9 @@ class ApiVendorTest extends TestCase {
      *
      * @test
      */
-    public function delete_vendor()
+    public function delete_vendor_contact()
     {
-        $request = $this->call('DELETE', 'vendors/1');
+        $request = $this->call('DELETE', 'vendor-contacts/1');
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
@@ -196,11 +189,11 @@ class ApiVendorTest extends TestCase {
      *
      * @test
      */
-    public function delete_vendor_that_doesnt_exist()
+    public function delete_vendor_contact_that_doesnt_exist()
     {
         $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
 
-        $request = $this->call('DELETE', 'vendors/x');
+        $request = $this->call('DELETE', 'vendor-contacts/x');
     }
 
 }

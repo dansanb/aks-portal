@@ -1,6 +1,7 @@
 /bootstrap/compiled.php
 /vendor
 /node_modules
+/.idea
 composer.phar
 composer.lock
 .DS_Store

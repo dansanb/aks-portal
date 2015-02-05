@@ -1,6 +1,15 @@
 <?php
 
+use Acme\API\CustomerValidator;
+
 class CustomersController extends \BaseController {
+
+
+    function __construct(CustomerValidator $validator)
+    {
+        $this->validator = $validator;
+    }
+
 
     /**
      * return a list of customers
@@ -11,26 +20,24 @@ class CustomersController extends \BaseController {
     {
         $data = Customer::orderBy('company_name')->get();
 
-        return Response::json($data);
+        return $this->successfulResponse($data);
     }
 
 
     /**
-     * Store a newly created customer in storage.
+     * Store a newly created customer and return it
      *
-     * @return Response
+     * @return Response with new customer
      */
     public function store()
     {
         $data = Input::json()->all();
+        $this->validator->validate($data);
+
         $customer = new Customer($data);
         $customer->save();
 
-        return Response::json(
-            array(
-                'success' => true,
-                'id' => $customer->customer_id
-            ));
+        return $this->successfulResponse($customer);
     }
 
     /**
@@ -42,35 +49,33 @@ class CustomersController extends \BaseController {
     public function show($id)
     {
         $customer = Customer::findOrFail($id);
-        return Response::json($customer);
+
+        return $this->successfulResponse($customer);
     }
 
     /**
      * Update the specified customer in storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return Response with updated customer
      */
     public function update($id)
     {
 
         $data = Input::json()->all();
-        $customer = Customer::find($id);
+        $customer = Customer::findOrFail($id);
+
+        $this->validator->validate($data);
+
         $customer->fill($data);
         $customer->save();
 
-        $message = "Customer '" . $customer->company_name . "' has been updated.";
-
-        return Response::json(
-            array(
-                'success' => true,
-                'message' => $message
-            ));
+        return $this->successfulResponse($customer);
     }
 
     /**
      * Remove the specified customer from storage, and
-     * all associated vendor contacts
+     * all associated customer contacts
      *
      * @param  int  $id
      * @return Response
@@ -78,21 +83,15 @@ class CustomersController extends \BaseController {
     public function destroy($id)
     {
         // get customer
-        $customer = Customer::find($id);
+        $customer = Customer::findOrFail($id);
 
         // destroy it's contacts
         $customer->customerContacts()->delete();
 
-        // delete vendor
+        // delete customer
         $customer->delete();
 
-        $message = "Customer has been deleted.";
-
-        return Response::json(
-            array(
-                'success' => true,
-                'message' => $message
-            ));
+        return $this->successfulResponse();
     }
 
 }
