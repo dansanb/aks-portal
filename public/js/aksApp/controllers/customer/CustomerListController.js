@@ -6,8 +6,8 @@ aksApp.controller('CustomerListController',
         function($scope, $location, $routeParams, $http, dbCustomerFactory, flashMessageService, ngDialog)
         {
             // Get all customers
-            dbCustomerFactory.getAllCustomers().then(function(data) {
-                $scope.customers = data;
+            dbCustomerFactory.getAllCustomers().then(function(response) {
+                $scope.customers = response.data;
             });
 
 
@@ -25,7 +25,7 @@ aksApp.controller('CustomerListController',
                     template: 'partials/dialog-create-input.html',
                     showClose: false,
                     scope: $scope
-                }).then (function (data) {  // clicked create
+                }).then (function (dialogData) {  // clicked create
 
                     // create a new customer
                     var customer = {};
@@ -33,8 +33,8 @@ aksApp.controller('CustomerListController',
 
                     // add it to database, and redirect to
                     // details page to finish adding the details
-                    dbCustomerFactory.addCustomer(customer).then(function(data) {
-                        $location.path("/customers/" + data.id);
+                    dbCustomerFactory.addCustomer(customer).then(function(response) {
+                        $location.path("/customers/" + response.customer_id);
                     });
                 });
             };

@@ -11,13 +11,13 @@ aksApp.controller('CustomerDetailController',
             $scope.customer = {};
 
             // Get customer details
-            dbCustomerFactory.getCustomer($scope.customerId).then(function(data) {
-                $scope.customer = data;
+            dbCustomerFactory.getCustomer($scope.customerId).then(function(response) {
+                $scope.customer = response.data;
             });
 
             // get list of customer contacts
-            dbCustomerFactory.getAllCustomerContacts($scope.customerId).then(function(data) {
-                $scope.customerContacts = data;
+            dbCustomerFactory.getAllCustomerContacts($scope.customerId).then(function(response) {
+                $scope.customerContacts = response.data;
             });
 
 
@@ -27,14 +27,14 @@ aksApp.controller('CustomerDetailController',
             $scope.updateCustomer = function () {
 
                 // update customer contact in database
-                dbCustomerFactory.updateCustomer($scope.customer).then(function(data) {
+                dbCustomerFactory.updateCustomer($scope.customer).then(function(response) {
                     // customer has been updated, redirect with flash message
-                    if (data.success === true) {
-                        flashMessageService.setMessage(data.message, 'success');
+                    if (response.success === true) {
+                        flashMessageService.setMessage('Customer has been updated.', 'success');
                         $location.path("/customers");
                     }
                     else {
-                        flashMessageService.setMessage(data.message, 'danger');
+                        flashMessageService.setMessage(response.message, 'danger');
                     }
                 });
             };
@@ -49,17 +49,17 @@ aksApp.controller('CustomerDetailController',
                     template: 'partials/dialog-yes-no.html',
                     showClose: false,
                     scope: $scope
-                }).then (function (data) {  // clicked yes
+                }).then (function (dialogData) {  // clicked yes
                     // delete customer
-                    dbCustomerFactory.deleteCustomer($scope.customerId).then(function(data) {
+                    dbCustomerFactory.deleteCustomer($scope.customerId).then(function(response) {
 
                         // customer has been deleted, redirect with flash message
-                        if (data.success === true) {
-                            flashMessageService.setMessage(data.message, 'success');
+                        if (response.success === true) {
+                            flashMessageService.setMessage('Customer has been deleted.', 'success');
                             $location.path("/customers");
                         }
                         else {
-                            flashMessageService.setMessage(data.message, 'danger');
+                            flashMessageService.setMessage(response.message, 'danger');
                         }
 
                     });
@@ -79,9 +79,9 @@ aksApp.controller('CustomerDetailController',
                     template: 'partials/vendor-contact-form.html',
                     showClose: false,
                     scope: $scope
-                }).then (function (data) {  // clicked save
+                }).then (function (dialogData) {  // clicked save
                     // update vendor contact in database
-                    dbCustomerFactory.addCustomerContact($scope.contactCopy).then(function(data) {
+                    dbCustomerFactory.addCustomerContact($scope.contactCopy).then(function(response) {
                         // update customer contact in cache data
                         $scope.customerContacts.push($scope.contactCopy);
                         $scope.contactCopy = {};
@@ -102,9 +102,9 @@ aksApp.controller('CustomerDetailController',
                     template: 'partials/vendor-contact-form.html',
                     showClose: false,
                     scope: $scope
-                }).then (function (data) {  // clicked save
+                }).then (function (dialogData) {  // clicked save
                     // update customer contact in database
-                    dbCustomerFactory.updateCustomerContact($scope.contactCopy).then(function(data) {
+                    dbCustomerFactory.updateCustomerContact($scope.contactCopy).then(function(response) {
                         // update customer contact in cache data
                         $scope.customerContacts[ $scope.contactCopyIndex ] = $scope.contactCopy;
                         $scope.contactCopy = {};
@@ -117,17 +117,17 @@ aksApp.controller('CustomerDetailController',
             // Handle "Delete customer Contact" Button Click
             //********************************************************************
             $scope.deleteCustomerContact = function ( contact ) {
-                $scope.dialogMessage = "Are you sure you want to delete " + contact.first_name + " " + contact.last_name + "?";
+                $scope.dialogMessage = "Are you sure you want to delete this customer?";
                 ngDialog.openConfirm({
                     template: 'partials/dialog-yes-no.html',
                     showClose: false,
                     scope: $scope
-                }).then (function (data) {  // clicked yes
+                }).then (function (dialogData) {  // clicked yes
                     // delete customer contact
-                    dbCustomerFactory.deleteCustomerContact(contact.customer_contact_id).then(function(data) {
+                    dbCustomerFactory.deleteCustomerContact(contact.customer_contact_id).then(function(response) {
                         // refresh customer contact list
-                        dbCustomerFactory.getAllCustomerContacts($scope.customerId).then(function(data) {
-                            $scope.customerContacts = data;
+                        dbCustomerFactory.getAllCustomerContacts($scope.customerId).then(function(response) {
+                            $scope.customerContacts = response.data;
                         });
 
                     });
