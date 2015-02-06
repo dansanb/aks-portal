@@ -40,7 +40,7 @@ class BaseController extends Controller {
         return Response::json(
             array(
                 'success' => false,
-                'data' => $message
+                'message' => $message
             ));
     }
 

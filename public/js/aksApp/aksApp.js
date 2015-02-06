@@ -50,7 +50,7 @@ aksApp.config(['$routeProvider', function($routeProvider) {
         // user dashboard
         when('/dashboard', {
             templateUrl: 'partials/user-dashboard.html',
-            controller: 'UserLoginController'
+            controller: 'UserDashboard'
         }).
 
 
@@ -82,17 +82,19 @@ aksApp.run(
         $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
             // if 'nextRoute' is undefined, exit.
             if (typeof nextRoute == 'undefined') {
+                console.log('next route undefined');
                 return;
             }
 
             // if $$route property is missing, exit
             if (nextRoute.hasOwnProperty('$$route') === false) {
+                console.log('next route does not have $$rote');
                 return;
             }
 
             // if controller is our login controller, exit. we want to allow that.
-            if (nextRoute.$$route.controller == 'UserController')
-            {
+            if (nextRoute.$$route.controller == 'UserLoginController') {
+                console.log('next route controller is UserLoginController');
                 return;
             }
 

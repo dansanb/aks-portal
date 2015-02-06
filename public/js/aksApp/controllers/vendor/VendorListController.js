@@ -7,8 +7,8 @@ aksApp.controller('VendorListController',
     function($scope, $location, $routeParams, $http, dbVendorFactory, flashMessageService, ngDialog)
     {
         // Get all vendors
-        dbVendorFactory.getAllVendors().then(function(data) {
-            $scope.vendors = data;
+        dbVendorFactory.getAllVendors().then(function(response) {
+            $scope.vendors = response.data;
         });
 
 
@@ -34,8 +34,8 @@ aksApp.controller('VendorListController',
 
                 // add it to database, and redirect to
                 // details page to finish adding the details
-                dbVendorFactory.addVendor(vendor).then(function(data) {
-                    $location.path("/vendors/" + data.id);
+                dbVendorFactory.addVendor(vendor).then(function(response) {
+                    $location.path("/vendors/" + response.data.id);
                 });
             });
         };

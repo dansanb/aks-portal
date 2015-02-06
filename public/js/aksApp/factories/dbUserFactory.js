@@ -7,7 +7,7 @@
 aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
 
 
-    var userName = "";
+    var displayName = "";
     var userId = 1;
     var loggedIn = false;
 
@@ -19,7 +19,7 @@ aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
     return({
         login: login,
         logout: logout,
-        getUserName: getUserName,
+        getDisplayName: getDisplayName,
         getUserId: getUserId,
         isLoggedIn: isLoggedIn,
 
@@ -33,15 +33,15 @@ aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
         var deferred = $q.defer();
 
         $http.post('users/login', user)
-            .success(function (data) {
+            .success(function (response) {
                 // check to see if login was successful and
                 // save user information
-                if (data.loginSuccess)  {
-                    userName = data.user.username;
-                    userId = data.user.id;
+                if (response.success)  {
+                    displayName = response.data.display_name;
+                    userId = response.data.id;
                     loggedIn = true;
                 }
-                deferred.resolve(data);
+                deferred.resolve(response);
             })
             .error( function() {
                 deferred.reject('Error getting vendor data');
@@ -74,8 +74,8 @@ aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
     }
 
 
-    function getUserName() {
-        return userName;
+    function getDisplayName() {
+        return displayName;
     }
 
     function getUserId() {
@@ -88,7 +88,7 @@ aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
 
 
     //********************************************************************
-    // log out of system
+    // get user information
     //********************************************************************
     function getUser(userId) {
         var deferred = $q.defer();

@@ -15,8 +15,8 @@ aksApp.controller('HeaderController',
             return flashMessageService.getAlertType();
         };
 
-        $scope.getUserName= function() {
-            return dbUserFactory.getUserName();
+        $scope.getDisplayName = function() {
+            return dbUserFactory.getDisplayName();
         };
 
         $scope.getUserId = function() {

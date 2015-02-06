@@ -11,13 +11,13 @@ aksApp.controller('VendorDetailController',
         $scope.vendor = {};
 
         // Get vendor details
-        dbVendorFactory.getVendor($scope.vendorId).then(function(data) {
-            $scope.vendor = data;
+        dbVendorFactory.getVendor($scope.vendorId).then(function(response) {
+            $scope.vendor = response.data;
         });
 
         // get list of vendor contacts
-        dbVendorFactory.getAllVendorContacts($scope.vendorId).then(function(data) {
-            $scope.vendorContacts = data;
+        dbVendorFactory.getAllVendorContacts($scope.vendorId).then(function(response) {
+            $scope.vendorContacts = response.data;
         });
 
 
@@ -28,10 +28,10 @@ aksApp.controller('VendorDetailController',
         $scope.updateVendor = function () {
 
             // update vendor contact in database
-            dbVendorFactory.updateVendor($scope.vendor).then(function(data) {
+            dbVendorFactory.updateVendor($scope.vendor).then(function(response) {
                 // vendor has been updated, redirect with flash message
-                if (data.success === true) {
-                    flashMessageService.setMessage(data.message, 'success');
+                if (response.success === true) {
+                    flashMessageService.setMessage('Vendor has been updated', 'success');
                     $location.path("/vendors");
                 }
                 else {

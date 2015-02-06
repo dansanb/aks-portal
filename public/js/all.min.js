@@ -50,7 +50,7 @@ aksApp.config(['$routeProvider', function($routeProvider) {
         // user dashboard
         when('/dashboard', {
             templateUrl: 'partials/user-dashboard.html',
-            controller: 'UserLoginController'
+            controller: 'UserDashboard'
         }).
 
 
@@ -82,17 +82,19 @@ aksApp.run(
         $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
             // if 'nextRoute' is undefined, exit.
             if (typeof nextRoute == 'undefined') {
+                console.log('next route undefined');
                 return;
             }
 
             // if $$route property is missing, exit
             if (nextRoute.hasOwnProperty('$$route') === false) {
+                console.log('next route does not have $$rote');
                 return;
             }
 
             // if controller is our login controller, exit. we want to allow that.
-            if (nextRoute.$$route.controller == 'UserController')
-            {
+            if (nextRoute.$$route.controller == 'UserLoginController') {
+                console.log('next route controller is UserLoginController');
                 return;
             }
 
@@ -295,7 +297,7 @@ aksApp.factory("dbCustomerFactory", function($http, $q) {
 aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
 
 
-    var userName = "";
+    var displayName = "";
     var userId = 1;
     var loggedIn = false;
 
@@ -307,7 +309,7 @@ aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
     return({
         login: login,
         logout: logout,
-        getUserName: getUserName,
+        getDisplayName: getDisplayName,
         getUserId: getUserId,
         isLoggedIn: isLoggedIn,
 
@@ -321,15 +323,15 @@ aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
         var deferred = $q.defer();
 
         $http.post('users/login', user)
-            .success(function (data) {
+            .success(function (response) {
                 // check to see if login was successful and
                 // save user information
-                if (data.loginSuccess)  {
-                    userName = data.user.username;
-                    userId = data.user.id;
+                if (response.success)  {
+                    displayName = response.data.display_name;
+                    userId = response.data.id;
                     loggedIn = true;
                 }
-                deferred.resolve(data);
+                deferred.resolve(response);
             })
             .error( function() {
                 deferred.reject('Error getting vendor data');
@@ -362,8 +364,8 @@ aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
     }
 
 
-    function getUserName() {
-        return userName;
+    function getDisplayName() {
+        return displayName;
     }
 
     function getUserId() {
@@ -376,7 +378,7 @@ aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
 
 
     //********************************************************************
-    // log out of system
+    // get user information
     //********************************************************************
     function getUser(userId) {
         var deferred = $q.defer();
@@ -607,7 +609,6 @@ aksApp.factory('httpInterceptor', function($rootScope, $q, $location) {
         // request was successful, and have received a response.
         //*********************************************************************
         'response': function(response) {
-            //console.log(response.data);
             return response;
         },
 
@@ -864,8 +865,8 @@ aksApp.controller('HeaderController',
             return flashMessageService.getAlertType();
         };
 
-        $scope.getUserName= function() {
-            return dbUserFactory.getUserName();
+        $scope.getDisplayName = function() {
+            return dbUserFactory.getDisplayName();
         };
 
         $scope.getUserId = function() {
@@ -891,6 +892,17 @@ aksApp.controller('HeaderController',
 
 
     }]);
+/*
+ Controller for User Dashboard
+ */
+
+aksApp.controller('UserDashboard',
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
+        {
+
+
+        }]);
 /*
  Controller for Login
  */
@@ -918,24 +930,21 @@ aksApp.controller('UserLoginController',
     ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
         {
+            // pre-fill for testing
             $scope.user = {};
-            $scope.user.username = "";
-            $scope.user.password = "";
+            $scope.user.email = "d@d.com";
+            $scope.user.password = "1";
 
             $scope.login = function() {
                 // attempt to login
-                dbUserFactory.login($scope.user).then(function(data) {
+                dbUserFactory.login($scope.user).then(function(response) {
 
-                    if (data.loginSuccess === true) {
-                        // clear out variables and send user to dashboard
-                        // with message
-                        $scope.user.username = "";
-                        //$scope.user.password = "";
-                        flashMessageService.setMessage('Welcome ' + data.user.username + '!', 'success');
+                    if (response.success === true) {
+                        flashMessageService.setMessage('Welcome ' + response.data.display_name + '!', 'success');
                         $location.path("/dashboard");
                     }
                     else {
-                        flashMessageService.setMessage('Invalid username / password. Please try again.', 'danger');
+                        flashMessageService.setMessage('Invalid email / password. Please try again.', 'danger');
                         $route.reload();
                     }
                 });
@@ -955,13 +964,13 @@ aksApp.controller('VendorDetailController',
         $scope.vendor = {};
 
         // Get vendor details
-        dbVendorFactory.getVendor($scope.vendorId).then(function(data) {
-            $scope.vendor = data;
+        dbVendorFactory.getVendor($scope.vendorId).then(function(response) {
+            $scope.vendor = response.data;
         });
 
         // get list of vendor contacts
-        dbVendorFactory.getAllVendorContacts($scope.vendorId).then(function(data) {
-            $scope.vendorContacts = data;
+        dbVendorFactory.getAllVendorContacts($scope.vendorId).then(function(response) {
+            $scope.vendorContacts = response.data;
         });
 
 
@@ -972,10 +981,10 @@ aksApp.controller('VendorDetailController',
         $scope.updateVendor = function () {
 
             // update vendor contact in database
-            dbVendorFactory.updateVendor($scope.vendor).then(function(data) {
+            dbVendorFactory.updateVendor($scope.vendor).then(function(response) {
                 // vendor has been updated, redirect with flash message
-                if (data.success === true) {
-                    flashMessageService.setMessage(data.message, 'success');
+                if (response.success === true) {
+                    flashMessageService.setMessage('Vendor has been updated', 'success');
                     $location.path("/vendors");
                 }
                 else {
@@ -1089,8 +1098,8 @@ aksApp.controller('VendorListController',
     function($scope, $location, $routeParams, $http, dbVendorFactory, flashMessageService, ngDialog)
     {
         // Get all vendors
-        dbVendorFactory.getAllVendors().then(function(data) {
-            $scope.vendors = data;
+        dbVendorFactory.getAllVendors().then(function(response) {
+            $scope.vendors = response.data;
         });
 
 
@@ -1116,8 +1125,8 @@ aksApp.controller('VendorListController',
 
                 // add it to database, and redirect to
                 // details page to finish adding the details
-                dbVendorFactory.addVendor(vendor).then(function(data) {
-                    $location.path("/vendors/" + data.id);
+                dbVendorFactory.addVendor(vendor).then(function(response) {
+                    $location.path("/vendors/" + response.data.id);
                 });
             });
         };

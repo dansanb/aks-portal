@@ -27,7 +27,6 @@ aksApp.factory('httpInterceptor', function($rootScope, $q, $location) {
         // request was successful, and have received a response.
         //*********************************************************************
         'response': function(response) {
-            //console.log(response.data);
             return response;
         },
 

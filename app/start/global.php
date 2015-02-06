@@ -60,7 +60,7 @@ App::error(function(Exception $exception, $code)
 */
 App::error(function(APIValidationException $exception)
 {
-	return Response::json(array('success' => false, 'errors' => $exception->getErrors()));
+	return Response::json(array('success' => false, 'message' => $exception->getErrors()));
 });
 
 /*
@@ -68,7 +68,7 @@ App::error(function(APIValidationException $exception)
 */
 App::error(function(ModelNotFoundException $exception)
 {
-	return Response::json(array('success' => false, 'errors' => $exception->getModel() . " was not found."), 404);
+	return Response::json(array('success' => false, 'message' => $exception->getModel() . " was not found."), 404);
 });
 
 
