@@ -50,17 +50,17 @@ aksApp.controller('VendorDetailController',
                 template: 'partials/dialog-yes-no.html',
                 showClose: false,
                 scope: $scope
-            }).then (function (data) {  // clicked yes
+            }).then (function (dialogData) {  // clicked yes
                 // delete vendor contact
-                dbVendorFactory.deleteVendor($scope.vendorId).then(function(data) {
+                dbVendorFactory.deleteVendor($scope.vendorId).then(function(response) {
 
                     // vendor has been deleted, redirect with flash message
-                    if (data.success === true) {
-                        flashMessageService.setMessage(data.message, 'success');
+                    if (response.success === true) {
+                        flashMessageService.setMessage('Vendor has been deleted.', 'success');
                         $location.path("/vendors");
                     }
                     else {
-                        flashMessageService.setMessage(data.message, 'danger');
+                        flashMessageService.setMessage(response.message, 'danger');
                     }
 
                 });
@@ -80,9 +80,9 @@ aksApp.controller('VendorDetailController',
                 template: 'partials/vendor-contact-form.html',
                 showClose: false,
                 scope: $scope
-            }).then (function (data) {  // clicked save
+            }).then (function (dialogData) {  // clicked save
                 // update vendor contact in database
-                dbVendorFactory.addVendorContact($scope.contactCopy).then(function(data) {
+                dbVendorFactory.addVendorContact($scope.contactCopy).then(function(response) {
                     // update vendor contact in cache data
                     $scope.vendorContacts.push($scope.contactCopy);
                     $scope.contactCopy = {};
@@ -103,9 +103,9 @@ aksApp.controller('VendorDetailController',
                 template: 'partials/vendor-contact-form.html',
                 showClose: false,
                 scope: $scope
-            }).then (function (data) {  // clicked save
+            }).then (function (dialogData) {  // clicked save
                 // update vendor contact in database
-                dbVendorFactory.updateVendorContact($scope.contactCopy).then(function(data) {
+                dbVendorFactory.updateVendorContact($scope.contactCopy).then(function(response) {
                     // update vendor contact in cache data
                     $scope.vendorContacts[ $scope.contactCopyIndex ] = $scope.contactCopy;
                     $scope.contactCopy = {};
@@ -118,17 +118,17 @@ aksApp.controller('VendorDetailController',
         // Handle "Delete Vendor Contact" Button Click
         //********************************************************************
         $scope.deleteVendorContact = function ( contact ) {
-            $scope.dialogMessage = "Are you sure you want to delete " + contact.first_name + " " + contact.last_name + "?";
+            $scope.dialogMessage = "Are you sure you want to delete this contact?";
             ngDialog.openConfirm({
                 template: 'partials/dialog-yes-no.html',
                 showClose: false,
                 scope: $scope
-            }).then (function (data) {  // clicked yes
+            }).then (function (dialogData) {  // clicked yes
                 // delete vendor contact
-                dbVendorFactory.deleteVendorContact(contact.vendor_contact_id).then(function(data) {
+                dbVendorFactory.deleteVendorContact(contact.vendor_contact_id).then(function(response) {
                     // refresh vendor contact list
-                    dbVendorFactory.getAllVendorContacts($scope.vendorId).then(function(data) {
-                        $scope.vendorContacts = data;
+                    dbVendorFactory.getAllVendorContacts($scope.vendorId).then(function(response) {
+                        $scope.vendorContacts = response.data;
                     });
 
                 });
