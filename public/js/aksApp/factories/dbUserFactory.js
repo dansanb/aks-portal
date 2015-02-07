@@ -20,6 +20,7 @@ aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
         login: login,
         logout: logout,
         updateUser: updateUser,
+        changeUserPassword: changeUserPassword,
         getDisplayName: getDisplayName,
         getUserId: getUserId,
         isLoggedIn: isLoggedIn,
@@ -86,6 +87,24 @@ aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
             })
             .error( function() {
                 deferred.reject('Error updating user');
+            });
+
+        return deferred.promise;
+    }
+
+
+    //********************************************************************
+    // update user password
+    //********************************************************************
+    function changeUserPassword(user) {
+        var deferred = $q.defer();
+
+        $http.put('user-change-password/' + user.id, user)
+            .success(function (data) {
+                deferred.resolve(data);
+            })
+            .error( function() {
+                deferred.reject('Error updating user password');
             });
 
         return deferred.promise;

@@ -76,11 +76,11 @@ class UsersController extends \BaseController {
 
         // keep password fields, remove them from
         // the data array, and fill all non-password fields
-        $oldPassword = $data['old_password'];
+        $currentPassword = $data['current_password'];
         $newPassword = $data['new_password'];
         $confirmPassword = $data['confirm_password'];
 
-        unset($data['old_password']);
+        unset($data['current_password']);
         unset($data['new_password']);
         unset($data['confirm_password']);
 
@@ -88,14 +88,14 @@ class UsersController extends \BaseController {
 
 
         // check if user wants to change password, and
-        if (empty($oldPassword)) {
-            // oldPassword is empty, user did not want to change password
+        if (empty($currentPassword)) {
+            // $currentPassword is empty, user did not want to change password
             $user->save();
             return $this->successfulResponse($user);
         }
 
         // user wants to change password - check if passwords match
-        if (Hash::check($oldPassword, Auth::user()->password)) {
+        if (Hash::check($currentPassword, Auth::user()->password)) {
             // old passwords match, check if new password and password confirmation match
             if ($newPassword === $confirmPassword) {
                 $user->password = Hash::make($newPassword);
@@ -111,6 +111,43 @@ class UsersController extends \BaseController {
         }
 
 	}
+
+
+
+    /**
+     * Update the specified user's password
+     *
+     * @param  int  $id - id of the user to be updated
+     * @return string json response containing 'success' to notify if user was updated (true/false).
+     */
+    public function changePassword($id)
+    {
+
+        $data = Input::json()->all();
+        $user = User::findOrFail($id);
+
+        // get data as variables
+        $currentPassword = $data['current_password'];
+        $newPassword = $data['new_password'];
+        $confirmPassword = $data['confirm_password'];
+
+        // check if passwords match
+        if (Hash::check($currentPassword, Auth::user()->password)) {
+            // old passwords match, check if new password and password confirmation match
+            if ($newPassword === $confirmPassword) {
+                $user->password = Hash::make($newPassword);
+                $user->save();
+                return $this->successfulResponse($user);
+            }
+            else {
+                return $this->failedResponse('The new passwords do not match.');
+            }
+        }
+        else {
+            return $this->failedResponse('The password provided is not the current password.');
+        }
+
+    }
 
 
 

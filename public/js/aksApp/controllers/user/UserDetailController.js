@@ -13,11 +13,6 @@ aksApp.controller('UserDetailController',
             // Get user details
             dbUserFactory.getUser($scope.userId).then(function(response) {
                 $scope.user = response.data;
-
-                // add additional members to the user object to allow for password change
-                $scope.user.old_password = "";
-                $scope.user.new_password = "";
-                $scope.user.confirm_password = "";
             });
 
 

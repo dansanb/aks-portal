@@ -20,6 +20,7 @@ Route::group(array('before' => 'auth'), function()
 {
     // user routes
     Route::post('users/logout', 'UsersController@logout');
+    Route::put('user-change-password/{userId}', 'UsersController@changePassword');
     Route::Resource('users', 'UsersController');
 
     // vendor routes

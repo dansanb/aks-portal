@@ -14,7 +14,7 @@ aksApp.controller('UserChangePasswordController',
                 $scope.user = response.data;
 
                 // add additional members to the user object to allow for password change
-                $scope.user.old_password = "";
+                $scope.user.current_password = "";
                 $scope.user.new_password = "";
                 $scope.user.confirm_password = "";
             });
@@ -23,10 +23,10 @@ aksApp.controller('UserChangePasswordController',
             //********************************************************************
             // update user password
             //********************************************************************
-            $scope.updateUserPassword = function () {
+            $scope.changeUserPassword = function () {
 
                 // update user password in database
-                dbUserFactory.updateUserPassword($scope.user).then(function(response) {
+                dbUserFactory.changeUserPassword($scope.user).then(function(response) {
                     // user password has been updated, display flash message
                     console.log(response);
                     if (response.success === true) {
