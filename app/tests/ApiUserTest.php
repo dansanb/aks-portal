@@ -15,6 +15,10 @@ class ApiUserTest extends TestCase {
         parent::setUp();
         Artisan::call('migrate');
         Artisan::call('db:seed');
+
+        // enable auth filter and login user id 1
+        Route::enableFilters();
+        Auth::loginUsingId(1);
     }
 
 
@@ -102,10 +106,7 @@ class ApiUserTest extends TestCase {
     {
         $json = '{
                 "email":"foo2@bar2.com",
-                "display_name":"Foo2_Bar2",
-                "old_password":"",
-                "new_password":"",
-                "confirm_password":""
+                "display_name":"Foo2_Bar2"
                 }';
 
 
@@ -144,15 +145,13 @@ class ApiUserTest extends TestCase {
     public function update_user_with_password()
     {
         $json = '{
-                "email":"foo2@bar2.com",
-                "display_name":"Foo2_Bar2",
-                "old_password":"1",
+                "current_password":"1",
                 "new_password":"new-pass",
                 "confirm_password":"new-pass"
                 }';
 
 
-        $request = $this->call('PUT', 'users/1', array(), array(), array(), $json );
+        $request = $this->call('PUT', 'user-change-password/1', array(), array(), array(), $json );
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
@@ -168,15 +167,13 @@ class ApiUserTest extends TestCase {
     public function update_user_with_invalid_password()
     {
         $json = '{
-                "email":"foo2@bar2.com",
-                "display_name":"Foo2_Bar2",
-                "old_password":"invalid-password",
+                "current_password":"invalid-password",
                 "new_password":"new-pass",
                 "confirm_password":"new-pass"
                 }';
 
 
-        $request = $this->call('PUT', 'users/1', array(), array(), array(), $json );
+        $request = $this->call('PUT', 'user-change-password/1', array(), array(), array(), $json );
         $response = json_decode($request->getContent());
 
         $this->assertEquals(false, $response->success);
@@ -192,14 +189,12 @@ class ApiUserTest extends TestCase {
     public function update_user_with_unmatching_new_passwords()
     {
         $json = '{
-                "email":"foo2@bar2.com",
-                "display_name":"Foo2_Bar2",
-                "old_password":"1",
+                "current_password":"1",
                 "new_password":"new-password",
                 "confirm_password":"newpasswurd"
                 }';
 
-        $request = $this->call('PUT', 'users/1', array(), array(), array(), $json );
+        $request = $this->call('PUT', 'user-change-password/1', array(), array(), array(), $json );
         $response = json_decode($request->getContent());
 
         $this->assertEquals(false, $response->success);

@@ -67,49 +67,14 @@ class UsersController extends \BaseController {
      */
 	public function update($id)
 	{
-
         $data = Input::json()->all();
         $user = User::findOrFail($id);
 
-        // validate all non-password fields
         $this->validator->validate($data);
 
-        // keep password fields, remove them from
-        // the data array, and fill all non-password fields
-        $currentPassword = $data['current_password'];
-        $newPassword = $data['new_password'];
-        $confirmPassword = $data['confirm_password'];
-
-        unset($data['current_password']);
-        unset($data['new_password']);
-        unset($data['confirm_password']);
-
         $user->fill($data);
-
-
-        // check if user wants to change password, and
-        if (empty($currentPassword)) {
-            // $currentPassword is empty, user did not want to change password
-            $user->save();
-            return $this->successfulResponse($user);
-        }
-
-        // user wants to change password - check if passwords match
-        if (Hash::check($currentPassword, Auth::user()->password)) {
-            // old passwords match, check if new password and password confirmation match
-            if ($newPassword === $confirmPassword) {
-                $user->password = Hash::make($newPassword);
-                $user->save();
-                return $this->successfulResponse($user);
-            }
-            else {
-                return $this->failedResponse('The new passwords do not match.');
-            }
-        }
-        else {
-            return $this->failedResponse('The password provided is not the current password.');
-        }
-
+        $user->save();
+        return $this->successfulResponse($user);
 	}
 
 
