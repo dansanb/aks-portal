@@ -3,10 +3,11 @@
     <div class="panel-body">
         <form name="form" class="form-horizontal vendor-contact-form">
 
-            <div class="form-group">
-                <label for="first_name" class="control-label col-xs-3">First</label>
+            <div class="form-group" ng-class="{ 'has-error' : form.first_name.$invalid && !form.first_name.$pristine }">
+                <label for="first_name" class="control-label col-xs-3">First *</label>
                 <div class="col-xs-9">
-                    <input type="text" class="form-control" ng-model="contactCopy.first_name" required>
+                    <input type="text" class="form-control" name="first_name" ng-model="contactCopy.first_name" required>
+                    <p ng-show="form.first_name.$invalid && !form.first_name.$pristine" class="help-block">Please enter a first name.</p>
                 </div>
             </div>
 
