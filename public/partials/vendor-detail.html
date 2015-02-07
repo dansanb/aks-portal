@@ -14,9 +14,10 @@
 
                         <!-- vendor name-->
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="company_name">Company Name</label>
-                                <input type="text" class="form-control" ng-model="vendor.company_name" required>
+                            <div class="form-group" ng-class="{ 'has-error' : form.company_name.$invalid && !form.company_name.$pristine }">
+                                <label>Company Name *</label>
+                                <input type="text" name="company_name" class="form-control" ng-model="vendor.company_name" required>
+                                <p ng-show="form.company_name.$invalid && !form.company_name.$pristine" class="help-block">Please enter a company name.</p>
                             </div>
                         </div>
 
@@ -78,12 +79,11 @@
                     <!-- buttons -->
                     <div class="row ">
                         <div class=" col-md-6">
-                            <button ng-click="deleteVendor()" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+                            <button ng-click="deleteVendor()" class="btn btn-default"> Delete</button>
                         </div>
                         <div class=" col-md-6 text-right">
-                            <span class="label label-danger" ng-show="form.$invalid"> Company name is required.</span>&nbsp;
-                            <a href="#/vendors" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Cancel</a>
-                            <button ng-click="updateVendor()" class="btn btn-default" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-ok"></span> Save</button>
+                            <button ng-click="updateVendor()" class="btn btn-primary" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-ok"></span> Save</button>
+                            <a href="#/vendors" class="btn btn-default"> Cancel</a>
                         </div>
                     </div>
 
