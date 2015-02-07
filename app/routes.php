@@ -24,6 +24,7 @@ Route::group(array('before' => 'auth'), function()
     Route::Resource('users', 'UsersController');
 
     // vendor routes
+    Route::get('vendors-lite', 'VendorsController@getAllVendorsLite');
     Route::Resource('vendors', 'VendorsController');
 
     // vendor contacts
@@ -35,6 +36,7 @@ Route::group(array('before' => 'auth'), function()
 
 
     // customer routes
+    Route::get('customers-lite', 'CustomersController@getAllCustomersLite');
     Route::Resource('customers', 'CustomersController');
 
     // customer contacts

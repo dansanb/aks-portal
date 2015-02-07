@@ -36,6 +36,24 @@ class ApiVendorTest extends TestCase {
     }
 
     /**
+     * Test valid get all request (lite list - only name and id)
+     *
+     * - $response->success should be true
+     * - $response->data should not be empty
+     *
+     * @test
+     */
+    public function get_all_vendors_lite()
+    {
+        $request = $this->call('GET', 'vendors-lite');
+        $response = json_decode($request->getContent());
+
+        $this->assertEquals(true, $response->success);
+        $this->assertNotEmpty($response->data);
+    }
+
+
+    /**
      * Test valid single get request
      *
      * - $response->success should be true

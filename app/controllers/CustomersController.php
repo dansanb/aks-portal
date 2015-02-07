@@ -23,6 +23,18 @@ class CustomersController extends \BaseController {
         return $this->successfulResponse($data);
     }
 
+    /**
+     * return a lite list of all customers (name and id only)
+     *
+     * @return Response
+     */
+    public function getAllCustomersLite()
+    {
+        $data = DB::table('customer')->select('id',  'company_name')->get();
+
+        return $this->successfulResponse($data);
+    }
+
 
     /**
      * Store a newly created customer and return it

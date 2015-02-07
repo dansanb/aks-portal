@@ -23,6 +23,18 @@ class VendorsController extends \BaseController {
         return $this->successfulResponse($data);
 	}
 
+    /**
+     * return a lite list of all vendors(name and id only)
+     *
+     * @return Response
+     */
+    public function getAllVendorsLite()
+    {
+        $data = DB::table('vendor')->select('id',  'company_name')->get();
+
+        return $this->successfulResponse($data);
+    }
+
 
 	/**
 	 * Store a newly created vendor and return it

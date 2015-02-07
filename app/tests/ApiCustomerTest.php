@@ -35,6 +35,24 @@ class ApiCustomerTest extends TestCase {
         $this->assertNotEmpty($response->data);
     }
 
+
+    /**
+     * Test valid get all request (lite list - only name and id)
+     *
+     * - $response->success should be true
+     * - $response->data should not be empty
+     *
+     * @test
+     */
+    public function get_all_customers_lite()
+    {
+        $request = $this->call('GET', 'customers-lite');
+        $response = json_decode($request->getContent());
+
+        $this->assertEquals(true, $response->success);
+        $this->assertNotEmpty($response->data);
+    }
+
     /**
      * Test valid single get request
      *
