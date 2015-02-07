@@ -2,7 +2,7 @@
 
 class Vendor extends \Eloquent
 {
-    protected $table = "vendor";
+    protected $table = "vendors";
     protected $primaryKey = 'vendor_id';
     protected $fillable = [
         'company_name',

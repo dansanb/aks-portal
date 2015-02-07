@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateEmployeeTable extends Migration {
+class CreateVendorContactsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,16 +12,16 @@ class CreateEmployeeTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('employee', function(Blueprint $table)
+		Schema::create('vendor_contacts', function(Blueprint $table)
 		{
-			$table->integer('employee_id', true);
+			$table->integer('vendor_contact_id', true);
+			$table->integer('vendor_id')->nullable();
 			$table->string('first_name', 45)->nullable();
 			$table->string('last_name', 45)->nullable();
 			$table->string('title', 45)->nullable();
-			$table->dateTime('birth_date')->nullable();
-			$table->dateTime('hire_date')->nullable();
-			$table->string('address')->nullable();
 			$table->string('phone', 30)->nullable();
+			$table->string('fax', 30)->nullable();
+			$table->string('email', 45)->nullable();
 			$table->string('notes')->nullable();
 			$table->timestamps();
 		});
@@ -35,7 +35,7 @@ class CreateEmployeeTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('employee');
+		Schema::drop('vendor_contact');
 	}
 
 }
