@@ -13,3 +13,8 @@ body {
     height: 150px; }
   body .vendor-contact-form .form-group {
     margin-top: 10px; }
+  body .contacts-panel-height {
+    height: 585px; }
+  body .contacts-list-group-height {
+    height: 458px;
+    overflow-y: scroll; }

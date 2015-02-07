@@ -11,7 +11,7 @@ class VendorContactsTableSeeder extends Seeder {
 
         foreach(range(1, 40) as $index)
         {
-            for($i=0; $i < 3; $i++) {
+            for($i=0; $i < 10; $i++) {
                 VendorContact::create([
                     'vendor_id' => $index,
                     'first_name' => $faker->firstName,

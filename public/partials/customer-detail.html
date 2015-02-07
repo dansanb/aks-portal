@@ -2,7 +2,8 @@
 
     <!-- customer details -->
 
-    <div class="col-md-8">
+    <div class="col-lg-8
+                col-md-7">
         <form name="form" novalidate>
             <!-- details panel -->
             <div class="panel panel-primary">
@@ -78,10 +79,10 @@
 
                     <!-- buttons -->
                     <div class="row ">
-                        <div class=" col-md-6">
+                        <div class="col-xs-6">
                             <button ng-click="deleteCustomer()" class="btn btn-default"> Delete</button>
                         </div>
-                        <div class=" col-md-6 text-right">
+                        <div class="col-xs-6 text-right">
                             <button ng-click="updateCustomer()" class="btn btn-primary" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-ok"></span> Save</button>
                             <a href="#/customers" class="btn btn-default"> Cancel</a>
                         </div>
@@ -94,13 +95,14 @@
 
 
     <!-- vendor contact list -->
-    <div class="col-md-4">
+    <div class="col-lg-4
+                col-md-5">
 
-        <div class="panel panel-primary">
+        <div class="panel panel-primary  contacts-panel-height">
             <div class="panel-heading">Customer Contacts</div>
             <div class="panel-body">
 
-                <div class="list-group top-buffer">
+                <div class="list-group top-buffer contacts-list-group-height">
                     <div class="list-group-item"  ng-repeat="contact in customerContacts">
                         <strong>{{contact.first_name}} {{contact.last_name}}</strong>
                         <br/>
@@ -119,7 +121,7 @@
                 <div class="clearfix"></div>
 
                 <div class="pull-right">
-                    <button title="Add Contact" class="btn btn-default" ng-click="addCustomerContact()"><span class="glyphicon glyphicon-plus"></span> Add Contact</button>
+                    <button title="Add Contact" class="btn btn-default" ng-click="addCustomerContact()"> Add Contact</button>
                 </div>
 
             </div>
