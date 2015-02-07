@@ -19,6 +19,7 @@ aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
     return({
         login: login,
         logout: logout,
+        updateUser: updateUser,
         getDisplayName: getDisplayName,
         getUserId: getUserId,
         isLoggedIn: isLoggedIn,
@@ -68,6 +69,23 @@ aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
             })
             .error( function() {
                 deferred.reject('Error getting vendor data');
+            });
+
+        return deferred.promise;
+    }
+
+    //********************************************************************
+    // update user
+    //********************************************************************
+    function updateUser(user) {
+        var deferred = $q.defer();
+
+        $http.put('users/' + user.id, user)
+            .success(function (data) {
+                deferred.resolve(data);
+            })
+            .error( function() {
+                deferred.reject('Error updating user');
             });
 
         return deferred.promise;

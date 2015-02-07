@@ -86,16 +86,16 @@ class UsersController extends \BaseController {
 
         $user->fill($data);
 
+
         // check if user wants to change password, and
         if (empty($oldPassword)) {
             // oldPassword is empty, user did not want to change password
             $user->save();
             return $this->successfulResponse($user);
-
         }
 
         // user wants to change password - check if passwords match
-        if (Hash::check($oldPassword, $user->password)) {
+        if (Hash::check($oldPassword, Auth::user()->password)) {
             // old passwords match, check if new password and password confirmation match
             if ($newPassword === $confirmPassword) {
                 $user->password = Hash::make($newPassword);
