@@ -60,6 +60,12 @@ aksApp.config(['$routeProvider', function($routeProvider) {
             controller: 'UserDetailController'
         }).
 
+        // update user password
+        when('/user-change-password/:user_id', {
+            templateUrl: 'partials/user-change-password.html',
+            controller: 'UserChangePasswordController'
+        }).
+
 
 
         otherwise({
