@@ -11,7 +11,7 @@ class SalesOrderTableSeeder extends Seeder {
 
         foreach(range(1, 20) as $index)
         {
-            PurchaseOrder::create([
+            SalesOrder::create([
                 'customer_id' => $faker->numberBetween(1, 50),
                 'user_id' => 1,
                 'date_ordered' => $faker->date,

@@ -2,9 +2,10 @@
 
 
 /**
- * Tests purchase order Model Requests
+ * Tests sales order Model Requests
  *
- * NOTE: for testing, purchase order id numbers start at 1
+ * NOTE: for testing, sales order id numbers start at 1
+ *
  *
  */
 class ApiPurchaseOrderTest extends TestCase {
@@ -28,9 +29,9 @@ class ApiPurchaseOrderTest extends TestCase {
      *
      * @test
      */
-    public function get_all_purchase_orders()
+    public function get_all_sales_orders()
     {
-        $request = $this->call('GET', 'purchase-orders');
+        $request = $this->call('GET', 'sales-orders');
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
@@ -45,13 +46,13 @@ class ApiPurchaseOrderTest extends TestCase {
      *
      * @test
      */
-    public function get_purchase_order()
+    public function get_sales_order()
     {
-        $request = $this->call('GET', 'purchase-orders/1');
+        $request = $this->call('GET', 'sales-orders/1');
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
-        $this->assertEquals(1, $response->data->purchase_order_id);
+        $this->assertEquals(1, $response->data->sales_order_id);
     }
 
 
@@ -62,10 +63,10 @@ class ApiPurchaseOrderTest extends TestCase {
      *
      * @test
      */
-    public function get_purchase_order_that_doesnt_exist()
+    public function get_sales_order_that_doesnt_exist()
     {
         $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
-        $request = $this->call('GET', 'purchase-orders/x');
+        $request = $this->call('GET', 'sales-orders/x');
     }
 
 
@@ -76,17 +77,16 @@ class ApiPurchaseOrderTest extends TestCase {
      *
      * @test
      */
-    public function create_purchase_order()
+    public function create_sales_order()
     {
         $json = '{
-                "vendor_id":"1",
-                "sales_order_id":"1",
+                "customer_id":"1",
                 "user_id":"1",
                 "date_ordered":"12/31/1999",
                 "short_description":"A simple part"
                 }';
 
-        $request = $this->call('POST', 'purchase-orders', array(), array(), array(), $json );
+        $request = $this->call('POST', 'sales-orders', array(), array(), array(), $json );
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
@@ -100,20 +100,19 @@ class ApiPurchaseOrderTest extends TestCase {
      *
      * @test
      */
-    public function create_purchase_order_with_invalid_data()
+    public function create_sales_order_with_invalid_data()
     {
         $this->setExpectedException('\Acme\API\APIValidationException');
 
         // invalid data is: missing short_description
         $json = '{
-                "vendor_id":"1",
-                "sales_order_id":"1",
+                "customer_id":"1",
                 "user_id":"1",
                 "date_ordered":"12/31/1999",
                 "short_description":""
                 }';
 
-        $request = $this->call('POST', 'purchase-orders', array(), array(), array(), $json);
+        $request = $this->call('POST', 'sales-orders', array(), array(), array(), $json);
     }
 
     /**
@@ -123,18 +122,17 @@ class ApiPurchaseOrderTest extends TestCase {
      *
      * @test
      */
-    public function update_purchase_order()
+    public function update_sales_order()
     {
         $json = '{
-                "vendor_id":"3",
-                "sales_order_id":"3",
+                "customer_id":"3",
                 "user_id":"3",
                 "date_ordered":"12/31/1999",
                 "short_description":"An updated short description"
                 }';
 
 
-        $request = $this->call('PUT', 'purchase-orders/1', array(), array(), array(), $json );
+        $request = $this->call('PUT', 'sales-orders/1', array(), array(), array(), $json );
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
@@ -147,20 +145,19 @@ class ApiPurchaseOrderTest extends TestCase {
      *
      * @test
      */
-    public function update_purchase_order_with_invalid_data()
+    public function update_sales_order_with_invalid_data()
     {
         $this->setExpectedException('\Acme\API\APIValidationException');
 
         // invalid data is: missing vendor_id
         $json = '{
-                "vendor_id":"",
-                "sales_order_id":"1",
+                "customer_id":"",
                 "user_id":"1",
                 "date_ordered":"12/31/1999",
                 "short_description":"A simple part"
                 }';
 
-        $request = $this->call('PUT', 'purchase-orders/1', array(), array(), array(), $json);
+        $request = $this->call('PUT', 'sales-orders/1', array(), array(), array(), $json);
     }
 
     /**
@@ -170,19 +167,18 @@ class ApiPurchaseOrderTest extends TestCase {
      *
      * @test
      */
-    public function update_purchase_order_that_doesnt_exist()
+    public function update_sales_order_that_doesnt_exist()
     {
         $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
 
         $json = '{
-                "vendor_id":"1",
-                "sales_order_id":"1",
+                "customer_id":"1",
                 "user_id":"1",
                 "date_ordered":"12/31/2005",
                 "short_description":"Updated short description and changed date"
                 }';
 
-        $request = $this->call('PUT', 'purchase-orders/x', array(), array(), array(), $json);
+        $request = $this->call('PUT', 'sales-orders/x', array(), array(), array(), $json);
     }
 
     /**
@@ -192,9 +188,9 @@ class ApiPurchaseOrderTest extends TestCase {
      *
      * @test
      */
-    public function delete_purchase_order()
+    public function delete_sales_order()
     {
-        $request = $this->call('DELETE', 'purchase-orders/1');
+        $request = $this->call('DELETE', 'sales-orders/1');
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
@@ -208,11 +204,11 @@ class ApiPurchaseOrderTest extends TestCase {
      *
      * @test
      */
-    public function delete_purchase_order_that_doesnt_exist()
+    public function delete_sales_order_that_doesnt_exist()
     {
         $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
 
-        $request = $this->call('DELETE', 'purchase-orders/x');
+        $request = $this->call('DELETE', 'sales-orders/x');
     }
 
 }
