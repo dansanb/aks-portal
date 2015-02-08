@@ -5,23 +5,22 @@ class PurchaseOrder extends \Eloquent
     protected $table = "purchase_order";
     protected $primaryKey = 'po_id';
     protected $fillable = [
-        'po_number',
         'vendor_id',
-        'customer_id',
+        'sales_order_id',
         'user_id',
-        'po_date',
-        'required_date',
-        'received_date',
+        'date_ordered',
+        'date_required',
+        'date_received',
         'short_description',
         'notes'
     ];
 
-    function customer() {
-        return $this->hasOne('Customer');
-    }
-
     function vendor() {
         return $this->hasOne('Vendor');
+    }
+
+    function salesOrder() {
+        return $this->hasOne('SalesOrder');
     }
 
     function user() {

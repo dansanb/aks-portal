@@ -7,15 +7,19 @@ class SalesOrder extends \Eloquent
     protected $fillable = [
         'customer_id',
         'users_id',
-        'ship_address',
-        'phone',
-        'fax',
-        'description'
+        'date_ordered',
+        'date_required',
+        'date_received',
+        'short_description',
+        'notes'
     ];
 
-    /*
-    function customerContacts() {
-        return $this->hasMany('CustomerContact');
+    function customer() {
+        return $this->hasOne('Customer');
     }
-    */
+
+    function user() {
+        return $this->hasOne('User');
+    }
+
 }

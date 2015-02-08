@@ -3,15 +3,14 @@
 
 
 
-class PurchaseOrderValidator extends APIValidator {
+class SalesOrderValidator extends APIValidator {
 
     /**
-     * Rules for purchase order model
+     * Rules for sales order model
      * @var array
      */
     protected $rules = [
-        'vendor_id'  => 'required',
-        'sales_order_id'  => 'required',
+        'customer_id'  => 'required',
         'user_id'  => 'required',
         'date_ordered' => 'required',
         'short_description' => 'required'

@@ -18,7 +18,7 @@ class PurchaseOrdersController extends \BaseController {
      */
     public function index()
     {
-        $data = PurchaseOrder::orderBy('po_number')->get();
+        $data = PurchaseOrder::orderBy('purchase_order_id')->get();
 
         return $this->successfulResponse($data);
     }

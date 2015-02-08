@@ -9,7 +9,7 @@ class VendorsTableSeeder extends Seeder {
 	{
 		$faker = Faker::create();
 
-		foreach(range(1, 40) as $index)
+		foreach(range(1, 50) as $index)
 		{
 			Vendor::create([
                 'company_name' => $faker->firstName,
