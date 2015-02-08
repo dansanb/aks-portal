@@ -2,7 +2,7 @@
 
 class Customer extends \Eloquent
 {
-    protected $table = "customers";
+    protected $table = "customer";
     protected $primaryKey = 'customer_id';
     protected $fillable = [
         'company_name',

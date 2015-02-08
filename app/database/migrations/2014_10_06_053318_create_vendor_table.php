@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateCustomersTable extends Migration {
+class CreateVendorTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,9 +12,9 @@ class CreateCustomersTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('customers', function(Blueprint $table)
+		Schema::create('vendor', function(Blueprint $table)
 		{
-			$table->integer('customer_id', true);
+			$table->integer('vendor_id', true);
 			$table->string('company_name', 45)->nullable();
 			$table->string('ship_address', 100)->nullable();
 			$table->string('bill_address', 100)->nullable();
@@ -25,7 +25,6 @@ class CreateCustomersTable extends Migration {
 		});
 	}
 
-
 	/**
 	 * Reverse the migrations.
 	 *
@@ -33,7 +32,7 @@ class CreateCustomersTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('customers');
+		Schema::drop('vendor');
 	}
 
 }

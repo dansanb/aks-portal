@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateVendorContactsTable extends Migration {
+class CreateVendorContactTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,7 @@ class CreateVendorContactsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('vendor_contacts', function(Blueprint $table)
+		Schema::create('vendor_contact', function(Blueprint $table)
 		{
 			$table->integer('vendor_contact_id', true);
 			$table->integer('vendor_id')->nullable();
@@ -35,7 +35,7 @@ class CreateVendorContactsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('vendor_contacts');
+		Schema::drop('vendor_contact');
 	}
 
 }

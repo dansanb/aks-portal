@@ -2,7 +2,7 @@
 
 class PurchaseOrder extends \Eloquent
 {
-    protected $table = "purchase_orders";
+    protected $table = "purchase_order";
     protected $primaryKey = 'po_id';
     protected $fillable = [
         'po_number',

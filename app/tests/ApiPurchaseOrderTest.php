@@ -2,7 +2,9 @@
 
 
 /**
- * Tests customer Model Requests
+ * Tests purchase order Model Requests
+ *
+ *
  */
 class ApiPurchaseOrderTest extends TestCase {
 
@@ -13,10 +15,14 @@ class ApiPurchaseOrderTest extends TestCase {
     public function setUp()
     {
         parent::setUp();
-        Artisan::call('migrate');
-        Artisan::call('db:seed');
+        //Artisan::call('migrate');
+        //Artisan::call('db:seed');
     }
 
+    public function test_default()
+    {
+        $this->assertEquals(true, true);
+    }
 
     /**
      * Test valid get all request
