@@ -33,7 +33,7 @@ class CreateCustomersTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('customer');
+		Schema::drop('customers');
 	}
 
 }

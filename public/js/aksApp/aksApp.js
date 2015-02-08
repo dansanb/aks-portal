@@ -14,6 +14,18 @@ aksApp.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
 
         //****************************************************************
+        // purchase order routes
+        //****************************************************************
+        when('/purchase-orders', {
+            templateUrl: 'partials/purchase-order-list.html',
+            controller: 'PurchaseOrderListController'
+        }).
+        when('/purchase-orders/:po_id', {
+            templateUrl: 'partials/purchase-order-detail.html',
+            controller: 'PurchaseOrderDetailController'
+        }).
+
+        //****************************************************************
         // vendor routes
         //****************************************************************
         when('/vendors', {

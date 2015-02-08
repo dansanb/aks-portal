@@ -25,7 +25,6 @@ class CreateVendorsTable extends Migration {
 		});
 	}
 
-
 	/**
 	 * Reverse the migrations.
 	 *
@@ -33,7 +32,7 @@ class CreateVendorsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('vendor');
+		Schema::drop('vendors');
 	}
 
 }

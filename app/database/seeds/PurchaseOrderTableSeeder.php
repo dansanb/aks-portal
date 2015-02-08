@@ -12,9 +12,8 @@ class PurchaseOrderTableSeeder extends Seeder {
         foreach(range(1, 40) as $index)
         {
             PurchaseOrder::create([
-                'po_number' => $faker->numberBetween(1000, 1900),
-                'vendor_id' => $faker->firstName,
-                'customer_id' => $faker->address,
+                'vendor_id' => $faker->numberBetween(1, 20),
+                'customer_id' => $faker->numberBetween(1, 20),
                 'user_id' => 1,
                 'po_date' => $faker->date,
                 'required_date' => $faker->date,

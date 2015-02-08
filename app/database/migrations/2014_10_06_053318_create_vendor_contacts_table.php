@@ -35,7 +35,7 @@ class CreateVendorContactsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('vendor_contact');
+		Schema::drop('vendor_contacts');
 	}
 
 }

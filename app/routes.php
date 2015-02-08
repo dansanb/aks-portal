@@ -23,6 +23,10 @@ Route::group(array('before' => 'auth'), function()
     Route::put('user-change-password/{userId}', 'UsersController@changePassword');
     Route::Resource('users', 'UsersController');
 
+    // purchase order routes
+    Route::Resource('purchase-orders', 'PurchaseOrdersController');
+
+
     // vendor routes
     Route::get('vendors-lite', 'VendorsController@getAllVendorsLite');
     Route::Resource('vendors', 'VendorsController');

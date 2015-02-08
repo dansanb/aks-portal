@@ -35,7 +35,7 @@ class CreateCustomerContactsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('customer_contact');
+		Schema::drop('customer_contacts');
 	}
 
 }
