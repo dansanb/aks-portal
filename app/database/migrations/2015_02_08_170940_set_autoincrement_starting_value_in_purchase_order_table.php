@@ -12,6 +12,11 @@ class SetAutoincrementStartingValueInPurchaseOrderTable extends Migration {
 	 */
 	public function up()
 	{
+        // don't run this command if in testing - sqlite throws errors
+        if (App()->environment() === "testing")
+        {
+            return;
+        }
 		$statement = "
                         ALTER TABLE purchase_order AUTO_INCREMENT = 1000;
                     ";

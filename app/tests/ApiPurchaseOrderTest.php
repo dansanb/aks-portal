@@ -15,13 +15,8 @@ class ApiPurchaseOrderTest extends TestCase {
     public function setUp()
     {
         parent::setUp();
-        //Artisan::call('migrate');
-        //Artisan::call('db:seed');
-    }
-
-    public function test_default()
-    {
-        $this->assertEquals(true, true);
+        Artisan::call('migrate');
+        Artisan::call('db:seed');
     }
 
     /**
@@ -55,166 +50,168 @@ class ApiPurchaseOrderTest extends TestCase {
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
-        $this->assertEquals(1, $response->data->user_id);
+        $this->assertEquals(1, $response->data->purchase_order_id);
     }
 
 
-    /**
-     * Test get request of record that doesn't exist
-     *
-     * - should throw ModelNotFoundException
-     *
-     * @test
-     */
-    public function get_purchase_order_that_doesnt_exist()
-    {
-        $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
-        $request = $this->call('GET', 'purchase-orders/x');
-    }
-
-
-    /**
-     * Test a post request (create/store) with valid data
-     *
-     * - $response->success should return true
-     * - $response->data->id should be the ID of the record created
-     *
-     * @test
-     */
-    public function create_purchase_order()
-    {
-        $json = '{
-                "po_number":"3333",
-                "vendor_id":"2",
-                "customer_id":"3",
-                "user_id":"6",
-                "po_date":"12/31/1999"
-                }';
-
-        $request = $this->call('POST', 'purchase-orders', array(), array(), array(), $json );
-        $response = json_decode($request->getContent());
-
-        $this->assertEquals(true, $response->success);
-    }
-
-
-    /**
-     * Test a post request (create/store) with invalid data, should throw exception
-     *
-     * - should throw APIValidationException
-     *
-     * @test
-     */
-    public function create_purchase_order_with_invalid_data()
-    {
-        $this->setExpectedException('\Acme\API\APIValidationException');
-
-        $json = '{
-                "vendor_id":"2",
-                "customer_id":"3",
-                "user_id":"",
-                "po_date":"12/31/1999"
-                }';
-
-        $request = $this->call('POST', 'customers', array(), array(), array(), $json);
-    }
-
-    /**
-     * Test a put request (update) with valid data
-     *
-     *  - $response->success should return true
-     *
-     * @test
-     */
-    public function update_purchase_order()
-    {
-        $json = '{
-                "vendor_id":"2",
-                "customer_id":"3",
-                "user_id":"6",
-                "po_date":"12/31/1999",
-                "short_description":"this is a short description"
-                }';
-
-
-        $request = $this->call('PUT', 'purchase-orders/1', array(), array(), array(), $json );
-        $response = json_decode($request->getContent());
-
-        $this->assertEquals(true, $response->success);
-    }
-
-    /**
-     * Test a put request (update) with invalid data
-     *
-     *  - should throw APIValidationException
-     *
-     * @test
-     */
-    public function update_purchase_order_with_invalid_data()
-    {
-        $this->setExpectedException('\Acme\API\APIValidationException');
-
-        $json = '{
-                "po_number":"3333",
-                "vendor_id":"2",
-                "customer_id":"3",
-                "user_id":"6",
-                "po_date":""
-                }';
-
-        $request = $this->call('PUT', 'purchase-orders/1', array(), array(), array(), $json);
-    }
-
-    /**
-     * Test a put request (update) on a record that doesn't exist
-     *
-     *  - should throw ModelNotFoundException
-     *
-     * @test
-     */
-    public function update_purchase_order_that_doesnt_exist()
-    {
-        $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
-
-        $json = '{
-                "po_number":"3333",
-                "vendor_id":"2",
-                "customer_id":"3",
-                "user_id":"6",
-                "po_date":"12/31/1999"
-                }';
-
-        $request = $this->call('PUT', 'purchase-orders/x', array(), array(), array(), $json);
-    }
-
-    /**
-     * Deletes a record
-     *
-     *  - should expect true from response
-     *
-     * @test
-     */
-    public function delete_purchase_order()
-    {
-        $request = $this->call('DELETE', 'purchase-orders/1');
-        $response = json_decode($request->getContent());
-
-        $this->assertEquals(true, $response->success);
-    }
-
-
-    /**
-     * Deletes a record that doesn't exist
-     *
-     *  - should throw ModelNotFoundException
-     *
-     * @test
-     */
-    public function delete_purchase_order_that_doesnt_exist()
-    {
-        $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
-
-        $request = $this->call('DELETE', 'purchase-orders/x');
-    }
+//    /**
+//     * Test get request of record that doesn't exist
+//     *
+//     * - should throw ModelNotFoundException
+//     *
+//     * @test
+//     */
+//    public function get_purchase_order_that_doesnt_exist()
+//    {
+//        $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
+//        $request = $this->call('GET', 'purchase-orders/x');
+//    }
+//
+//
+//    /**
+//     * Test a post request (create/store) with valid data
+//     *
+//     * - $response->success should return true
+//     *
+//     * @test
+//     */
+//    public function create_purchase_order()
+//    {
+//        $json = '{
+//                "vendor_id":"1",
+//                "sales_order_id":"1",
+//                "user_id":"1",
+//                "date_ordered":"12/31/1999",
+//                "short_description":"A simple part"
+//                }';
+//
+//        $request = $this->call('POST', 'purchase-orders', array(), array(), array(), $json );
+//        $response = json_decode($request->getContent());
+//
+//        $this->assertEquals(true, $response->success);
+//    }
+//
+//
+//    /**
+//     * Test a post request (create/store) with invalid data, should throw exception
+//     *
+//     * - should throw APIValidationException
+//     *
+//     * @test
+//     */
+//    public function create_purchase_order_with_invalid_data()
+//    {
+//        $this->setExpectedException('\Acme\API\APIValidationException');
+//
+//        // invalid data is: missing short_description
+//        $json = '{
+//                "vendor_id":"1",
+//                "sales_order_id":"1",
+//                "user_id":"1",
+//                "date_ordered":"12/31/1999",
+//                "short_description":""
+//                }';
+//
+//        $request = $this->call('POST', 'purchase-orders', array(), array(), array(), $json);
+//    }
+//
+//    /**
+//     * Test a put request (update) with valid data
+//     *
+//     *  - $response->success should return true
+//     *
+//     * @test
+//     */
+//    public function update_purchase_order()
+//    {
+//        $json = '{
+//                "vendor_id":"3",
+//                "sales_order_id":"3",
+//                "user_id":"3",
+//                "date_ordered":"12/31/1999",
+//                "short_description":"An updated short description"
+//                }';
+//
+//
+//        $request = $this->call('PUT', 'purchase-orders/1', array(), array(), array(), $json );
+//        $response = json_decode($request->getContent());
+//
+//        $this->assertEquals(true, $response->success);
+//    }
+//
+//    /**
+//     * Test a put request (update) with invalid data
+//     *
+//     *  - should throw APIValidationException
+//     *
+//     * @test
+//     */
+//    public function update_purchase_order_with_invalid_data()
+//    {
+//        $this->setExpectedException('\Acme\API\APIValidationException');
+//
+//        // invalid data is: missing vendor_id
+//        $json = '{
+//                "vendor_id":"",
+//                "sales_order_id":"1",
+//                "user_id":"1",
+//                "date_ordered":"12/31/1999",
+//                "short_description":"A simple part"
+//                }';
+//
+//        $request = $this->call('PUT', 'purchase-orders/1', array(), array(), array(), $json);
+//    }
+//
+//    /**
+//     * Test a put request (update) on a record that doesn't exist
+//     *
+//     *  - should throw ModelNotFoundException
+//     *
+//     * @test
+//     */
+//    public function update_purchase_order_that_doesnt_exist()
+//    {
+//        $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
+//
+//        $json = '{
+//                "vendor_id":"1",
+//                "sales_order_id":"1",
+//                "user_id":"1",
+//                "date_ordered":"12/31/2005",
+//                "short_description":"Updated short description and changed date"
+//                }';
+//
+//        $request = $this->call('PUT', 'purchase-orders/x', array(), array(), array(), $json);
+//    }
+//
+//    /**
+//     * Deletes a record
+//     *
+//     *  - should expect true from response
+//     *
+//     * @test
+//     */
+//    public function delete_purchase_order()
+//    {
+//        $request = $this->call('DELETE', 'purchase-orders/1');
+//        $response = json_decode($request->getContent());
+//
+//        $this->assertEquals(true, $response->success);
+//    }
+//
+//
+//    /**
+//     * Deletes a record that doesn't exist
+//     *
+//     *  - should throw ModelNotFoundException
+//     *
+//     * @test
+//     */
+//    public function delete_purchase_order_that_doesnt_exist()
+//    {
+//        $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
+//
+//        $request = $this->call('DELETE', 'purchase-orders/x');
+//    }
 
 }
