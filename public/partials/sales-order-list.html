@@ -28,11 +28,11 @@
             </tr>
             </thead>
             <tr ng-repeat="salesOrder in saleOrders | filter:searchText">
-                <td ><a href="#/sales-order/{{salesOrder.sales_order_id}}">{{salesOrder.sales_order_id}}</a></td>
-                <td >{{salesOrder.customer.company_name}}</td>
+                <td ><a href="#/sale-orders/{{salesOrder.sales_order_id}}">{{salesOrder.sales_order_id}}</a></td>
+                <td >{{salesOrder.company_name}}</td>
                 <td class="hidden-sm hidden-xs" >{{salesOrder.short_description}}</td>
                 <td class="text-center">
-                    <a  href="#/sales-order/{{salesOrder.sales_order_id}}" class="btn btn-default btn-md"><span class="glyphicon glyphicon-search"></span> View</a>
+                    <a  href="#/sale-orders/{{salesOrder.sales_order_id}}" class="btn btn-default btn-md"><span class="glyphicon glyphicon-search"></span> View</a>
                 </td>
             </tr>
         </table>

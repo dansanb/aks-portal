@@ -18,8 +18,12 @@ class SaleOrdersController extends \BaseController {
      */
     public function index()
     {
-        $data = SalesOrder::orderBy('sales_order_id')->with('customer')->get();
-        Log::info($data);
+        //$data = SalesOrder::orderBy('sales_order_id')->with('customer')->get();
+        $data = DB::table('sales_order')
+                ->join('customer', 'sales_order.customer_id', '=', 'customer.customer_id')
+                ->select('sales_order.sales_order_id', 'sales_order.short_description', 'customer.company_name')
+                ->get();
+
         return $this->successfulResponse($data);
     }
 

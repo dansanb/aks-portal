@@ -21,9 +21,9 @@ aksApp.config(['$routeProvider', function($routeProvider) {
             templateUrl: 'partials/sales-order-list.html',
             controller: 'SalesOrderListController'
         }).
-        when('/sale-orders/:po_id', {
+        when('/sale-orders/:sales_order_id', {
             templateUrl: 'partials/sales-order-detail.html',
-            controller: 'SalesOrderDetailsController'
+            controller: 'SalesOrderDetailController'
         }).
 
         //****************************************************************
@@ -127,9 +127,9 @@ aksApp.run(
             }
 
             // check all other routes
-            if (dbUserFactory.isLoggedIn() === false) {
-                flashMessageService.setMessage('Please login first to use that feature.', 'warning');
-                $location.path('/login');
-            }
+            //if (dbUserFactory.isLoggedIn() === false) {
+            //    flashMessageService.setMessage('Please login first to use that feature.', 'warning');
+            //    $location.path('/login');
+            //}
         });
 }]);

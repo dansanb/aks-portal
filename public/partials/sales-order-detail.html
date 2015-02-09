@@ -1,0 +1,147 @@
+<div class="row">
+
+    <!-- sales order details -->
+
+    <div class="col-lg-8
+                col-md-7">
+        <form name="form" novalidate>
+            <!-- details panel -->
+            <div class="panel panel-primary">
+                <div class="panel-heading">Sales Order Details</div>
+                <div class="panel-body">
+
+
+                    <div class="row">
+
+                        <!-- sales order number-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Sales Order #</label>
+                                <input type="text" name="sales_order_id" class="form-control" ng-model="salesOrder.sales_order_id" readonly>
+                            </div>
+                        </div>
+
+                        <!-- date ordered-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="text" name="user_name" class="form-control" ng-model="salesOrder.date_ordered" readonly>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="row">
+
+                        <!-- customer -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Customer</label>
+                                <select class="form-control"
+
+                                        ng-model="salesOrder.customer_id"
+
+                                        ng-options="customer.customer_id as customer.company_name for customer in customers">
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- short description -->
+                    <div class="row">
+                        <div class=" col-md-12">
+                            <div class="form-group">
+                                <label>Short Description</label>
+                                <input type="text" class="form-control" ng-model="salesOrder.short_description">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- notes -->
+                    <div class="row">
+                        <div class=" col-md-12">
+                            <div class="form-group">
+                                <label for="company_name">Notes</label>
+                                <textarea class="form-control ta-noresize ta-height-lg" ng-model="salesOrder.notes"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <!-- date required  -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date Required</label>
+                                <input type="text" class="form-control" ng-model="salesOrder.date_required">
+                            </div>
+                        </div>
+
+                        <!-- date received -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="company_name">Date Received</label>
+                                <input type="text" class="form-control" ng-model="salesOrder.date_received">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- buttons -->
+                    <div class="row ">
+                        <div class="col-xs-6">
+                            <button ng-click="deleteCustomer()" class="btn btn-default"> Delete</button>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <button ng-click="updateCustomer()" class="btn btn-primary" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-ok"></span> Save</button>
+                            <a href="#/customers" class="btn btn-default"> Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- vendor contact list -->
+    <div class="col-lg-4
+                col-md-5">
+
+        <div class="panel panel-primary  contacts-panel-height">
+            <div class="panel-heading">Customer Contacts</div>
+            <div class="panel-body">
+
+                <div class="list-group top-buffer contacts-list-group-height">
+                    <div class="list-group-item"  ng-repeat="contact in customerContacts">
+                        <strong>{{contact.first_name}} {{contact.last_name}}</strong>
+                        <br/>
+                        <span class="glyphicon glyphicon-earphone"></span>&nbsp;&nbsp;&nbsp;{{contact.phone }}
+                        <br/>
+                        <span class="glyphicon glyphicon-envelope"></span>&nbsp;&nbsp;&nbsp;<a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+                        <br/>
+                        <div class="btn-group pull-right top-buffer-10">
+                            <button class="btn btn-sm btn-default" ng-click="editCustomerContact( contact );"> <span class="glyphicon glyphicon-edit"></span></button>
+                            <button class="btn btn-sm btn-default" ng-click="deleteCustomerContact( contact );"> <span class="glyphicon glyphicon-trash"></span></button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="pull-right">
+                    <button title="Add Contact" class="btn btn-default" ng-click="addCustomerContact()"> Add Contact</button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+

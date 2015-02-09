@@ -31,7 +31,7 @@ class ApiPurchaseOrderTest extends TestCase {
      */
     public function get_all_sales_orders()
     {
-        $request = $this->call('GET', 'sales-orders');
+        $request = $this->call('GET', 'sale-orders');
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
@@ -48,7 +48,7 @@ class ApiPurchaseOrderTest extends TestCase {
      */
     public function get_sales_order()
     {
-        $request = $this->call('GET', 'sales-orders/1');
+        $request = $this->call('GET', 'sale-orders/1');
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
@@ -66,7 +66,7 @@ class ApiPurchaseOrderTest extends TestCase {
     public function get_sales_order_that_doesnt_exist()
     {
         $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
-        $request = $this->call('GET', 'sales-orders/x');
+        $request = $this->call('GET', 'sale-orders/x');
     }
 
 
@@ -86,7 +86,7 @@ class ApiPurchaseOrderTest extends TestCase {
                 "short_description":"A simple part"
                 }';
 
-        $request = $this->call('POST', 'sales-orders', array(), array(), array(), $json );
+        $request = $this->call('POST', 'sale-orders', array(), array(), array(), $json );
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
@@ -112,7 +112,7 @@ class ApiPurchaseOrderTest extends TestCase {
                 "short_description":""
                 }';
 
-        $request = $this->call('POST', 'sales-orders', array(), array(), array(), $json);
+        $request = $this->call('POST', 'sale-orders', array(), array(), array(), $json);
     }
 
     /**
@@ -132,7 +132,7 @@ class ApiPurchaseOrderTest extends TestCase {
                 }';
 
 
-        $request = $this->call('PUT', 'sales-orders/1', array(), array(), array(), $json );
+        $request = $this->call('PUT', 'sale-orders/1', array(), array(), array(), $json );
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
@@ -157,7 +157,7 @@ class ApiPurchaseOrderTest extends TestCase {
                 "short_description":"A simple part"
                 }';
 
-        $request = $this->call('PUT', 'sales-orders/1', array(), array(), array(), $json);
+        $request = $this->call('PUT', 'sale-orders/1', array(), array(), array(), $json);
     }
 
     /**
@@ -178,7 +178,7 @@ class ApiPurchaseOrderTest extends TestCase {
                 "short_description":"Updated short description and changed date"
                 }';
 
-        $request = $this->call('PUT', 'sales-orders/x', array(), array(), array(), $json);
+        $request = $this->call('PUT', 'sale-orders/x', array(), array(), array(), $json);
     }
 
     /**
@@ -190,7 +190,7 @@ class ApiPurchaseOrderTest extends TestCase {
      */
     public function delete_sales_order()
     {
-        $request = $this->call('DELETE', 'sales-orders/1');
+        $request = $this->call('DELETE', 'sale-orders/1');
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
@@ -208,7 +208,7 @@ class ApiPurchaseOrderTest extends TestCase {
     {
         $this->setExpectedException('\Illuminate\Database\Eloquent\ModelNotFoundException');
 
-        $request = $this->call('DELETE', 'sales-orders/x');
+        $request = $this->call('DELETE', 'sale-orders/x');
     }
 
 }
