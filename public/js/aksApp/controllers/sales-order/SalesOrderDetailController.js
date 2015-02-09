@@ -12,11 +12,17 @@ aksApp.controller('SalesOrderDetailController',
             $scope.purchaseOrders = {};
 
             // datepicker
-            $scope.open = function($event) {
+            $scope.datePickers =  {
+                dateOrdered: false,
+                dateRequired: false,
+                dateDelivered: false
+            }
+
+            $scope.open = function($event, which) {
                 $event.preventDefault();
                 $event.stopPropagation();
 
-                $scope.opened = true;
+                $scope.datePickers[which]= true;
             };
 
             $scope.dateOptions = {

@@ -9,7 +9,7 @@ class SalesOrder extends \Eloquent
         'users_id',
         'date_ordered',
         'date_required',
-        'date_received',
+        'date_delivered',
         'short_description',
         'notes'
     ];

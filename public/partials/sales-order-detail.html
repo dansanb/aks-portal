@@ -26,9 +26,9 @@
                             <div class="form-group">
                                 <label>Date</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" datepicker-popup="MMMM d, yyyy" ng-model="salesOrder.date_ordered" is-open="opened" show-weeks=false datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                                    <input type="text" class="form-control" datepicker-popup="MMMM d, yyyy" ng-model="salesOrder.date_ordered" is-open="datePickers.dateOrdered" ng-required="true" close-text="Close" />
                                     <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i>&nbsp;</button>
+                                        <button type="button" class="btn btn-default" ng-click="open($event,'dateOrdered')"><i class="glyphicon glyphicon-calendar"></i>&nbsp;</button>
                                     </span>
                                 </div>
                             </div>
@@ -56,6 +56,35 @@
 
                     </div>
 
+                    <div class="row">
+
+                        <!-- date required  -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date Required</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" datepicker-popup="MMMM d, yyyy" ng-model="salesOrder.date_required" is-open="datePickers.dateRequired" ng-required="true" close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open($event,'dateRequired')"><i class="glyphicon glyphicon-calendar"></i>&nbsp;</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- date delivered -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date Delivered</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" datepicker-popup="MMMM d, yyyy" ng-model="salesOrder.date_delivered" is-open="datePickers.dateDelivered" ng-required="true" close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open($event,'dateDelivered')"><i class="glyphicon glyphicon-calendar"></i>&nbsp;</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <!-- short description -->
                     <div class="row">
@@ -73,31 +102,6 @@
                             <div class="form-group">
                                 <label for="company_name">Notes</label>
                                 <textarea class="form-control ta-noresize ta-height-lg" ng-model="salesOrder.notes"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-
-                        <!-- date required  -->
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Date Required</label>
-                                <div class="input-group date datetimepicker">
-                                    <input type="text" class="form-control" ng-model="salesOrder.date_required" simple-date>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- date received -->
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Date Received</label>
-                                <div class="input-group date datetimepicker">
-                                    <input type="text" class="form-control" ng-model="salesOrder.date_delivered" simple-date>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -155,13 +159,3 @@
 
     </div>
 </div>
-
-<!--<script type="text/javascript">-->
-    <!--$(function () {-->
-        <!--$('.datetimepicker').datetimepicker({-->
-            <!--format: "MMMM D, YYYY",-->
-            <!--useCurrent: false-->
-        <!--});-->
-    <!--});-->
-<!--</script>-->
-

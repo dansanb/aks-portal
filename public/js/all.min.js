@@ -10,6 +10,11 @@ var aksApp = angular.module('aksApp', [
     'ui.bootstrap'
 ]);
 
+// configure angular ui components
+aksApp.config(['datepickerConfig', function(datepickerConfig) {
+    datepickerConfig.showWeeks = false;
+}]);
+
 // routes
 aksApp.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
@@ -409,7 +414,7 @@ aksApp.factory("dbSalesOrderFactory", function($http, $q) {
     //********************************************************************
     function updateSalesOrder(salesOrder) {
         var deferred = $q.defer();
-        console.log(salesOrder);
+
         $http.put('sale-orders/' + salesOrder.sales_order_id, salesOrder)
             .success(function (data) {
                 deferred.resolve(data);
@@ -1135,11 +1140,17 @@ aksApp.controller('SalesOrderDetailController',
             $scope.purchaseOrders = {};
 
             // datepicker
-            $scope.open = function($event) {
+            $scope.datePickers =  {
+                dateOrdered: false,
+                dateRequired: false,
+                dateDelivered: false
+            }
+
+            $scope.open = function($event, which) {
                 $event.preventDefault();
                 $event.stopPropagation();
 
-                $scope.opened = true;
+                $scope.datePickers[which]= true;
             };
 
             $scope.dateOptions = {

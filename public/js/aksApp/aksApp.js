@@ -10,6 +10,11 @@ var aksApp = angular.module('aksApp', [
     'ui.bootstrap'
 ]);
 
+// configure angular ui components
+aksApp.config(['datepickerConfig', function(datepickerConfig) {
+    datepickerConfig.showWeeks = false;
+}]);
+
 // routes
 aksApp.config(['$routeProvider', function($routeProvider) {
     $routeProvider.

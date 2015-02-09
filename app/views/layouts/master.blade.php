@@ -13,7 +13,7 @@
     {{ HTML::script('js/all.js'); }}
 
     {{ HTML::style('css/bootstrap.min.css'); }}
-    {{--{{ HTML::style('css/bootstrap-theme.min.css'); }}--}}
+    {{ HTML::style('css/bootstrap-theme.min.css'); }}
     {{ HTML::style('css/ngDialog.css'); }}
     {{ HTML::style('css/ngDialog-theme-default.css'); }}
 

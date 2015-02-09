@@ -72,7 +72,7 @@ aksApp.factory("dbSalesOrderFactory", function($http, $q) {
     //********************************************************************
     function updateSalesOrder(salesOrder) {
         var deferred = $q.defer();
-        console.log(salesOrder);
+
         $http.put('sale-orders/' + salesOrder.sales_order_id, salesOrder)
             .success(function (data) {
                 deferred.resolve(data);
