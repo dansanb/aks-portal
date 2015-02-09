@@ -6,7 +6,8 @@
 
 var aksApp = angular.module('aksApp', [
     'ngRoute',
-    'ngDialog'
+    'ngDialog',
+    'ui.bootstrap'
 ]);
 
 // routes

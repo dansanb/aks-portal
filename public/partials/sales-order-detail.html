@@ -25,9 +25,11 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Date</label>
-                                <div class="input-group date datetimepicker">
-                                    <input type="text" class="form-control" ng-model="salesOrder.date_ordered" simple-date>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" datepicker-popup="MMMM d, yyyy" ng-model="salesOrder.date_ordered" is-open="opened" show-weeks=false datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i>&nbsp;</button>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -93,7 +95,7 @@
                             <div class="form-group">
                                 <label>Date Received</label>
                                 <div class="input-group date datetimepicker">
-                                    <input type="text" class="form-control" ng-model="salesOrder.date_received" simple-date>
+                                    <input type="text" class="form-control" ng-model="salesOrder.date_delivered" simple-date>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                                 </div>
                             </div>
@@ -103,11 +105,11 @@
                     <!-- buttons -->
                     <div class="row ">
                         <div class="col-xs-6">
-                            <button ng-click="deleteCustomer()" class="btn btn-default"> Delete</button>
+                            <button ng-click="deleteSalesOrder()" class="btn btn-default"> Delete</button>
                         </div>
                         <div class="col-xs-6 text-right">
-                            <button ng-click="updateCustomer()" class="btn btn-primary" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-ok"></span> Save</button>
-                            <a href="#/customers" class="btn btn-default"> Cancel</a>
+                            <button ng-click="updateSalesOrder()" class="btn btn-primary" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-ok"></span> Save</button>
+                            <a href="#/sale-orders" class="btn btn-default"> Cancel</a>
                         </div>
                     </div>
 
@@ -117,12 +119,12 @@
     </div>
 
 
-    <!-- vendor contact list -->
+    <!-- purchase orders list -->
     <div class="col-lg-4
                 col-md-5">
 
         <div class="panel panel-primary  contacts-panel-height">
-            <div class="panel-heading">Customer Contacts</div>
+            <div class="panel-heading">Purchase Orders</div>
             <div class="panel-body">
 
                 <div class="list-group top-buffer contacts-list-group-height">
@@ -144,7 +146,7 @@
                 <div class="clearfix"></div>
 
                 <div class="pull-right">
-                    <button title="Add Contact" class="btn btn-default" ng-click="addCustomerContact()"> Add Contact</button>
+                    <button title="Add Contact" class="btn btn-default" ng-click="addSalesOrder()"> Add Purchase Order</button>
                 </div>
 
             </div>
@@ -154,11 +156,12 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    $(function () {
-        $('.datetimepicker').datetimepicker({
-            format: 'MM/DD/YY'
-        });
-    });
-</script>
+<!--<script type="text/javascript">-->
+    <!--$(function () {-->
+        <!--$('.datetimepicker').datetimepicker({-->
+            <!--format: "MMMM D, YYYY",-->
+            <!--useCurrent: false-->
+        <!--});-->
+    <!--});-->
+<!--</script>-->
 

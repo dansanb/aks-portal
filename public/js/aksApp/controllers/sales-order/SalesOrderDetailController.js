@@ -11,6 +11,19 @@ aksApp.controller('SalesOrderDetailController',
             $scope.customers = {};
             $scope.purchaseOrders = {};
 
+            // datepicker
+            $scope.open = function($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+
+                $scope.opened = true;
+            };
+
+            $scope.dateOptions = {
+                formatYear: 'yy',
+                startingDay: 1
+            };
+
             // Get sales order details
             dbSalesOrderFactory.getSalesOrder($scope.salesOrderId).then(function(response) {
                 $scope.salesOrder = response.data;

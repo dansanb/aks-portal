@@ -67,7 +67,7 @@ class SaleOrdersController extends \BaseController {
 
         $data = Input::json()->all();
         $salesOrder = SalesOrder::findOrFail($id);
-
+        Log::info($data);
         $this->validator->validate($data);
 
         $salesOrder->fill($data);
