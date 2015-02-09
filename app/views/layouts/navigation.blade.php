@@ -11,7 +11,8 @@
                 <li ng-class="{ active: isActive('/purchase-orders')}"><a href="#/purchase-orders">Purchase Orders</a></li>
                 <li ng-class="{ active: isActive('/orders')}"><a href="#/orders">Orders</a></li>
                 -->
-                <li ng-class="{ active: isActive('/purchase-orders')}"><a href="#/vendors">Purchase Orders</a></li>
+                <li ng-class="{ active: isActive('/sale-orders')}"><a href="#/sale-orders">Sale Orders</a></li>
+                <li ng-class="{ active: isActive('/purchase-orders')}"><a href="#/purchase-orders">Purchase Orders</a></li>
                 <li ng-class="{ active: isActive('/vendors')}"><a href="#/vendors">Vendors</a></li>
                 <li ng-class="{ active: isActive('/customers')}"><a href="#/customers">Customers</a></li>
                 <!-- <li><a href="#/employees">Employees</a></li> -->

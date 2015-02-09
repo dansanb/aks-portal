@@ -14,12 +14,12 @@ class SalesOrder extends \Eloquent
         'notes'
     ];
 
-    function customer() {
-        return $this->hasOne('Customer');
+    public function user() {
+        return $this->hasOne('User');
     }
 
-    function user() {
-        return $this->hasOne('User');
+    public function customer() {
+        return $this->belongsTo('Customer');
     }
 
 }

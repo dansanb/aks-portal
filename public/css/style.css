@@ -18,3 +18,6 @@ body {
   body .contacts-list-group-height {
     height: 458px;
     overflow-y: scroll; }
+  body .table td {
+    line-height: 50px;
+    vertical-align: middle; }

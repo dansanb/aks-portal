@@ -13,6 +13,19 @@ var aksApp = angular.module('aksApp', [
 aksApp.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
 
+
+        //****************************************************************
+        // sales order routes
+        //****************************************************************
+        when('/sale-orders', {
+            templateUrl: 'partials/sales-order-list.html',
+            controller: 'SalesOrderListController'
+        }).
+        when('/sale-orders/:po_id', {
+            templateUrl: 'partials/sales-order-detail.html',
+            controller: 'SalesOrderDetailsController'
+        }).
+
         //****************************************************************
         // purchase order routes
         //****************************************************************
@@ -62,7 +75,7 @@ aksApp.config(['$routeProvider', function($routeProvider) {
         // user dashboard
         when('/dashboard', {
             templateUrl: 'partials/user-dashboard.html',
-            controller: 'UserDashboard'
+            controller: 'UserDashboardController'
         }).
 
 
@@ -100,29 +113,24 @@ aksApp.run(
         $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
             // if 'nextRoute' is undefined, exit.
             if (typeof nextRoute == 'undefined') {
-                console.log('next route undefined');
                 return;
             }
 
             // if $$route property is missing, exit
             if (nextRoute.hasOwnProperty('$$route') === false) {
-                console.log('next route does not have $$rote');
                 return;
             }
 
             // if controller is our login controller, exit. we want to allow that.
             if (nextRoute.$$route.controller == 'UserLoginController') {
-                console.log('next route controller is UserLoginController');
                 return;
             }
 
             // check all other routes
-            /*
             if (dbUserFactory.isLoggedIn() === false) {
                 flashMessageService.setMessage('Please login first to use that feature.', 'warning');
                 $location.path('/login');
             }
-            */
         });
 }]);
 /*
@@ -303,6 +311,110 @@ aksApp.factory("dbCustomerFactory", function($http, $q) {
             })
             .error( function() {
                 deferred.reject('Error deleting customer contact');
+            });
+
+        return deferred.promise;
+    }
+});
+/*
+ Sales Order Database Service Factory
+
+ CRUD methods for sale orders
+
+ */
+aksApp.factory("dbSalesOrderFactory", function($http, $q) {
+
+    // public API.
+    return({
+        // vendor operations
+        getAllSaleOrders: getAllSaleOrders,
+        addSalesOrder: addSalesOrder,
+        getSalesOrder: getSalesOrder,
+        updateSalesOrder: updateSalesOrder,
+        deleteSalesOrder: deleteSalesOrder,
+    });
+
+    //********************************************************************
+    // get all sale orders
+    //********************************************************************
+    function getAllSaleOrders() {
+        var deferred = $q.defer();
+
+        $http.get('sale-orders')
+            .success(function (data) {
+                deferred.resolve(data);
+            })
+            .error( function() {
+                deferred.reject('Error getting all sale orders');
+            });
+
+        return deferred.promise;
+    }
+
+    //********************************************************************
+    // get a single sales order
+    //********************************************************************
+    function getSalesOrder(salesOrderId) {
+        var deferred = $q.defer();
+
+        $http.get('sale-orders/' + salesOrderId)
+            .success(function (data) {
+                deferred.resolve(data);
+            })
+            .error( function() {
+                deferred.reject('Error getting sales order');
+            });
+
+        return deferred.promise;
+    }
+
+    //********************************************************************
+    // add sales order
+    //********************************************************************
+    function addSalesOrder(salesOrder) {
+        var deferred = $q.defer();
+
+        $http.post('sale-orders', salesOrder)
+            .success(function (data) {
+                deferred.resolve(data);
+            })
+            .error( function() {
+                deferred.reject('Error adding sales order');
+            });
+
+        return deferred.promise;
+    }
+
+    //********************************************************************
+    // update sales order
+    //********************************************************************
+    function updateSalesOrder(salesOrder) {
+        var deferred = $q.defer();
+
+        $http.put('sale-orders/' + salesOrder.sales_order_id, salesOrder)
+            .success(function (data) {
+                deferred.resolve(data);
+            })
+            .error( function() {
+                deferred.reject('Error updating sales order');
+            });
+
+        return deferred.promise;
+    }
+
+    //********************************************************************
+    // delete sales order
+    //********************************************************************
+    function deleteSalesOrder(salesOrderId) {
+
+        var deferred = $q.defer();
+
+        $http.delete('sale-orders/' + salesOrderId)
+            .success(function (data) {
+                deferred.resolve(data);
+            })
+            .error( function() {
+                deferred.reject('Error deleting sales order');
             });
 
         return deferred.promise;
@@ -1295,3 +1407,44 @@ aksApp.controller('VendorListController',
             });
         };
     }]);
+/*
+ Controller for Sales Order List
+ */
+aksApp.controller('SalesOrderListController',
+    ['$scope', '$location', '$routeParams', '$http', 'dbSalesOrderFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, dbSalesOrderFactory, flashMessageService, ngDialog)
+        {
+            // Get all sale orders
+            dbSalesOrderFactory.getAllSaleOrders().then(function(response) {
+                $scope.saleOrders = response.data;
+            });
+
+
+            //********************************************************************
+            // Handle "Add" Button Click
+            //********************************************************************
+            $scope.addSalesOrder = function() {
+
+                // display dialog to get started
+                $scope.dialogMessage = 'Give a short description for new sales order:';
+                $scope.dialogModel = {};
+                $scope.dialogModel.inputValue = "";
+
+                ngDialog.openConfirm({
+                    template: 'partials/dialog-create-input.html',
+                    showClose: false,
+                    scope: $scope
+                }).then (function (dialogData) {  // clicked create
+
+                    // create a new sales order
+                    var salesOrder = {};
+                    salesOrder.short_description =  $scope.dialogModel.inputValue;
+
+                    // add it to database, and redirect to
+                    // details page to finish adding the details
+                    dbSalesOrderFactory.addSalesOrder(salesOrder).then(function(response) {
+                        $location.path("/sale-orders/" + response.sales_order_id);
+                    });
+                });
+            };
+        }]);
