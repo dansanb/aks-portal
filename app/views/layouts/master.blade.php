@@ -6,15 +6,19 @@
 
     {{ HTML::script('js/libs/jquery.min.js');}}
     {{ HTML::script('js/libs/bootstrap.min.js'); }}
+    {{ HTML::script('js/libs/moment.js'); }}
+    {{ HTML::script('js/libs/bootstrap-datetimepicker.min.js'); }}
     {{ HTML::script('js/libs/angular.min.js'); }}
     {{ HTML::script('js/libs/angular-route.min.js'); }}
     {{ HTML::script('js/libs/ngDialog.min.js'); }}
+    {{ HTML::script('js/libs/datetimepickerDirective.js'); }}
     {{ HTML::script('js/all.js'); }}
 
     {{ HTML::style('css/bootstrap.min.css'); }}
     {{ HTML::style('css/bootstrap-theme.min.css'); }}
     {{ HTML::style('css/ngDialog.css'); }}
     {{ HTML::style('css/ngDialog-theme-default.css'); }}
+    {{ HTML::style('css/bootstrap-datetimepicker.min.css'); }}
 
     {{ HTML::style('css/style.css'); }}
 

@@ -133,6 +133,22 @@ aksApp.run(
             //}
         });
 }]);
+angular.module("aksApp").directive("simpleDate", function(){
+    return {
+        require: 'ngModel',
+        link: function(scope, element, attrs, ngModelController) {
+            ngModelController.$parsers.push(function(data) {
+                //convert data from view format to model format
+                return data; //converted
+            });
+
+            ngModelController.$formatters.push(function(data) {
+                //convert data from model format to view format
+                return moment(data).format("MMMM D, YYYY");
+            });
+        }
+    };
+});
 /*
  Customer Database Service Factory
 
@@ -1080,6 +1096,163 @@ aksApp.controller('HeaderController',
 
     }]);
 /*
+ Controller for Purchase Order List
+ */
+aksApp.controller('PurchaseOrderListController',
+    ['$scope', '$location', '$routeParams', '$http', 'dbPurchaseOrderFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, dbPurchaseOrderFactory, flashMessageService, ngDialog)
+        {
+            // Get all purchase orders
+            dbPurchaseOrderFactory.getAllPurchaseOrders().then(function(response) {
+                $scope.purchaseOrders = response.data;
+            });
+
+
+            //********************************************************************
+            // Handle "Add Contact" Button Click
+            //********************************************************************
+            $scope.addPurchaseOrder = function() {
+
+                // display "add customer name" dialog to get started
+                $scope.dialogMessage = 'What is the name of new customer?';
+                $scope.dialogModel = {};
+                $scope.dialogModel.inputValue = "";
+
+                ngDialog.openConfirm({
+                    template: 'partials/dialog-create-input.html',
+                    showClose: false,
+                    scope: $scope
+                }).then (function (dialogData) {  // clicked create
+
+                    // create a new customer
+                    var purchaseOrder = {};
+                    purchaseOrder.company_name =  $scope.dialogModel.inputValue;
+
+                    // add it to database, and redirect to
+                    // details page to finish adding the details
+                    dbPurchaseOrderFactory.addPurchaseOrder(purchaseOrder).then(function(response) {
+                        $location.path("/purchase-orders/" + response.customer_id);
+                    });
+                });
+            };
+        }]);
+/*
+ Controller for Sales Order Details
+ */
+
+aksApp.controller('SalesOrderDetailController',
+    ['$scope', '$location', '$routeParams', '$http', 'dbSalesOrderFactory', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, dbSalesOrderFactory, dbCustomerFactory, flashMessageService, ngDialog) {
+
+            $scope.salesOrderId =  $routeParams.sales_order_id;
+            $scope.salesOrder = {};
+            $scope.customers = {};
+            $scope.purchaseOrders = {};
+
+            // Get sales order details
+            dbSalesOrderFactory.getSalesOrder($scope.salesOrderId).then(function(response) {
+                $scope.salesOrder = response.data;
+            });
+
+
+            // Get customer lite list
+            dbCustomerFactory.getAllCustomersLite().then(function(response) {
+                $scope.customers = response.data;
+            });
+
+            // get list of purchase orders placed for this sales order
+            //dbSalesOrderFactory.getAllVendorContacts($scope.salesOrderId).then(function(response) {
+            //    $scope.vendorContacts = response.data;
+            //});
+
+            //********************************************************************
+            // update sales order to database and redirect to sales order list
+            //********************************************************************
+            $scope.updateSalesOrder = function () {
+
+                // update sales order contact in database
+                dbSalesOrderFactory.updateSalesOrder($scope.salesOrder).then(function(response) {
+                    //sales order has been updated, redirect with flash message
+                    if (response.success === true) {
+                        flashMessageService.setMessage('Sales Order has been updated', 'success');
+                        $location.path("/sale-orders");
+                    }
+                    else {
+                        flashMessageService.setMessage(data.message, 'danger');
+                    }
+                });
+            };
+
+            //********************************************************************
+            // delete sales order from database and redirect to sales order list
+            //********************************************************************
+            $scope.deleteSalesOrder = function () {
+
+                $scope.dialogMessage = "Are you sure you want to delete this sales order?";
+                ngDialog.openConfirm({
+                    template: 'partials/dialog-yes-no.html',
+                    showClose: false,
+                    scope: $scope
+                }).then (function (dialogData) {  // clicked yes
+                    // delete sales order contact
+                    dbSalesOrderFactory.deleteSalesOrder($scope.salesOrderId).then(function(response) {
+
+                        // sales order has been deleted, redirect with flash message
+                        if (response.success === true) {
+                            flashMessageService.setMessage('Sales order has been deleted.', 'success');
+                            $location.path("/sale-orders");
+                        }
+                        else {
+                            flashMessageService.setMessage(response.message, 'danger');
+                        }
+
+                    });
+                });
+            };
+
+        }]);
+/*
+ Controller for Sales Order List
+ */
+aksApp.controller('SalesOrderListController',
+    ['$scope', '$location', '$routeParams', '$http', 'dbSalesOrderFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, dbSalesOrderFactory, flashMessageService, ngDialog)
+        {
+            // Get all sale orders
+            dbSalesOrderFactory.getAllSaleOrders().then(function(response) {
+                $scope.saleOrders = response.data;
+            });
+
+
+            //********************************************************************
+            // Handle "Add" Button Click
+            //********************************************************************
+            $scope.addSalesOrder = function() {
+
+                // display dialog to get started
+                $scope.dialogMessage = 'Give a short description for new sales order:';
+                $scope.dialogModel = {};
+                $scope.dialogModel.inputValue = "";
+
+                ngDialog.openConfirm({
+                    template: 'partials/dialog-create-input.html',
+                    showClose: false,
+                    scope: $scope
+                }).then (function (dialogData) {  // clicked create
+
+                    // create a new sales order
+                    var salesOrder = {};
+                    salesOrder.short_description =  $scope.dialogModel.inputValue;
+
+                    // add it to database, and redirect to
+                    // details page to finish adding the details
+                    dbSalesOrderFactory.addSalesOrder(salesOrder).then(function(response) {
+                        $location.path("/sale-orders/" + response.sales_order_id);
+                    });
+                });
+            };
+        }]);
+/*
  Controller for Login
  */
 
@@ -1203,47 +1376,6 @@ aksApp.controller('UserLoginController',
                 });
             };
 
-        }]);
-/*
- Controller for Purchase Order List
- */
-aksApp.controller('PurchaseOrderListController',
-    ['$scope', '$location', '$routeParams', '$http', 'dbPurchaseOrderFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, dbPurchaseOrderFactory, flashMessageService, ngDialog)
-        {
-            // Get all purchase orders
-            dbPurchaseOrderFactory.getAllPurchaseOrders().then(function(response) {
-                $scope.purchaseOrders = response.data;
-            });
-
-
-            //********************************************************************
-            // Handle "Add Contact" Button Click
-            //********************************************************************
-            $scope.addPurchaseOrder = function() {
-
-                // display "add customer name" dialog to get started
-                $scope.dialogMessage = 'What is the name of new customer?';
-                $scope.dialogModel = {};
-                $scope.dialogModel.inputValue = "";
-
-                ngDialog.openConfirm({
-                    template: 'partials/dialog-create-input.html',
-                    showClose: false,
-                    scope: $scope
-                }).then (function (dialogData) {  // clicked create
-
-                    // create a new customer
-                    var purchaseOrder = {};
-                    purchaseOrder.company_name =  $scope.dialogModel.inputValue;
-
-                    // add it to database, and redirect to
-                    // details page to finish adding the details
-                    dbPurchaseOrderFactory.addPurchaseOrder(purchaseOrder).then(function(response) {
-                        $location.path("/purchase-orders/" + response.customer_id);
-                    });
-                });
-            };
         }]);
 /*
     Controller for Vendor Details
@@ -1425,120 +1557,3 @@ aksApp.controller('VendorListController',
             });
         };
     }]);
-/*
- Controller for Sales Order Details
- */
-
-aksApp.controller('SalesOrderDetailController',
-    ['$scope', '$location', '$routeParams', '$http', 'dbSalesOrderFactory', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, dbSalesOrderFactory, dbCustomerFactory, flashMessageService, ngDialog) {
-
-            $scope.salesOrderId =  $routeParams.sales_order_id;
-            $scope.salesOrder = {};
-            $scope.customers = {};
-            $scope.purchaseOrders = {};
-
-            // Get sales order details
-            dbSalesOrderFactory.getSalesOrder($scope.salesOrderId).then(function(response) {
-                $scope.salesOrder = response.data;
-            });
-
-
-            // Get customer lite list
-            dbCustomerFactory.getAllCustomersLite().then(function(response) {
-                $scope.customers = response.data;
-                console.log($scope.customers);
-            });
-
-            // get list of purchase orders placed for this sales order
-            //dbSalesOrderFactory.getAllVendorContacts($scope.salesOrderId).then(function(response) {
-            //    $scope.vendorContacts = response.data;
-            //});
-
-            //********************************************************************
-            // update sales order to database and redirect to sales order list
-            //********************************************************************
-            $scope.updateSalesOrder = function () {
-
-                // update sales order contact in database
-                dbSalesOrderFactory.updateSalesOrder($scope.salesOrder).then(function(response) {
-                    //sales order has been updated, redirect with flash message
-                    if (response.success === true) {
-                        flashMessageService.setMessage('Sales Order has been updated', 'success');
-                        $location.path("/sale-orders");
-                    }
-                    else {
-                        flashMessageService.setMessage(data.message, 'danger');
-                    }
-                });
-            };
-
-            //********************************************************************
-            // delete sales order from database and redirect to sales order list
-            //********************************************************************
-            $scope.deleteSalesOrder = function () {
-
-                $scope.dialogMessage = "Are you sure you want to delete this sales order?";
-                ngDialog.openConfirm({
-                    template: 'partials/dialog-yes-no.html',
-                    showClose: false,
-                    scope: $scope
-                }).then (function (dialogData) {  // clicked yes
-                    // delete sales order contact
-                    dbSalesOrderFactory.deleteSalesOrder($scope.salesOrderId).then(function(response) {
-
-                        // sales order has been deleted, redirect with flash message
-                        if (response.success === true) {
-                            flashMessageService.setMessage('Sales order has been deleted.', 'success');
-                            $location.path("/sale-orders");
-                        }
-                        else {
-                            flashMessageService.setMessage(response.message, 'danger');
-                        }
-
-                    });
-                });
-            };
-
-        }]);
-/*
- Controller for Sales Order List
- */
-aksApp.controller('SalesOrderListController',
-    ['$scope', '$location', '$routeParams', '$http', 'dbSalesOrderFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, dbSalesOrderFactory, flashMessageService, ngDialog)
-        {
-            // Get all sale orders
-            dbSalesOrderFactory.getAllSaleOrders().then(function(response) {
-                $scope.saleOrders = response.data;
-            });
-
-
-            //********************************************************************
-            // Handle "Add" Button Click
-            //********************************************************************
-            $scope.addSalesOrder = function() {
-
-                // display dialog to get started
-                $scope.dialogMessage = 'Give a short description for new sales order:';
-                $scope.dialogModel = {};
-                $scope.dialogModel.inputValue = "";
-
-                ngDialog.openConfirm({
-                    template: 'partials/dialog-create-input.html',
-                    showClose: false,
-                    scope: $scope
-                }).then (function (dialogData) {  // clicked create
-
-                    // create a new sales order
-                    var salesOrder = {};
-                    salesOrder.short_description =  $scope.dialogModel.inputValue;
-
-                    // add it to database, and redirect to
-                    // details page to finish adding the details
-                    dbSalesOrderFactory.addSalesOrder(salesOrder).then(function(response) {
-                        $location.path("/sale-orders/" + response.sales_order_id);
-                    });
-                });
-            };
-        }]);

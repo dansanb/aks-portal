@@ -25,7 +25,10 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Date</label>
-                                <input type="text" name="user_name" class="form-control" ng-model="salesOrder.date_ordered" readonly>
+                                <div class="input-group date datetimepicker">
+                                    <input type="text" class="form-control" ng-model="salesOrder.date_ordered" simple-date>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                </div>
                             </div>
                         </div>
 
@@ -78,15 +81,21 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Date Required</label>
-                                <input type="text" class="form-control" ng-model="salesOrder.date_required">
+                                <div class="input-group date datetimepicker">
+                                    <input type="text" class="form-control" ng-model="salesOrder.date_required" simple-date>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                </div>
                             </div>
                         </div>
 
                         <!-- date received -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="company_name">Date Received</label>
-                                <input type="text" class="form-control" ng-model="salesOrder.date_received">
+                                <label>Date Received</label>
+                                <div class="input-group date datetimepicker">
+                                    <input type="text" class="form-control" ng-model="salesOrder.date_received" simple-date>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -144,4 +153,12 @@
 
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $('.datetimepicker').datetimepicker({
+            format: 'MM/DD/YY'
+        });
+    });
+</script>
 

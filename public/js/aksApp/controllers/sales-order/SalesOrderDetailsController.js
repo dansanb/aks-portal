@@ -20,7 +20,6 @@ aksApp.controller('SalesOrderDetailController',
             // Get customer lite list
             dbCustomerFactory.getAllCustomersLite().then(function(response) {
                 $scope.customers = response.data;
-                console.log($scope.customers);
             });
 
             // get list of purchase orders placed for this sales order
