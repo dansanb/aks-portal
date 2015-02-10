@@ -23,14 +23,15 @@
 
                         <!-- date ordered-->
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group" ng-class="{ 'has-error' : form.date_ordered.$invalid && !form.date_ordered.$pristine }">
                                 <label>Date</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" datepicker-popup="MMMM d, yyyy" ng-model="salesOrder.date_ordered" is-open="datePickers.dateOrdered" close-text="Close" />
+                                    <input type="text" name="date_ordered" class="form-control" datepicker-popup="MMMM d, yyyy" ng-model="salesOrder.date_ordered" is-open="datePickers.dateOrdered" close-text="Close" required/>
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="open($event,'dateOrdered')"><i class="glyphicon glyphicon-calendar"></i>&nbsp;</button>
                                     </span>
                                 </div>
+                                <p ng-show="form.date_ordered.$invalid && !form.date_ordered.$pristine" class="help-block">Please select a date.</p>
                             </div>
                         </div>
 

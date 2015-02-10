@@ -31,12 +31,13 @@ aksApp.controller('UserChangePasswordController',
                     console.log(response);
                     if (response.success === true) {
                         flashMessageService.setMessage('Your password has been updated.', 'success');
-                        $location.path("/dashboard");
+                        //$location.path("/dashboard");
                     }
                     else {
                         flashMessageService.setMessage(response.message, 'danger');
-                        $route.reload();
+                        //$route.reload();
                     }
+                    $route.reload();
                 });
             };
 

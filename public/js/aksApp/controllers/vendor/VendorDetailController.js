@@ -3,8 +3,8 @@
  */
 
 aksApp.controller('VendorDetailController',
-    ['$scope', '$location', '$routeParams', '$http', 'dbVendorFactory', 'flashMessageService', 'ngDialog',
-    function($scope, $location, $routeParams, $http, dbVendorFactory, flashMessageService, ngDialog) {
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbVendorFactory', 'flashMessageService', 'ngDialog',
+    function($scope, $location, $routeParams, $http, $route, dbVendorFactory, flashMessageService, ngDialog) {
 
         $scope.vendorId =  $routeParams.vendor_id;
         $scope.vendorContacts = {};
@@ -32,11 +32,12 @@ aksApp.controller('VendorDetailController',
                 // vendor has been updated, redirect with flash message
                 if (response.success === true) {
                     flashMessageService.setMessage('Vendor has been updated', 'success');
-                    $location.path("/vendors");
+                    //$location.path("/vendors");
                 }
                 else {
                     flashMessageService.setMessage(data.message, 'danger');
                 }
+                $route.reload();
             });
         };
 

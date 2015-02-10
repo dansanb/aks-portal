@@ -3,11 +3,12 @@
  */
 
 aksApp.controller('SalesOrderDetailController',
-    ['$scope', '$location', '$routeParams', '$http', 'dbSalesOrderFactory', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, dbSalesOrderFactory, dbCustomerFactory, flashMessageService, ngDialog) {
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbSalesOrderFactory', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, $route, dbSalesOrderFactory, dbCustomerFactory, flashMessageService, ngDialog) {
 
             $scope.salesOrderId =  $routeParams.sales_order_id;
             $scope.salesOrder = {};
+            $scope.salesOrder.created_at = "1/1/2001";
             $scope.customers = {};
             $scope.purchaseOrders = {};
 
@@ -48,11 +49,12 @@ aksApp.controller('SalesOrderDetailController',
                     //sales order has been updated, redirect with flash message
                     if (response.success === true) {
                         flashMessageService.setMessage('Sales Order has been updated', 'success');
-                        $location.path("/sale-orders");
+                        //$location.path("/sale-orders");
                     }
                     else {
                         flashMessageService.setMessage(data.message, 'danger');
                     }
+                    $route.reload();
                 });
             };
 

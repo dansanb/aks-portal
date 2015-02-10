@@ -133,9 +133,9 @@ aksApp.run(
             }
 
             // check all other routes
-            //if (dbUserFactory.isLoggedIn() === false) {
-            //    flashMessageService.setMessage('Please login first to use that feature.', 'warning');
-            //    $location.path('/login');
-            //}
+            if (dbUserFactory.isLoggedIn() === false) {
+                flashMessageService.setMessage('Please login first to use that feature.', 'warning');
+                $location.path('/login');
+            }
         });
 }]);

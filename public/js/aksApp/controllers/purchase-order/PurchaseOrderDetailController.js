@@ -3,11 +3,12 @@
  */
 
 aksApp.controller('PurchaseOrderDetailController',
-    ['$scope', '$location', '$routeParams', '$http', 'dbPurchaseOrderFactory', 'dbVendorFactory', 'dbSalesOrderFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, dbPurchaseOrderFactory, dbVendorFactory, dbSalesOrderFactory, flashMessageService, ngDialog) {
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbPurchaseOrderFactory', 'dbVendorFactory', 'dbSalesOrderFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, $route, dbPurchaseOrderFactory, dbVendorFactory, dbSalesOrderFactory, flashMessageService, ngDialog) {
 
             $scope.purchaseOrderId =  $routeParams.purchase_order_id;
             $scope.purchaseOrder = {};
+            $scope.purchaseOrder.created_at = "1/1/2001";   // set starting dummy date - otherwise we get Error: error:interr Interpolation Error
             $scope.customers = {};
             $scope.purchaseOrders = {};
 
@@ -58,11 +59,12 @@ aksApp.controller('PurchaseOrderDetailController',
                     //purchase order has been updated, redirect with flash message
                     if (response.success === true) {
                         flashMessageService.setMessage('Purchase Order has been updated', 'success');
-                        $location.path("/purchase-orders");
+                        //$location.path("/purchase-orders");
                     }
                     else {
                         flashMessageService.setMessage(data.message, 'danger');
                     }
+                    $route.reload();
                 });
             };
 

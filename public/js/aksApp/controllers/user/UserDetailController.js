@@ -27,13 +27,13 @@ aksApp.controller('UserDetailController',
                     console.log(response);
                     if (response.success === true) {
                         flashMessageService.setMessage('You have updated your profile, ' + response.data.display_name, 'success');
-                        $location.path("/dashboard");
+                        //$location.path("/dashboard");
                     }
                     else {
                         flashMessageService.setMessage(response.message, 'danger');
                         //$location.path("/user/" + $scope.user.id);
-                        $route.reload();
                     }
+                    $route.reload();
                 });
             };
 

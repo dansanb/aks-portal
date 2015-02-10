@@ -32,7 +32,7 @@
             @include('layouts.navigation')
             <div class="alert alert-@{{ getFlashAlertType() }}" ng-show="getFlashMessage()">
                 <span class="glyphicon glyphicon-info-sign"></span> @{{ getFlashMessage() }}
-                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <!-- <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> -->
             </div>
         </div>
 

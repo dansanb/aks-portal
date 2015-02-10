@@ -3,8 +3,8 @@
  */
 
 aksApp.controller('CustomerDetailController',
-    ['$scope', '$location', '$routeParams', '$http', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, dbCustomerFactory, flashMessageService, ngDialog) {
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, $route,  dbCustomerFactory, flashMessageService, ngDialog) {
 
             $scope.customerId =  $routeParams.customer_id;
             $scope.customerContacts = {};
@@ -31,11 +31,12 @@ aksApp.controller('CustomerDetailController',
                     // customer has been updated, redirect with flash message
                     if (response.success === true) {
                         flashMessageService.setMessage('Customer has been updated.', 'success');
-                        $location.path("/customers");
+                        //$location.path("/customers");
                     }
                     else {
                         flashMessageService.setMessage(response.message, 'danger');
                     }
+                    $route.reload();
                 });
             };
 

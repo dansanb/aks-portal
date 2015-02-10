@@ -162,15 +162,14 @@
 
                 <div class="list-group top-buffer purchase-orders-list-group-height">
                     <div class="list-group-item"  ng-repeat="purchaseOrder in purchaseOrderHistory">
-                        <strong>{{purchaseOrder.purchase_order_id}}</strong>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span ng-hide="purchaseOrder.date_delivered" class="label label-warning">Pending</span>
-                        <span ng-show="purchaseOrder.date_delivered" class="label label-success">Complete</span>
-                        <br/>
-                        something goes here
+                        <div class="pull-left top-buffer-10">
+                            <strong>{{purchaseOrder.purchase_order_id}}</strong>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span ng-hide="purchaseOrder.date_delivered" class="label label-warning">Pending</span>
+                            <span ng-show="purchaseOrder.date_delivered" class="label label-success">Complete</span>
+                        </div>
                         <div class="btn-group pull-right top-buffer-10">
-
-                            <a class="btn btn-sm btn-default" href="#/purchase-order/{{ purchaseOrder.purchase_order_id }}"> View</a>
+                            <a class="btn btn-sm btn-default" href="#/purchase-orders/{{ purchaseOrder.purchase_order_id }}"> View</a>
                         </div>
                         <div class="clearfix"></div>
                     </div>
