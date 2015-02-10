@@ -3,8 +3,8 @@
  */
 
 aksApp.controller('PurchaseOrderDetailController',
-    ['$scope', '$location', '$routeParams', '$http', 'dbPurchaseOrderFactory', 'dbVendorFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, dbPurchaseOrderFactory, dbVendorFactory, flashMessageService, ngDialog) {
+    ['$scope', '$location', '$routeParams', '$http', 'dbPurchaseOrderFactory', 'dbVendorFactory', 'dbSalesOrderFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, dbPurchaseOrderFactory, dbVendorFactory, dbSalesOrderFactory, flashMessageService, ngDialog) {
 
             $scope.purchaseOrderId =  $routeParams.purchase_order_id;
             $scope.purchaseOrder = {};
@@ -34,6 +34,12 @@ aksApp.controller('PurchaseOrderDetailController',
             // Get vendor lite list
             dbVendorFactory.getAllVendorsLite().then(function(response) {
                 $scope.vendors = response.data;
+            });
+
+
+            // Get sale orders lite list
+            dbSalesOrderFactory.getAllSaleOrdersLite().then(function(response) {
+                $scope.saleOrders = response.data;
             });
 
             //********************************************************************

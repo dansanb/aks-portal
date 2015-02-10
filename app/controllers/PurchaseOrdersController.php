@@ -38,6 +38,13 @@ class PurchaseOrdersController extends \BaseController {
     public function store()
     {
         $data = Input::json()->all();
+
+        // inject current logged-in user
+        $data['user_id'] = Auth::id();
+
+        // inject today's date as default for 'date_ordered'
+        $data['date_ordered'] = date("Y-m-d H:i:s");
+
         $this->validator->validate($data);
 
         $purchaseOrder = new PurchaseOrder($data);

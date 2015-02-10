@@ -31,6 +31,24 @@ class SaleOrdersController extends \BaseController {
     }
 
     /**
+     * return a lite list of all sale orders(id and customer_name)
+     *
+     * @return Response
+     */
+    public function getAllSaleOrdersLite()
+    {
+        $data = DB::table('sales_order')
+            ->join('customer', 'sales_order.customer_id', '=', 'customer.customer_id')
+            ->select('sales_order.sales_order_id', DB::raw('CONCAT(sales_order.sales_order_id, " - ", customer.company_name) AS sales_order_label'))
+            ->orderBy('sales_order.sales_order_id', 'desc')
+            ->get();
+
+        Log::info($data);
+
+        return $this->successfulResponse($data);
+    }
+
+    /**
      * Store a newly created sales order and return it
      *
      * @return Response with new sales order

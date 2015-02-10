@@ -1,0 +1,46 @@
+<div class="panel panel-primary">
+    <div class="panel-heading"><span class="glyphicon glyphicon-plus"></span> Create Dialog</div>
+    <div class="panel-body">
+
+        <div class="row top-buffer-20">
+            <div class="col-xs-12">
+                {{ dialogMessage }}
+            </div>
+        </div>
+
+        <div class="row top-buffer-20">
+            <div class="col-xs-12">
+                <form name="form" novalidate>
+
+
+                        <label>Sales Order</label>
+                        <select class="form-control"
+                                required
+                                ng-model="dialogModel.salesOrderId"
+                                ng-options="salesOrder.sales_order_id as salesOrder.sales_order_label for salesOrder in saleOrders">
+                        </select>
+
+                        <div class="top-buffer-20"></div>
+
+
+                        <label>Vendor</label>
+                        <select class="form-control"
+                                required
+                                ng-model="dialogModel.vendorId"
+                                ng-options="vendor.vendor_id as vendor.company_name for vendor in vendors">
+                        </select>
+
+
+                </form>
+            </div>
+        </div>
+
+        <div class="row top-buffer-20 pull-right">
+            <div class="col-xs-12">
+                <button type="submit" ng-click="confirm()" class="btn btn-primary" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-ok"></span> Create</button>
+                <button type="button" ng-click="closeThisDialog()" class="btn btn-default"> Cancel</button>
+            </div>
+        </div>
+
+    </div>
+</div>

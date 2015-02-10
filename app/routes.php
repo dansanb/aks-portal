@@ -27,6 +27,7 @@ Route::group(array('before' => 'auth'), function()
     Route::Resource('purchase-orders', 'PurchaseOrdersController');
 
     // sales order routes
+    Route::get('sale-orders-lite', 'SaleOrdersController@getAllSaleOrdersLite');
     Route::Resource('sale-orders', 'SaleOrdersController');
 
 

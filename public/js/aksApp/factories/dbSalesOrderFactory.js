@@ -10,6 +10,7 @@ aksApp.factory("dbSalesOrderFactory", function($http, $q) {
     return({
         // vendor operations
         getAllSaleOrders: getAllSaleOrders,
+        getAllSaleOrdersLite: getAllSaleOrdersLite,
         addSalesOrder: addSalesOrder,
         getSalesOrder: getSalesOrder,
         updateSalesOrder: updateSalesOrder,
@@ -23,6 +24,23 @@ aksApp.factory("dbSalesOrderFactory", function($http, $q) {
         var deferred = $q.defer();
 
         $http.get('sale-orders')
+            .success(function (data) {
+                deferred.resolve(data);
+            })
+            .error( function() {
+                deferred.reject('Error getting all sale orders');
+            });
+
+        return deferred.promise;
+    }
+
+    //********************************************************************
+    // get all sale orders lite
+    //********************************************************************
+    function getAllSaleOrdersLite() {
+        var deferred = $q.defer();
+
+        $http.get('sale-orders-lite')
             .success(function (data) {
                 deferred.resolve(data);
             })

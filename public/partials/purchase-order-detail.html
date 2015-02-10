@@ -16,7 +16,7 @@
                         <!-- purchase order number-->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Sales Order #</label>
+                                <label>Purchase Order #</label>
                                 <input type="text" name="purchase_order_id" class="form-control" ng-model="purchaseOrder.purchase_order_id" readonly>
                             </div>
                         </div>
@@ -50,6 +50,20 @@
                                         ng-model="purchaseOrder.vendor_id"
 
                                         ng-options="vendor.vendor_id as vendor.company_name for vendor in vendors">
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <!-- sales order -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Sales Order</label>
+                                <select class="form-control"
+
+                                        ng-model="purchaseOrder.sales_order_id"
+
+                                        ng-options="salesOrder.sales_order_id as salesOrder.sales_order_label for salesOrder in saleOrders">
                                 </select>
                             </div>
                         </div>
@@ -140,7 +154,7 @@
                 col-md-5">
 
         <div class="panel panel-primary  purchase-orders-panel-height">
-            <div class="panel-heading">Purchase Orders</div>
+            <div class="panel-heading">Previous Purchase Orders</div>
             <div class="panel-body">
 
                 <div class="list-group top-buffer purchase-orders-list-group-height">
