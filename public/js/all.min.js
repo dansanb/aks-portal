@@ -39,7 +39,7 @@ aksApp.config(['$routeProvider', function($routeProvider) {
             templateUrl: 'partials/purchase-order-list.html',
             controller: 'PurchaseOrderListController'
         }).
-        when('/purchase-orders/:po_id', {
+        when('/purchase-orders/:purchase_order_id', {
             templateUrl: 'partials/purchase-order-detail.html',
             controller: 'PurchaseOrderDetailController'
         }).
@@ -715,6 +715,7 @@ aksApp.factory("dbVendorFactory", function($http, $q) {
     return({
         // vendor operations
         getAllVendors: getAllVendors,
+        getAllVendorsLite: getAllVendorsLite,
         addVendor: addVendor,
         getVendor: getVendor,
         updateVendor: updateVendor,
@@ -739,6 +740,23 @@ aksApp.factory("dbVendorFactory", function($http, $q) {
             })
             .error( function() {
                 deferred.reject('Error getting vendor data');
+            });
+
+        return deferred.promise;
+    }
+
+    //********************************************************************
+    // get all vendors lite
+    //********************************************************************
+    function getAllVendorsLite() {
+        var deferred = $q.defer();
+
+        $http.get('vendors-lite')
+            .success(function (data) {
+                deferred.resolve(data);
+            })
+            .error( function() {
+                deferred.reject('Error getting all vendors');
             });
 
         return deferred.promise;
@@ -977,50 +995,6 @@ aksApp.service("flashMessageService", function($rootScope) {
     }
 });
 /*
-    Header Controller
-
-    Controller to access site-wide functionality, such as flash message
- */
-aksApp.controller('HeaderController',
-    ['$scope', '$location', 'flashMessageService', 'dbUserFactory',
-    function ($scope, $location, flashMessageService, dbUserFactory)
-    {
-        $scope.getFlashMessage = function() {
-            return flashMessageService.getMessage();
-        };
-
-        $scope.getFlashAlertType = function() {
-            return flashMessageService.getAlertType();
-        };
-
-        $scope.getDisplayName = function() {
-            return dbUserFactory.getDisplayName();
-        };
-
-        $scope.getUserId = function() {
-            return dbUserFactory.getUserId();
-        };
-
-        $scope.isUserLoggedIn = function() {
-            return dbUserFactory.isLoggedIn();
-        };
-
-        $scope.logout = function() {
-
-            dbUserFactory.logout().then(function(data) {
-                flashMessageService.setMessage('You have been logged out.', 'success');
-                $location.path('/login');
-            });
-        };
-
-        $scope.isActive = function (viewLocation) {
-            return viewLocation === $location.path();
-        };
-
-
-
-    }]);
-/*
  Controller for Vendor Details
  */
 
@@ -1197,6 +1171,134 @@ aksApp.controller('CustomerListController',
                     });
                 });
             };
+        }]);
+/*
+    Header Controller
+
+    Controller to access site-wide functionality, such as flash message
+ */
+aksApp.controller('HeaderController',
+    ['$scope', '$location', 'flashMessageService', 'dbUserFactory',
+    function ($scope, $location, flashMessageService, dbUserFactory)
+    {
+        $scope.getFlashMessage = function() {
+            return flashMessageService.getMessage();
+        };
+
+        $scope.getFlashAlertType = function() {
+            return flashMessageService.getAlertType();
+        };
+
+        $scope.getDisplayName = function() {
+            return dbUserFactory.getDisplayName();
+        };
+
+        $scope.getUserId = function() {
+            return dbUserFactory.getUserId();
+        };
+
+        $scope.isUserLoggedIn = function() {
+            return dbUserFactory.isLoggedIn();
+        };
+
+        $scope.logout = function() {
+
+            dbUserFactory.logout().then(function(data) {
+                flashMessageService.setMessage('You have been logged out.', 'success');
+                $location.path('/login');
+            });
+        };
+
+        $scope.isActive = function (viewLocation) {
+            return viewLocation === $location.path();
+        };
+
+
+
+    }]);
+/*
+ Controller for Purchase Order Details
+ */
+
+aksApp.controller('PurchaseOrderDetailController',
+    ['$scope', '$location', '$routeParams', '$http', 'dbPurchaseOrderFactory', 'dbVendorFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, dbPurchaseOrderFactory, dbVendorFactory, flashMessageService, ngDialog) {
+
+            $scope.purchaseOrderId =  $routeParams.purchase_order_id;
+            $scope.purchaseOrder = {};
+            $scope.customers = {};
+            $scope.purchaseOrders = {};
+
+            // datepicker
+            $scope.datePickers =  {
+                dateOrdered: false,
+                dateRequired: false,
+                dateDelivered: false
+            };
+
+            $scope.open = function($event, which) {
+                $event.preventDefault();
+                $event.stopPropagation();
+
+                $scope.datePickers[which]= true;
+            };
+
+            // Get purchase order details
+            dbPurchaseOrderFactory.getPurchaseOrder($scope.purchaseOrderId).then(function(response) {
+                $scope.purchaseOrder = response.data;
+            });
+
+
+            // Get vendor lite list
+            dbVendorFactory.getAllVendorsLite().then(function(response) {
+                $scope.vendors = response.data;
+            });
+
+            //********************************************************************
+            // update purchase order to database and redirect to purchase order list
+            //********************************************************************
+            $scope.updatePurchaseOrder = function () {
+
+                // update purchase order contact in database
+                dbPurchaseOrderFactory.updatePurchaseOrder($scope.purchaseOrder).then(function(response) {
+                    //purchase order has been updated, redirect with flash message
+                    if (response.success === true) {
+                        flashMessageService.setMessage('Purchase Order has been updated', 'success');
+                        $location.path("/purchase-orders");
+                    }
+                    else {
+                        flashMessageService.setMessage(data.message, 'danger');
+                    }
+                });
+            };
+
+            //********************************************************************
+            // delete purchase order from database and redirect to purchase order list
+            //********************************************************************
+            $scope.deletePurchaseOrder = function () {
+
+                $scope.dialogMessage = "Are you sure you want to delete this purchase order?";
+                ngDialog.openConfirm({
+                    template: 'partials/dialog-yes-no.html',
+                    showClose: false,
+                    scope: $scope
+                }).then (function (dialogData) {  // clicked yes
+                    // delete purchase order contact
+                    dbPurchaseOrderFactory.deletePurchaseOrder($scope.purchaseOrderId).then(function(response) {
+
+                        // purchase order has been deleted, redirect with flash message
+                        if (response.success === true) {
+                            flashMessageService.setMessage('Purchase order has been deleted.', 'success');
+                            $location.path("/purchase-orders");
+                        }
+                        else {
+                            flashMessageService.setMessage(response.message, 'danger');
+                        }
+
+                    });
+                });
+            };
+
         }]);
 /*
  Controller for Purchase Order List
@@ -1425,6 +1527,131 @@ aksApp.controller('VendorListController',
         };
     }]);
 /*
+ Controller for Login
+ */
+
+aksApp.controller('UserChangePasswordController',
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
+        {
+            $scope.user = {};
+            $scope.userId =  $routeParams.user_id;
+
+            // Get user details
+            dbUserFactory.getUser($scope.userId).then(function(response) {
+                $scope.user = response.data;
+
+                // add additional members to the user object to allow for password change
+                $scope.user.current_password = "";
+                $scope.user.new_password = "";
+                $scope.user.confirm_password = "";
+            });
+
+
+            //********************************************************************
+            // update user password
+            //********************************************************************
+            $scope.changeUserPassword = function () {
+
+                // update user password in database
+                dbUserFactory.changeUserPassword($scope.user).then(function(response) {
+                    // user password has been updated, display flash message
+                    console.log(response);
+                    if (response.success === true) {
+                        flashMessageService.setMessage('Your password has been updated.', 'success');
+                        $location.path("/dashboard");
+                    }
+                    else {
+                        flashMessageService.setMessage(response.message, 'danger');
+                        $route.reload();
+                    }
+                });
+            };
+
+
+        }]);
+/*
+ Controller for User Dashboard
+ */
+
+aksApp.controller('UserDashboardController',
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
+        {
+
+
+        }]);
+/*
+ Controller for Login
+ */
+
+aksApp.controller('UserDetailController',
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
+        {
+            $scope.user = {};
+            $scope.userId =  $routeParams.user_id;
+
+
+            // Get user details
+            dbUserFactory.getUser($scope.userId).then(function(response) {
+                $scope.user = response.data;
+            });
+
+
+            //********************************************************************
+            // update user to database and redirect to dashboard
+            //********************************************************************
+            $scope.updateUser = function () {
+
+                // update user in database
+                dbUserFactory.updateUser($scope.user).then(function(response) {
+                    // customer has been updated, redirect with flash message
+                    console.log(response);
+                    if (response.success === true) {
+                        flashMessageService.setMessage('You have updated your profile, ' + response.data.display_name, 'success');
+                        $location.path("/dashboard");
+                    }
+                    else {
+                        flashMessageService.setMessage(response.message, 'danger');
+                        //$location.path("/user/" + $scope.user.id);
+                        $route.reload();
+                    }
+                });
+            };
+
+
+        }]);
+/*
+ Controller for Login
+ */
+
+aksApp.controller('UserLoginController',
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
+        {
+            // pre-fill for testing
+            $scope.user = {};
+            $scope.user.email = "d@d.com";
+            $scope.user.password = "1";
+
+            $scope.login = function() {
+                // attempt to login
+                dbUserFactory.login($scope.user).then(function(response) {
+
+                    if (response.success === true) {
+                        flashMessageService.setMessage('Welcome ' + response.data.display_name + '!', 'success');
+                        $location.path("/dashboard");
+                    }
+                    else {
+                        flashMessageService.setMessage('Invalid email / password. Please try again.', 'danger');
+                        $route.reload();
+                    }
+                });
+            };
+
+        }]);
+/*
  Controller for Sales Order Details
  */
 
@@ -1558,129 +1785,4 @@ aksApp.controller('SalesOrderListController',
                     });
                 });
             };
-        }]);
-/*
- Controller for Login
- */
-
-aksApp.controller('UserChangePasswordController',
-    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
-        {
-            $scope.user = {};
-            $scope.userId =  $routeParams.user_id;
-
-            // Get user details
-            dbUserFactory.getUser($scope.userId).then(function(response) {
-                $scope.user = response.data;
-
-                // add additional members to the user object to allow for password change
-                $scope.user.current_password = "";
-                $scope.user.new_password = "";
-                $scope.user.confirm_password = "";
-            });
-
-
-            //********************************************************************
-            // update user password
-            //********************************************************************
-            $scope.changeUserPassword = function () {
-
-                // update user password in database
-                dbUserFactory.changeUserPassword($scope.user).then(function(response) {
-                    // user password has been updated, display flash message
-                    console.log(response);
-                    if (response.success === true) {
-                        flashMessageService.setMessage('Your password has been updated.', 'success');
-                        $location.path("/dashboard");
-                    }
-                    else {
-                        flashMessageService.setMessage(response.message, 'danger');
-                        $route.reload();
-                    }
-                });
-            };
-
-
-        }]);
-/*
- Controller for User Dashboard
- */
-
-aksApp.controller('UserDashboardController',
-    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
-        {
-
-
-        }]);
-/*
- Controller for Login
- */
-
-aksApp.controller('UserDetailController',
-    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
-        {
-            $scope.user = {};
-            $scope.userId =  $routeParams.user_id;
-
-
-            // Get user details
-            dbUserFactory.getUser($scope.userId).then(function(response) {
-                $scope.user = response.data;
-            });
-
-
-            //********************************************************************
-            // update user to database and redirect to dashboard
-            //********************************************************************
-            $scope.updateUser = function () {
-
-                // update user in database
-                dbUserFactory.updateUser($scope.user).then(function(response) {
-                    // customer has been updated, redirect with flash message
-                    console.log(response);
-                    if (response.success === true) {
-                        flashMessageService.setMessage('You have updated your profile, ' + response.data.display_name, 'success');
-                        $location.path("/dashboard");
-                    }
-                    else {
-                        flashMessageService.setMessage(response.message, 'danger');
-                        //$location.path("/user/" + $scope.user.id);
-                        $route.reload();
-                    }
-                });
-            };
-
-
-        }]);
-/*
- Controller for Login
- */
-
-aksApp.controller('UserLoginController',
-    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
-        {
-            // pre-fill for testing
-            $scope.user = {};
-            $scope.user.email = "d@d.com";
-            $scope.user.password = "1";
-
-            $scope.login = function() {
-                // attempt to login
-                dbUserFactory.login($scope.user).then(function(response) {
-
-                    if (response.success === true) {
-                        flashMessageService.setMessage('Welcome ' + response.data.display_name + '!', 'success');
-                        $location.path("/dashboard");
-                    }
-                    else {
-                        flashMessageService.setMessage('Invalid email / password. Please try again.', 'danger');
-                        $route.reload();
-                    }
-                });
-            };
-
         }]);

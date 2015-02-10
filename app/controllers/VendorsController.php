@@ -30,7 +30,7 @@ class VendorsController extends \BaseController {
      */
     public function getAllVendorsLite()
     {
-        $data = DB::table('vendor')->select('id',  'company_name')->get();
+        $data = DB::table('vendor')->select('vendor_id',  'company_name')->orderBy('company_name', 'asc')->get();
 
         return $this->successfulResponse($data);
     }

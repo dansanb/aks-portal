@@ -30,7 +30,7 @@
             </thead>
             <tr ng-repeat="purchaseOrder in purchaseOrders | filter:searchText">
 
-                <td class="vert-align text-center"><a href="#/sale-orders/{{purchaseOrder.purchase_order_id}}">{{purchaseOrder.purchase_order_id}}</a></td>
+                <td class="vert-align text-center"><a href="#/purchase-orders/{{purchaseOrder.purchase_order_id}}">{{purchaseOrder.purchase_order_id}}</a></td>
                 <td class="vert-align hidden-xs text-center">{{purchaseOrder.date_ordered | dateToISO | date:'MM/dd/yyyy'}}</td>
                 <td class="vert-align hidden-sm hidden-xs">{{purchaseOrder.company_name}}</td>
 

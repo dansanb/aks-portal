@@ -1,0 +1,169 @@
+<div class="row">
+
+    <!-- purchase order details -->
+
+    <div class="col-lg-8
+                col-md-7">
+        <form name="form" novalidate>
+            <!-- details panel -->
+            <div class="panel panel-primary">
+                <div class="panel-heading">Purchase Order Details</div>
+                <div class="panel-body">
+
+
+                    <div class="row">
+
+                        <!-- purchase order number-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Sales Order #</label>
+                                <input type="text" name="purchase_order_id" class="form-control" ng-model="purchaseOrder.purchase_order_id" readonly>
+                            </div>
+                        </div>
+
+                        <!-- date ordered-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" datepicker-popup="MMMM d, yyyy" ng-model="purchaseOrder.date_ordered" is-open="datePickers.dateOrdered" close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open($event,'dateOrdered')"><i class="glyphicon glyphicon-calendar"></i>&nbsp;</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="row">
+
+                        <!-- vendor -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Vendor</label>
+                                <select class="form-control"
+
+                                        ng-model="purchaseOrder.vendor_id"
+
+                                        ng-options="vendor.vendor_id as vendor.company_name for vendor in vendors">
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <!-- date required  -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date Required</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" datepicker-popup="MMMM d, yyyy" ng-model="purchaseOrder.date_required" is-open="datePickers.dateRequired" close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open($event,'dateRequired')"><i class="glyphicon glyphicon-calendar"></i>&nbsp;</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- date delivered -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date Delivered</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" datepicker-popup="MMMM d, yyyy" ng-model="purchaseOrder.date_delivered" is-open="datePickers.dateDelivered" close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open($event,'dateDelivered')"><i class="glyphicon glyphicon-calendar"></i>&nbsp;</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- short description -->
+                    <div class="row">
+                        <div class=" col-md-12">
+                            <div class="form-group">
+                                <label>Short Description</label>
+                                <input type="text" class="form-control" ng-model="purchaseOrder.short_description">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- notes -->
+                    <div class="row">
+                        <div class=" col-md-12">
+                            <div class="form-group">
+                                <label for="company_name">Notes</label>
+                                <textarea class="form-control ta-noresize ta-height-lg" ng-model="purchaseOrder.notes"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- status -->
+                    <div class="row">
+                        <div class=" col-md-12">
+                            <div class="form-group">
+                                <label for="company_name">Order Status: </label>
+                                <span ng-hide="purchaseOrder.date_delivered" class="label label-warning">Pending</span>
+                                <span ng-show="purchaseOrder.date_delivered" class="label label-success">Complete</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- buttons -->
+                    <div class="row ">
+                        <div class="col-xs-6">
+                            <button ng-click="deletePurchaseOrder()" class="btn btn-default"> Delete</button>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <button ng-click="updatePurchaseOrder()" class="btn btn-primary" ng-disabled="form.$invalid"><span class="glyphicon glyphicon-ok"></span> Save</button>
+                            <a href="#/purchase-orders" class="btn btn-default"> Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- purchase orders list -->
+    <div class="col-lg-4
+                col-md-5">
+
+        <div class="panel panel-primary  purchase-orders-panel-height">
+            <div class="panel-heading">Purchase Orders</div>
+            <div class="panel-body">
+
+                <div class="list-group top-buffer purchase-orders-list-group-height">
+                    <div class="list-group-item"  ng-repeat="purchaseOrder in purchaseOrder.purchase_orders">
+                        <strong>{{purchaseOrder.purchase_order_id}}</strong>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span ng-hide="purchaseOrder.date_delivered" class="label label-warning">Pending</span>
+                        <span ng-show="purchaseOrder.date_delivered" class="label label-success">Complete</span>
+                        <br/>
+                        {{purchaseOrder.vendor.company_name}}
+                        <div class="btn-group pull-right top-buffer-10">
+
+                            <a class="btn btn-sm btn-default" href="#/purchase-order/{{ purchaseOrder.purchase_order_id }}"> View</a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>

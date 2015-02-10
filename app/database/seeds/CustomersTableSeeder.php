@@ -12,7 +12,7 @@ class CustomersTableSeeder extends Seeder {
         foreach(range(1, 50) as $index)
         {
             Customer::create([
-                'company_name' => $faker->firstName,
+                'company_name' => 'Customer-' . $faker->firstName,
                 'ship_address' => $faker->address,
                 'bill_address' => $faker->address,
                 'phone' => $faker->phoneNumber,

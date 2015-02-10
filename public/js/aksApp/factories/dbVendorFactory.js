@@ -10,6 +10,7 @@ aksApp.factory("dbVendorFactory", function($http, $q) {
     return({
         // vendor operations
         getAllVendors: getAllVendors,
+        getAllVendorsLite: getAllVendorsLite,
         addVendor: addVendor,
         getVendor: getVendor,
         updateVendor: updateVendor,
@@ -34,6 +35,23 @@ aksApp.factory("dbVendorFactory", function($http, $q) {
             })
             .error( function() {
                 deferred.reject('Error getting vendor data');
+            });
+
+        return deferred.promise;
+    }
+
+    //********************************************************************
+    // get all vendors lite
+    //********************************************************************
+    function getAllVendorsLite() {
+        var deferred = $q.defer();
+
+        $http.get('vendors-lite')
+            .success(function (data) {
+                deferred.resolve(data);
+            })
+            .error( function() {
+                deferred.reject('Error getting all vendors');
             });
 
         return deferred.promise;

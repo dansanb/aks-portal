@@ -39,7 +39,7 @@ aksApp.config(['$routeProvider', function($routeProvider) {
             templateUrl: 'partials/purchase-order-list.html',
             controller: 'PurchaseOrderListController'
         }).
-        when('/purchase-orders/:po_id', {
+        when('/purchase-orders/:purchase_order_id', {
             templateUrl: 'partials/purchase-order-detail.html',
             controller: 'PurchaseOrderDetailController'
         }).
