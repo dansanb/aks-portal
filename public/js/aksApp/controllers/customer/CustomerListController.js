@@ -34,7 +34,7 @@ aksApp.controller('CustomerListController',
                     // add it to database, and redirect to
                     // details page to finish adding the details
                     dbCustomerFactory.addCustomer(customer).then(function(response) {
-                        $location.path("/customers/" + response.customer_id);
+                        $location.path("/customers/" + response.data.customer_id);
                     });
                 });
             };

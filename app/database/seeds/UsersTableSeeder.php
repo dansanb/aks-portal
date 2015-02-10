@@ -12,10 +12,18 @@ class UsersTableSeeder extends Seeder {
 		$faker = Faker::create();
 
         User::create([
-            'email' => 'd@d.com',
+            'email' => 'daniel@aquaklean.com',
             'password' => Hash::make('1'),
-            'display_name' => 'Dan'
+            'display_name' => 'Daniel'
         ]);
+
+
+        User::create([
+            'email' => 'shane@aquaklean.com',
+            'password' => Hash::make('1'),
+            'display_name' => 'Shane'
+        ]);
+
 	}
 
 }

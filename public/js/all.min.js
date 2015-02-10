@@ -1204,7 +1204,7 @@ aksApp.controller('CustomerListController',
                     // add it to database, and redirect to
                     // details page to finish adding the details
                     dbCustomerFactory.addCustomer(customer).then(function(response) {
-                        $location.path("/customers/" + response.customer_id);
+                        $location.path("/customers/" + response.data.customer_id);
                     });
                 });
             };
@@ -1645,8 +1645,8 @@ aksApp.controller('UserLoginController',
         {
             // pre-fill for testing
             $scope.user = {};
-            $scope.user.email = "d@d.com";
-            $scope.user.password = "1";
+            //$scope.user.email = "d@d.com";
+            //$scope.user.password = "1";
 
             $scope.login = function() {
                 // attempt to login
@@ -1840,7 +1840,7 @@ aksApp.controller('VendorListController',
                 // add it to database, and redirect to
                 // details page to finish adding the details
                 dbVendorFactory.addVendor(vendor).then(function(response) {
-                    $location.path("/vendors/" + response.data.id);
+                    $location.path("/vendors/" + response.data.vendor_id);
                 });
             });
         };

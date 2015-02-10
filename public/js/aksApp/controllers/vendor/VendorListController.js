@@ -35,7 +35,7 @@ aksApp.controller('VendorListController',
                 // add it to database, and redirect to
                 // details page to finish adding the details
                 dbVendorFactory.addVendor(vendor).then(function(response) {
-                    $location.path("/vendors/" + response.data.id);
+                    $location.path("/vendors/" + response.data.vendor_id);
                 });
             });
         };
