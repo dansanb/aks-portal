@@ -123,12 +123,15 @@
 
                     <!-- status -->
                     <div class="row">
-                        <div class=" col-md-12">
+                        <div class=" col-md-6">
                             <div class="form-group">
                                 <label for="company_name">Order Status: </label>
                                 <span ng-hide="purchaseOrder.date_delivered" class="label label-warning">Pending</span>
                                 <span ng-show="purchaseOrder.date_delivered" class="label label-success">Complete</span>
                             </div>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <i>Entered by {{ purchaseOrder.user.display_name }} on {{ purchaseOrder.created_at | dateToISO | date:"MM/dd/yy hh:mm a" }}</i>
                         </div>
                     </div>
 
@@ -158,13 +161,13 @@
             <div class="panel-body">
 
                 <div class="list-group top-buffer purchase-orders-list-group-height">
-                    <div class="list-group-item"  ng-repeat="purchaseOrder in purchaseOrder.purchase_orders">
+                    <div class="list-group-item"  ng-repeat="purchaseOrder in purchaseOrderHistory">
                         <strong>{{purchaseOrder.purchase_order_id}}</strong>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <span ng-hide="purchaseOrder.date_delivered" class="label label-warning">Pending</span>
                         <span ng-show="purchaseOrder.date_delivered" class="label label-success">Complete</span>
                         <br/>
-                        {{purchaseOrder.vendor.company_name}}
+                        something goes here
                         <div class="btn-group pull-right top-buffer-10">
 
                             <a class="btn btn-sm btn-default" href="#/purchase-order/{{ purchaseOrder.purchase_order_id }}"> View</a>

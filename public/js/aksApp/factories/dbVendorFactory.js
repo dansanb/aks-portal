@@ -13,6 +13,7 @@ aksApp.factory("dbVendorFactory", function($http, $q) {
         getAllVendorsLite: getAllVendorsLite,
         addVendor: addVendor,
         getVendor: getVendor,
+        getPurchaseOrderHistory: getPurchaseOrderHistory,
         updateVendor: updateVendor,
         deleteVendor: deleteVendor,
 
@@ -69,6 +70,23 @@ aksApp.factory("dbVendorFactory", function($http, $q) {
             })
             .error( function() {
                 deferred.reject('Error getting vendor data');
+            });
+
+        return deferred.promise;
+    }
+
+    //********************************************************************
+    // get a list of purchase orders from vendor
+    //********************************************************************
+    function getPurchaseOrderHistory(vendorId) {
+        var deferred = $q.defer();
+
+        $http.get('vendors-purchase-order-history/' + vendorId)
+            .success(function (data) {
+                deferred.resolve(data);
+            })
+            .error( function() {
+                deferred.reject('Error getting purchase orders');
             });
 
         return deferred.promise;

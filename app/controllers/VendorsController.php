@@ -36,6 +36,21 @@ class VendorsController extends \BaseController {
     }
 
 
+
+
+    /**
+     * return a list of purchase orders from a vendor
+     *
+     * @return Response
+     */
+    public function getPurchaseOrderHistory($vendorId)
+    {
+        $data = Vendor::find($vendorId)->purchaseOrders;
+
+        return $this->successfulResponse($data);
+    }
+
+
 	/**
 	 * Store a newly created vendor and return it
 	 *

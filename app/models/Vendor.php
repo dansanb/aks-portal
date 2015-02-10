@@ -17,5 +17,9 @@ class Vendor extends \Eloquent
         return $this->hasMany('VendorContact');
     }
 
+    function purchaseOrders() {
+        return $this->hasMany('PurchaseOrder');
+    }
+
 
 }

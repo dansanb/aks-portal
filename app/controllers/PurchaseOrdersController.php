@@ -30,6 +30,8 @@ class PurchaseOrdersController extends \BaseController {
         return $this->successfulResponse($data);
     }
 
+
+
     /**
      * Store a newly created purchase order and return it
      *
@@ -61,7 +63,7 @@ class PurchaseOrdersController extends \BaseController {
      */
     public function show($id)
     {
-        $purchaseOrder = PurchaseOrder::findOrFail($id);
+        $purchaseOrder = PurchaseOrder::with(['user'])->findOrFail($id);
 
         return $this->successfulResponse($purchaseOrder);
     }

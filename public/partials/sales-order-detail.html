@@ -109,12 +109,15 @@
 
                     <!-- status -->
                     <div class="row">
-                        <div class=" col-md-12">
+                        <div class=" col-md-6">
                             <div class="form-group">
                                 <label for="company_name">Order Status: </label>
                                 <span ng-hide="salesOrder.date_delivered" class="label label-warning">Pending</span>
                                 <span ng-show="salesOrder.date_delivered" class="label label-success">Complete</span>
                             </div>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <i>Entered by {{ salesOrder.user.display_name }} on {{ salesOrder.created_at | dateToISO | date:"MM/dd/yy hh:mm a" }}</i>
                         </div>
                     </div>
 
@@ -145,24 +148,21 @@
 
                 <div class="list-group top-buffer purchase-orders-list-group-height">
                     <div class="list-group-item"  ng-repeat="purchaseOrder in salesOrder.purchase_orders">
-                        <strong>{{purchaseOrder.purchase_order_id}}</strong>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span ng-hide="purchaseOrder.date_delivered" class="label label-warning">Pending</span>
-                        <span ng-show="purchaseOrder.date_delivered" class="label label-success">Complete</span>
-                        <br/>
-                        {{purchaseOrder.vendor.company_name}}
+                        <div class="pull-left top-buffer-10">
+                            <strong>{{purchaseOrder.purchase_order_id}}</strong> - {{purchaseOrder.vendor.company_name}}
+                            <br/>
+                            <span ng-hide="purchaseOrder.date_delivered" class="label label-warning">Pending</span>
+                            <span ng-show="purchaseOrder.date_delivered" class="label label-success">Complete</span>
+                            <br/>
+                        </div>
                         <div class="btn-group pull-right top-buffer-10">
-
                             <a class="btn btn-sm btn-default" href="#/purchase-orders/{{ purchaseOrder.purchase_order_id }}"> View</a>
                         </div>
                         <div class="clearfix"></div>
+                        <div class="hidden-lg hidden-md">
+                            {{ purchaseOrder.short_description }}
+                        </div>
                     </div>
-                </div>
-
-                <div class="clearfix"></div>
-
-                <div class="pull-right">
-                    <button title="Add Contact" class="btn btn-default" ng-click="addSalesOrder()"> Add Purchase Order</button>
                 </div>
 
             </div>

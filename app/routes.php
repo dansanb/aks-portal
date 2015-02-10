@@ -33,6 +33,7 @@ Route::group(array('before' => 'auth'), function()
 
     // vendor routes
     Route::get('vendors-lite', 'VendorsController@getAllVendorsLite');
+    Route::get('vendors-purchase-order-history/{vendorId}', 'VendorsController@getPurchaseOrderHistory');
     Route::Resource('vendors', 'VendorsController');
 
     // vendor contacts

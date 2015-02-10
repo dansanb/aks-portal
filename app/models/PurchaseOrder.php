@@ -15,11 +15,12 @@ class PurchaseOrder extends \Eloquent
         'notes'
     ];
 
-    function vendor() {
+    public function vendor() {
         return $this->belongsTo('Vendor');
     }
 
-    function user() {
-        return $this->hasOne('User');
+    public function user() {
+        return $this->belongsTo('User');
     }
+
 }

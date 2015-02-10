@@ -28,6 +28,12 @@ aksApp.controller('PurchaseOrderDetailController',
             // Get purchase order details
             dbPurchaseOrderFactory.getPurchaseOrder($scope.purchaseOrderId).then(function(response) {
                 $scope.purchaseOrder = response.data;
+
+                // once purchase order detail are obtained, request list of all
+                // previous purchase orders from this vendor
+                dbVendorFactory.getPurchaseOrderHistory($scope.purchaseOrder.vendor_id).then(function(response){
+                    $scope.purchaseOrderHistory = response.data;
+                });
             });
 
 

@@ -28,6 +28,7 @@ aksApp.controller('SalesOrderDetailController',
             // Get sales order details
             dbSalesOrderFactory.getSalesOrder($scope.salesOrderId).then(function(response) {
                 $scope.salesOrder = response.data;
+                console.log($scope.salesOrder);
             });
 
 
@@ -36,10 +37,6 @@ aksApp.controller('SalesOrderDetailController',
                 $scope.customers = response.data;
             });
 
-            // get list of purchase orders placed for this sales order
-            //dbSalesOrderFactory.getAllVendorContacts($scope.salesOrderId).then(function(response) {
-            //    $scope.vendorContacts = response.data;
-            //});
 
             //********************************************************************
             // update sales order to database and redirect to sales order list

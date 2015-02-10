@@ -43,7 +43,6 @@ class SaleOrdersController extends \BaseController {
             ->orderBy('sales_order.sales_order_id', 'desc')
             ->get();
 
-        Log::info($data);
 
         return $this->successfulResponse($data);
     }
@@ -83,7 +82,7 @@ class SaleOrdersController extends \BaseController {
         // here, sales order will come with associated purchase orders. then, each purchase
         // order will come with it's associated vendor.
         //
-        $salesOrder = SalesOrder::with(['purchaseOrders.vendor'])->findOrFail($id);
+        $salesOrder = SalesOrder::with(['purchaseOrders.vendor', 'user'])->findOrFail($id);
         return $this->successfulResponse($salesOrder);
     }
 
@@ -98,7 +97,7 @@ class SaleOrdersController extends \BaseController {
 
         $data = Input::json()->all();
         $salesOrder = SalesOrder::findOrFail($id);
-        Log::info($data);
+
         $this->validator->validate($data);
 
         $salesOrder->fill($data);
