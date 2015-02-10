@@ -8,7 +8,7 @@
         <!-- filter search box -->
         <div class="row top-buffer-20">
             <div class="col-xs-6 col-md-3">
-                <button class="btn btn btn-default" ng-click="addPurchaseOrder();"><span class="glyphicon glyphicon-plus"></span> New Purchase Order</button>
+                <button class="btn btn btn-default" ng-click="addPurchaseOrder();"><span class="glyphicon glyphicon-plus"></span> New P.O.</button>
             </div>
             <div class="col-xs-6 col-md-6">
                 <div class="input-group">
@@ -21,16 +21,16 @@
         <table class="table top-buffer-20">
             <thead>
             <tr>
-                <th class="col-md-2 text-center">Purchase Order #</th>
+                <th class="col-md-2 text-center">P.O. #</th>
                 <th class="col-md-2 hidden-xs text-center">Date</th>
-                <th class="col-md-4 hidden-sm hidden-xs">Customer</th>
+                <th class="col-md-4 hidden-sm hidden-xs">Vendor</th>
                 <th class="col-md-2 text-center">Status</th>
                 <th class="col-md-2 text-center"></th>
             </tr>
             </thead>
-            <tr ng-repeat="purchaseOrder in saleOrders | filter:searchText">
+            <tr ng-repeat="purchaseOrder in purchaseOrders | filter:searchText">
 
-                <td class="vert-align text-center"><a href="#/sale-orders/{{purchaseOrder.sales_order_id}}">{{purchaseOrder.sales_order_id}}</a></td>
+                <td class="vert-align text-center"><a href="#/sale-orders/{{purchaseOrder.purchase_order_id}}">{{purchaseOrder.purchase_order_id}}</a></td>
                 <td class="vert-align hidden-xs text-center">{{purchaseOrder.date_ordered | dateToISO | date:'MM/dd/yyyy'}}</td>
                 <td class="vert-align hidden-sm hidden-xs">{{purchaseOrder.company_name}}</td>
 
@@ -41,7 +41,7 @@
 
 
                 <td class="vert-align text-center">
-                    <a  href="#/sale-orders/{{purchaseOrder.sales_order_id}}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-search"></span> View</a>
+                    <a  href="#/purchase-orders/{{purchaseOrder.purchase_order_id}}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-search"></span> View</a>
                 </td>
             </tr>
         </table>

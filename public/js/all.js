@@ -977,6 +977,50 @@ aksApp.service("flashMessageService", function($rootScope) {
     }
 });
 /*
+    Header Controller
+
+    Controller to access site-wide functionality, such as flash message
+ */
+aksApp.controller('HeaderController',
+    ['$scope', '$location', 'flashMessageService', 'dbUserFactory',
+    function ($scope, $location, flashMessageService, dbUserFactory)
+    {
+        $scope.getFlashMessage = function() {
+            return flashMessageService.getMessage();
+        };
+
+        $scope.getFlashAlertType = function() {
+            return flashMessageService.getAlertType();
+        };
+
+        $scope.getDisplayName = function() {
+            return dbUserFactory.getDisplayName();
+        };
+
+        $scope.getUserId = function() {
+            return dbUserFactory.getUserId();
+        };
+
+        $scope.isUserLoggedIn = function() {
+            return dbUserFactory.isLoggedIn();
+        };
+
+        $scope.logout = function() {
+
+            dbUserFactory.logout().then(function(data) {
+                flashMessageService.setMessage('You have been logged out.', 'success');
+                $location.path('/login');
+            });
+        };
+
+        $scope.isActive = function (viewLocation) {
+            return viewLocation === $location.path();
+        };
+
+
+
+    }]);
+/*
  Controller for Vendor Details
  */
 
@@ -1155,48 +1199,230 @@ aksApp.controller('CustomerListController',
             };
         }]);
 /*
-    Header Controller
-
-    Controller to access site-wide functionality, such as flash message
+ Controller for Purchase Order List
  */
-aksApp.controller('HeaderController',
-    ['$scope', '$location', 'flashMessageService', 'dbUserFactory',
-    function ($scope, $location, flashMessageService, dbUserFactory)
-    {
-        $scope.getFlashMessage = function() {
-            return flashMessageService.getMessage();
-        };
+aksApp.controller('PurchaseOrderListController',
+    ['$scope', '$location', '$routeParams', '$http', 'dbPurchaseOrderFactory', 'dbVendorFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, dbPurchaseOrderFactory, dbVendorFactory, flashMessageService, ngDialog)
+        {
+            // Get all sale orders
+            dbPurchaseOrderFactory.getAllPurchaseOrders().then(function(response) {
+                $scope.purchaseOrders = response.data;
+            });
 
-        $scope.getFlashAlertType = function() {
-            return flashMessageService.getAlertType();
-        };
+            // Get all vendors lite
+            //dbVendorFactory.getAllVendorsLite().then(function(response) {
+            //    $scope.customers = response.data;
+            //});
 
-        $scope.getDisplayName = function() {
-            return dbUserFactory.getDisplayName();
-        };
 
-        $scope.getUserId = function() {
-            return dbUserFactory.getUserId();
-        };
+            //********************************************************************
+            // Handle "Add" Button Click
+            //********************************************************************
+            $scope.addPurchaseOrder = function() {
 
-        $scope.isUserLoggedIn = function() {
-            return dbUserFactory.isLoggedIn();
-        };
+                // display dialog to get started
+                $scope.dialogMessage = 'Select customer for new purchase order:';
+                $scope.dialogModel = {};
+                $scope.dialogModel.inputValue = "";
 
-        $scope.logout = function() {
+                ngDialog.openConfirm({
+                    template: 'partials/dialog-create-purchase-order.html',
+                    showClose: false,
+                    scope: $scope
+                }).then (function (dialogData) {  // clicked create
 
-            dbUserFactory.logout().then(function(data) {
-                flashMessageService.setMessage('You have been logged out.', 'success');
-                $location.path('/login');
+                    // create a new purchase order
+                    var purchaseOrder = {};
+                    purchaseOrder.customer_id =  $scope.dialogModel.inputValue;
+
+                    // add it to database, and redirect to
+                    // details page to finish adding the details
+                    dbPurchaseOrderFactory.addPurchaseOrder(purchaseOrder).then(function(response) {
+                        $location.path("/sale-orders/" + response.data.purchase_order_id);
+                    });
+                });
+            };
+        }]);
+/*
+    Controller for Vendor Details
+ */
+
+aksApp.controller('VendorDetailController',
+    ['$scope', '$location', '$routeParams', '$http', 'dbVendorFactory', 'flashMessageService', 'ngDialog',
+    function($scope, $location, $routeParams, $http, dbVendorFactory, flashMessageService, ngDialog) {
+
+        $scope.vendorId =  $routeParams.vendor_id;
+        $scope.vendorContacts = {};
+        $scope.vendor = {};
+
+        // Get vendor details
+        dbVendorFactory.getVendor($scope.vendorId).then(function(response) {
+            $scope.vendor = response.data;
+        });
+
+        // get list of vendor contacts
+        dbVendorFactory.getAllVendorContacts($scope.vendorId).then(function(response) {
+            $scope.vendorContacts = response.data;
+        });
+
+
+
+        //********************************************************************
+        // update vendor to database and redirect to vendor list
+        //********************************************************************
+        $scope.updateVendor = function () {
+
+            // update vendor contact in database
+            dbVendorFactory.updateVendor($scope.vendor).then(function(response) {
+                // vendor has been updated, redirect with flash message
+                if (response.success === true) {
+                    flashMessageService.setMessage('Vendor has been updated', 'success');
+                    $location.path("/vendors");
+                }
+                else {
+                    flashMessageService.setMessage(data.message, 'danger');
+                }
             });
         };
 
-        $scope.isActive = function (viewLocation) {
-            return viewLocation === $location.path();
+        //********************************************************************
+        // delete vendor from database and redirect to vendor list
+        //********************************************************************
+        $scope.deleteVendor = function () {
+
+            $scope.dialogMessage = "Deleting this vendor will also delete all it's contacts. Are you sure you want to delete this vendor?";
+            ngDialog.openConfirm({
+                template: 'partials/dialog-yes-no.html',
+                showClose: false,
+                scope: $scope
+            }).then (function (dialogData) {  // clicked yes
+                // delete vendor contact
+                dbVendorFactory.deleteVendor($scope.vendorId).then(function(response) {
+
+                    // vendor has been deleted, redirect with flash message
+                    if (response.success === true) {
+                        flashMessageService.setMessage('Vendor has been deleted.', 'success');
+                        $location.path("/vendors");
+                    }
+                    else {
+                        flashMessageService.setMessage(response.message, 'danger');
+                    }
+
+                });
+            });
         };
 
+        //********************************************************************
+        // Handle "Add Contact" Button Click
+        //********************************************************************
+        $scope.addVendorContact = function () {
+            // display "edit contact" dialog
+            $scope.contactCopy = {};
+            $scope.contactCopy.vendor_id = $scope.vendorId;
+            $scope.dialogTitle = 'New Vendor Contact';
+
+            ngDialog.openConfirm({
+                template: 'partials/vendor-contact-form.html',
+                showClose: false,
+                scope: $scope
+            }).then (function (dialogData) {  // clicked save
+                // update vendor contact in database
+                dbVendorFactory.addVendorContact($scope.contactCopy).then(function(response) {
+                    // update vendor contact in cache data
+                    $scope.vendorContacts.push($scope.contactCopy);
+                    $scope.contactCopy = {};
+                });
+            });
+        };
+
+        //********************************************************************
+        // Handle "Edit Vendor Contact" Button Click
+        //********************************************************************
+        $scope.editVendorContact = function ( contact ) {
+            // display "edit contact" dialog
+            $scope.contactCopy = angular.copy(contact);
+            $scope.contactCopyIndex = $scope.vendorContacts.indexOf(contact);
+            $scope.dialogTitle = 'Edit Vendor Contact';
+
+            ngDialog.openConfirm({
+                template: 'partials/vendor-contact-form.html',
+                showClose: false,
+                scope: $scope
+            }).then (function (dialogData) {  // clicked save
+                // update vendor contact in database
+                dbVendorFactory.updateVendorContact($scope.contactCopy).then(function(response) {
+                    // update vendor contact in cache data
+                    $scope.vendorContacts[ $scope.contactCopyIndex ] = $scope.contactCopy;
+                    $scope.contactCopy = {};
+                    $scope.contactCopyIndex = null;
+                });
+            });
+        };
+
+        //********************************************************************
+        // Handle "Delete Vendor Contact" Button Click
+        //********************************************************************
+        $scope.deleteVendorContact = function ( contact ) {
+            $scope.dialogMessage = "Are you sure you want to delete this contact?";
+            ngDialog.openConfirm({
+                template: 'partials/dialog-yes-no.html',
+                showClose: false,
+                scope: $scope
+            }).then (function (dialogData) {  // clicked yes
+                // delete vendor contact
+                dbVendorFactory.deleteVendorContact(contact.vendor_contact_id).then(function(response) {
+                    // refresh vendor contact list
+                    dbVendorFactory.getAllVendorContacts($scope.vendorId).then(function(response) {
+                        $scope.vendorContacts = response.data;
+                    });
+
+                });
+            });
+        };
+
+    }]);
+/*
+    Controller for Vendor List
+ */
+
+aksApp.controller('VendorListController',
+    ['$scope', '$location', '$routeParams', '$http', 'dbVendorFactory', 'flashMessageService', 'ngDialog',
+    function($scope, $location, $routeParams, $http, dbVendorFactory, flashMessageService, ngDialog)
+    {
+        // Get all vendors
+        dbVendorFactory.getAllVendors().then(function(response) {
+            $scope.vendors = response.data;
+        });
 
 
+        //********************************************************************
+        // Handle "Add Contact" Button Click
+        //********************************************************************
+        $scope.addVendor = function() {
+
+            // display "add vendor name" dialog to get started
+            $scope.dialogMessage = 'What is the name of new vendor?';
+            $scope.dialogModel = {};
+            $scope.dialogModel.inputValue = "";
+
+            ngDialog.openConfirm({
+                template: 'partials/dialog-create-input.html',
+                showClose: false,
+                scope: $scope
+            }).then (function (data) {  // clicked create
+
+                // create a new vendor
+                var vendor = {};
+                vendor.company_name =  $scope.dialogModel.inputValue;
+
+                // add it to database, and redirect to
+                // details page to finish adding the details
+                dbVendorFactory.addVendor(vendor).then(function(response) {
+                    $location.path("/vendors/" + response.data.id);
+                });
+            });
+        };
     }]);
 /*
  Controller for Sales Order Details
@@ -1457,230 +1683,4 @@ aksApp.controller('UserLoginController',
                 });
             };
 
-        }]);
-/*
-    Controller for Vendor Details
- */
-
-aksApp.controller('VendorDetailController',
-    ['$scope', '$location', '$routeParams', '$http', 'dbVendorFactory', 'flashMessageService', 'ngDialog',
-    function($scope, $location, $routeParams, $http, dbVendorFactory, flashMessageService, ngDialog) {
-
-        $scope.vendorId =  $routeParams.vendor_id;
-        $scope.vendorContacts = {};
-        $scope.vendor = {};
-
-        // Get vendor details
-        dbVendorFactory.getVendor($scope.vendorId).then(function(response) {
-            $scope.vendor = response.data;
-        });
-
-        // get list of vendor contacts
-        dbVendorFactory.getAllVendorContacts($scope.vendorId).then(function(response) {
-            $scope.vendorContacts = response.data;
-        });
-
-
-
-        //********************************************************************
-        // update vendor to database and redirect to vendor list
-        //********************************************************************
-        $scope.updateVendor = function () {
-
-            // update vendor contact in database
-            dbVendorFactory.updateVendor($scope.vendor).then(function(response) {
-                // vendor has been updated, redirect with flash message
-                if (response.success === true) {
-                    flashMessageService.setMessage('Vendor has been updated', 'success');
-                    $location.path("/vendors");
-                }
-                else {
-                    flashMessageService.setMessage(data.message, 'danger');
-                }
-            });
-        };
-
-        //********************************************************************
-        // delete vendor from database and redirect to vendor list
-        //********************************************************************
-        $scope.deleteVendor = function () {
-
-            $scope.dialogMessage = "Deleting this vendor will also delete all it's contacts. Are you sure you want to delete this vendor?";
-            ngDialog.openConfirm({
-                template: 'partials/dialog-yes-no.html',
-                showClose: false,
-                scope: $scope
-            }).then (function (dialogData) {  // clicked yes
-                // delete vendor contact
-                dbVendorFactory.deleteVendor($scope.vendorId).then(function(response) {
-
-                    // vendor has been deleted, redirect with flash message
-                    if (response.success === true) {
-                        flashMessageService.setMessage('Vendor has been deleted.', 'success');
-                        $location.path("/vendors");
-                    }
-                    else {
-                        flashMessageService.setMessage(response.message, 'danger');
-                    }
-
-                });
-            });
-        };
-
-        //********************************************************************
-        // Handle "Add Contact" Button Click
-        //********************************************************************
-        $scope.addVendorContact = function () {
-            // display "edit contact" dialog
-            $scope.contactCopy = {};
-            $scope.contactCopy.vendor_id = $scope.vendorId;
-            $scope.dialogTitle = 'New Vendor Contact';
-
-            ngDialog.openConfirm({
-                template: 'partials/vendor-contact-form.html',
-                showClose: false,
-                scope: $scope
-            }).then (function (dialogData) {  // clicked save
-                // update vendor contact in database
-                dbVendorFactory.addVendorContact($scope.contactCopy).then(function(response) {
-                    // update vendor contact in cache data
-                    $scope.vendorContacts.push($scope.contactCopy);
-                    $scope.contactCopy = {};
-                });
-            });
-        };
-
-        //********************************************************************
-        // Handle "Edit Vendor Contact" Button Click
-        //********************************************************************
-        $scope.editVendorContact = function ( contact ) {
-            // display "edit contact" dialog
-            $scope.contactCopy = angular.copy(contact);
-            $scope.contactCopyIndex = $scope.vendorContacts.indexOf(contact);
-            $scope.dialogTitle = 'Edit Vendor Contact';
-
-            ngDialog.openConfirm({
-                template: 'partials/vendor-contact-form.html',
-                showClose: false,
-                scope: $scope
-            }).then (function (dialogData) {  // clicked save
-                // update vendor contact in database
-                dbVendorFactory.updateVendorContact($scope.contactCopy).then(function(response) {
-                    // update vendor contact in cache data
-                    $scope.vendorContacts[ $scope.contactCopyIndex ] = $scope.contactCopy;
-                    $scope.contactCopy = {};
-                    $scope.contactCopyIndex = null;
-                });
-            });
-        };
-
-        //********************************************************************
-        // Handle "Delete Vendor Contact" Button Click
-        //********************************************************************
-        $scope.deleteVendorContact = function ( contact ) {
-            $scope.dialogMessage = "Are you sure you want to delete this contact?";
-            ngDialog.openConfirm({
-                template: 'partials/dialog-yes-no.html',
-                showClose: false,
-                scope: $scope
-            }).then (function (dialogData) {  // clicked yes
-                // delete vendor contact
-                dbVendorFactory.deleteVendorContact(contact.vendor_contact_id).then(function(response) {
-                    // refresh vendor contact list
-                    dbVendorFactory.getAllVendorContacts($scope.vendorId).then(function(response) {
-                        $scope.vendorContacts = response.data;
-                    });
-
-                });
-            });
-        };
-
-    }]);
-/*
-    Controller for Vendor List
- */
-
-aksApp.controller('VendorListController',
-    ['$scope', '$location', '$routeParams', '$http', 'dbVendorFactory', 'flashMessageService', 'ngDialog',
-    function($scope, $location, $routeParams, $http, dbVendorFactory, flashMessageService, ngDialog)
-    {
-        // Get all vendors
-        dbVendorFactory.getAllVendors().then(function(response) {
-            $scope.vendors = response.data;
-        });
-
-
-        //********************************************************************
-        // Handle "Add Contact" Button Click
-        //********************************************************************
-        $scope.addVendor = function() {
-
-            // display "add vendor name" dialog to get started
-            $scope.dialogMessage = 'What is the name of new vendor?';
-            $scope.dialogModel = {};
-            $scope.dialogModel.inputValue = "";
-
-            ngDialog.openConfirm({
-                template: 'partials/dialog-create-input.html',
-                showClose: false,
-                scope: $scope
-            }).then (function (data) {  // clicked create
-
-                // create a new vendor
-                var vendor = {};
-                vendor.company_name =  $scope.dialogModel.inputValue;
-
-                // add it to database, and redirect to
-                // details page to finish adding the details
-                dbVendorFactory.addVendor(vendor).then(function(response) {
-                    $location.path("/vendors/" + response.data.id);
-                });
-            });
-        };
-    }]);
-/*
- Controller for Purchase Order List
- */
-aksApp.controller('PurchaseOrderListController',
-    ['$scope', '$location', '$routeParams', '$http', 'dbPurchaseOrderFactory', 'dbVendorFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, dbPurchaseOrderFactory, dbVendorFactory, flashMessageService, ngDialog)
-        {
-            // Get all sale orders
-            dbPurchaseOrderFactory.getAllPurchaseOrders().then(function(response) {
-                $scope.purchaseOrders = response.data;
-            });
-
-            // Get all vendors lite
-            //dbVendorFactory.getAllVendorsLite().then(function(response) {
-            //    $scope.customers = response.data;
-            //});
-
-
-            //********************************************************************
-            // Handle "Add" Button Click
-            //********************************************************************
-            $scope.addPurchaseOrder = function() {
-
-                // display dialog to get started
-                $scope.dialogMessage = 'Select customer for new purchase order:';
-                $scope.dialogModel = {};
-                $scope.dialogModel.inputValue = "";
-
-                ngDialog.openConfirm({
-                    template: 'partials/dialog-create-purchase-order.html',
-                    showClose: false,
-                    scope: $scope
-                }).then (function (dialogData) {  // clicked create
-
-                    // create a new purchase order
-                    var purchaseOrder = {};
-                    purchaseOrder.customer_id =  $scope.dialogModel.inputValue;
-
-                    // add it to database, and redirect to
-                    // details page to finish adding the details
-                    dbPurchaseOrderFactory.addPurchaseOrder(purchaseOrder).then(function(response) {
-                        $location.path("/sale-orders/" + response.data.purchase_order_id);
-                    });
-                });
-            };
         }]);

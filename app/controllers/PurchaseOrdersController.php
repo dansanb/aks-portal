@@ -18,7 +18,14 @@ class PurchaseOrdersController extends \BaseController {
      */
     public function index()
     {
-        $data = PurchaseOrder::orderBy('purchase_order_id')->get();
+        //$data = PurchaseOrder::orderBy('purchase_order_id')->get();
+        $data = DB::table('purchase_order')
+            ->join('vendor', 'purchase_order.vendor_id', '=', 'vendor.vendor_id')
+            ->select(   'purchase_order.purchase_order_id', 'purchase_order.date_ordered',
+                        'purchase_order.date_delivered', 'purchase_order.date_required',
+                        'vendor.company_name')
+            ->orderBy('purchase_order.purchase_order_id', 'desc')
+            ->get();
 
         return $this->successfulResponse($data);
     }
