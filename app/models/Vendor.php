@@ -16,4 +16,6 @@ class Vendor extends \Eloquent
     function vendorContacts() {
         return $this->hasMany('VendorContact');
     }
+
+
 }

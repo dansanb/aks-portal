@@ -13,7 +13,7 @@ class PurchaseOrderTableSeeder extends Seeder {
         {
             PurchaseOrder::create([
                 'vendor_id' => $faker->numberBetween(1, 50),
-                'sales_order_id' => $faker->numberBetween(1, 20),
+                'sales_order_id' => $faker->numberBetween(1000, 1020),
                 'user_id' => 1,
                 'date_ordered' => $faker->date,
                 'date_required' => $faker->date,

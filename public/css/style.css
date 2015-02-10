@@ -18,5 +18,10 @@ body {
   body .contacts-list-group-height {
     height: 458px;
     overflow-y: scroll; }
+  body .purchase-orders-panel-height {
+    height: 634px; }
+  body .purchase-orders-list-group-height {
+    height: 507px;
+    overflow-y: scroll; }
   body .table tbody > tr > td.vert-align {
     vertical-align: middle; }

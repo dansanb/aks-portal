@@ -16,11 +16,7 @@ class PurchaseOrder extends \Eloquent
     ];
 
     function vendor() {
-        return $this->hasOne('Vendor');
-    }
-
-    function salesOrder() {
-        return $this->hasOne('SalesOrder');
+        return $this->belongsTo('Vendor');
     }
 
     function user() {

@@ -61,8 +61,11 @@ class SaleOrdersController extends \BaseController {
      */
     public function show($id)
     {
-        $salesOrder = SalesOrder::findOrFail($id);
-
+        // multi-relationship eager loading
+        // here, sales order will come with associated purchase orders. then, each purchase
+        // order will come with it's associated vendor.
+        //
+        $salesOrder = SalesOrder::with(['purchaseOrders.vendor'])->findOrFail($id);
         return $this->successfulResponse($salesOrder);
     }
 

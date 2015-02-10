@@ -22,4 +22,8 @@ class SalesOrder extends \Eloquent
         return $this->belongsTo('Customer');
     }
 
+    public function purchaseOrders() {
+        return $this->hasMany('PurchaseOrder');
+    }
+
 }

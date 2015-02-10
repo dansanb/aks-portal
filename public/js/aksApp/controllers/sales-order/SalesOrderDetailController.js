@@ -16,18 +16,13 @@ aksApp.controller('SalesOrderDetailController',
                 dateOrdered: false,
                 dateRequired: false,
                 dateDelivered: false
-            }
+            };
 
             $scope.open = function($event, which) {
                 $event.preventDefault();
                 $event.stopPropagation();
 
                 $scope.datePickers[which]= true;
-            };
-
-            $scope.dateOptions = {
-                formatYear: 'yy',
-                startingDay: 1
             };
 
             // Get sales order details
