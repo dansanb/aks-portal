@@ -21,7 +21,10 @@ class SaleOrdersController extends \BaseController {
         //$data = SalesOrder::orderBy('sales_order_id')->with('customer')->get();
         $data = DB::table('sales_order')
                 ->join('customer', 'sales_order.customer_id', '=', 'customer.customer_id')
-                ->select('sales_order.sales_order_id', 'sales_order.short_description', 'customer.company_name')
+                ->select(   'sales_order.sales_order_id', 'sales_order.date_ordered',
+                            'sales_order.date_delivered', 'sales_order.date_required',
+                            'customer.company_name')
+                ->orderBy('sales_order.sales_order_id', 'desc')
                 ->get();
 
         return $this->successfulResponse($data);
@@ -35,6 +38,13 @@ class SaleOrdersController extends \BaseController {
     public function store()
     {
         $data = Input::json()->all();
+
+        // inject current logged-in user
+        $data['user_id'] = Auth::id();
+
+        // inject today's date as default for 'date_ordered'
+        $data['date_ordered'] = date("Y-m-d H:i:s");
+
         $this->validator->validate($data);
 
         $salesOrder = new SalesOrder($data);

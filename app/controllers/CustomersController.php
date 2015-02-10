@@ -30,7 +30,7 @@ class CustomersController extends \BaseController {
      */
     public function getAllCustomersLite()
     {
-        $data = DB::table('customer')->select('customer_id',  'company_name')->get();
+        $data = DB::table('customer')->select('customer_id',  'company_name')->orderBy('company_name', 'asc')->get();
 
         return $this->successfulResponse($data);
     }

@@ -10,10 +10,9 @@ class SalesOrderValidator extends APIValidator {
      * @var array
      */
     protected $rules = [
-        'customer_id'  => 'required',
-        'user_id'  => 'required',
         'date_ordered' => 'required',
-        'short_description' => 'required'
+        'customer_id' => 'required',
+        'user_id' => 'required'
     ];
 
 }

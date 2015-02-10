@@ -21,18 +21,26 @@
         <table class="table top-buffer-20">
             <thead>
             <tr>
-                <th class="col-md-2">Sales Order#</th>
-                <th class="col-md-3">Customer</th>
-                <th class="col-md-5 hidden-sm hidden-xs">Description</th>
+                <th class="col-md-2 text-center">Sales Order #</th>
+                <th class="col-md-2 text-center">Date</th>
+                <th class="col-md-4 hidden-sm hidden-xs">Customer</th>
+                <th class="col-md-2 text-center">Status</th>
                 <th class="col-md-2 text-center"></th>
             </tr>
             </thead>
             <tr ng-repeat="salesOrder in saleOrders | filter:searchText">
-                <td ><a href="#/sale-orders/{{salesOrder.sales_order_id}}">{{salesOrder.sales_order_id}}</a></td>
-                <td >{{salesOrder.company_name}}</td>
-                <td class="hidden-sm hidden-xs" >{{salesOrder.short_description}}</td>
-                <td class="text-center">
-                    <a  href="#/sale-orders/{{salesOrder.sales_order_id}}" class="btn btn-default btn-md"><span class="glyphicon glyphicon-search"></span> View</a>
+                <td class="vert-align text-center"><a href="#/sale-orders/{{salesOrder.sales_order_id}}">{{salesOrder.sales_order_id}}</a></td>
+                <td class="vert-align text-center">{{salesOrder.date_ordered | dateToISO | date:'MM/dd/yyyy'}}</td>
+                <td class="vert-align hidden-sm hidden-xs">{{salesOrder.company_name}}</td>
+
+                <td class="vert-align text-center">
+                    <span ng-hide="salesOrder.date_delivered" class="label label-warning">Pending</span>
+                    <span ng-show="salesOrder.date_delivered" class="label label-success">Complete</span>
+                </td>
+
+
+                <td class="vert-align text-center">
+                    <a  href="#/sale-orders/{{salesOrder.sales_order_id}}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-search"></span> View</a>
                 </td>
             </tr>
         </table>

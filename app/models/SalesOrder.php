@@ -6,7 +6,7 @@ class SalesOrder extends \Eloquent
     protected $primaryKey = 'sales_order_id';
     protected $fillable = [
         'customer_id',
-        'users_id',
+        'user_id',
         'date_ordered',
         'date_required',
         'date_delivered',
