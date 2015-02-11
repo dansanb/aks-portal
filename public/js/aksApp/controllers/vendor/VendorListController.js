@@ -7,7 +7,7 @@ aksApp.controller('VendorListController',
     function($scope, $location, $routeParams, $http, dbVendorFactory, flashMessageService, ngDialog)
     {
         // Get all vendors
-        dbVendorFactory.getAllVendors().then(function(response) {
+        dbVendorFactory.getAllVendors().then(function (response) {
             $scope.vendors = response.data;
         });
 

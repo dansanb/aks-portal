@@ -27,14 +27,17 @@ aksApp.factory('httpInterceptor', function($rootScope, $q, $location) {
         // request was successful, and have received a response.
         //*********************************************************************
         'response': function(response) {
+            console.log(response);
+
             return response;
+
         },
 
         //*********************************************************************
         // request failed, and have received a response.
         //*********************************************************************
         'responseError': function(rejection) {
-
+            console.log(rejection);
             // check to see if user is logged in
             if (rejection.data.loggedIn === false)
             {

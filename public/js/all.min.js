@@ -969,14 +969,17 @@ aksApp.factory('httpInterceptor', function($rootScope, $q, $location) {
         // request was successful, and have received a response.
         //*********************************************************************
         'response': function(response) {
+            console.log(response);
+
             return response;
+
         },
 
         //*********************************************************************
         // request failed, and have received a response.
         //*********************************************************************
         'responseError': function(rejection) {
-
+            console.log(rejection);
             // check to see if user is logged in
             if (rejection.data.loggedIn === false)
             {
@@ -1358,6 +1361,12 @@ aksApp.controller('PurchaseOrderListController',
     ['$scope', '$location', '$routeParams', '$http', 'dbPurchaseOrderFactory', 'dbVendorFactory', 'dbSalesOrderFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, dbPurchaseOrderFactory, dbVendorFactory, dbSalesOrderFactory, flashMessageService, ngDialog)
         {
+            /*
+            $scope.purchaseOrders = {};
+            $scope.vendors = {};
+            $scope.saleOrders = {};
+            */
+
             // Get all sale orders
             dbPurchaseOrderFactory.getAllPurchaseOrders().then(function(response) {
                 $scope.purchaseOrders = response.data;
@@ -1645,8 +1654,8 @@ aksApp.controller('UserLoginController',
         {
             // pre-fill for testing
             $scope.user = {};
-            //$scope.user.email = "d@d.com";
-            //$scope.user.password = "1";
+            $scope.user.email = "daniel@aquaklean.com";
+            $scope.user.password = "1";
 
             $scope.login = function() {
                 // attempt to login
@@ -1812,7 +1821,7 @@ aksApp.controller('VendorListController',
     function($scope, $location, $routeParams, $http, dbVendorFactory, flashMessageService, ngDialog)
     {
         // Get all vendors
-        dbVendorFactory.getAllVendors().then(function(response) {
+        dbVendorFactory.getAllVendors().then(function (response) {
             $scope.vendors = response.data;
         });
 

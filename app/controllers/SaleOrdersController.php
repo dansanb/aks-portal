@@ -54,6 +54,7 @@ class SaleOrdersController extends \BaseController {
      */
     public function store()
     {
+
         $data = Input::json()->all();
 
         // inject current logged-in user
@@ -97,6 +98,8 @@ class SaleOrdersController extends \BaseController {
 
         $data = Input::json()->all();
         $salesOrder = SalesOrder::findOrFail($id);
+
+        Log::info($data);
 
         $this->validator->validate($data);
 
