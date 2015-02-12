@@ -30,6 +30,11 @@ There are three reasons for AKS Portal:
 ----
 ## Planned Features
 
+As our company uses AKS Portal, additional features have been requested. In no particular order, I list them here for tracking purposes:
+
+- Implement `Escape` and `Enter` keys which would map to "OK" and "CANCEL" in dialog pop-ups.
+- Implement avatars in user profiles
+- Implement user password recovery
 
 
 
