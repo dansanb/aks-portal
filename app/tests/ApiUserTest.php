@@ -73,7 +73,6 @@ class ApiUserTest extends TestCase {
         $response = json_decode($request->getContent());
 
         $this->assertEquals(true, $response->success);
-        $this->assertEquals(2, $response->data->id);
     }
 
 

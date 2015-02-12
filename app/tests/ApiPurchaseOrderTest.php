@@ -18,6 +18,10 @@ class ApiPurchaseOrderTest extends TestCase {
         parent::setUp();
         Artisan::call('migrate');
         Artisan::call('db:seed');
+
+        // enable auth filter and login user id 1
+        Route::enableFilters();
+        Auth::loginUsingId(1);
     }
 
     /**
@@ -80,10 +84,7 @@ class ApiPurchaseOrderTest extends TestCase {
     {
         $json = '{
                 "vendor_id":"1",
-                "sales_order_id":"1",
-                "user_id":"1",
-                "date_ordered":"12/31/1999",
-                "short_description":"A simple part"
+                "sales_order_id":"1"
                 }';
 
         $request = $this->call('POST', 'purchase-orders', array(), array(), array(), $json );
@@ -104,13 +105,10 @@ class ApiPurchaseOrderTest extends TestCase {
     {
         $this->setExpectedException('\Acme\API\APIValidationException');
 
-        // invalid data is: missing short_description
+        // invalid data is: missing sales_order_id
         $json = '{
                 "vendor_id":"1",
-                "sales_order_id":"1",
-                "user_id":"1",
-                "date_ordered":"12/31/1999",
-                "short_description":""
+                "sales_order_id":""
                 }';
 
         $request = $this->call('POST', 'purchase-orders', array(), array(), array(), $json);
