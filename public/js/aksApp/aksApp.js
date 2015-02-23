@@ -1,5 +1,5 @@
 /*
-    aksApp
+    aksApp - An application to keep track of sale orders, purchase orders, vendors and customers
 
     Entry Point.
  */
@@ -96,8 +96,6 @@ aksApp.config(['$routeProvider', function($routeProvider) {
             templateUrl: 'partials/user-change-password.html',
             controller: 'UserChangePasswordController'
         }).
-
-
 
         otherwise({
             // send them to login page

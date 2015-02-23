@@ -1,10 +1,18 @@
 <?php
-
+/**
+ * Purchase Order Controller
+ *
+ * Handles route requests to create, retrieve, update and delete purchase orders
+ */
 use Acme\API\PurchaseOrderValidator;
 
 class PurchaseOrdersController extends \BaseController {
 
-
+    /**
+     * constructor
+     *
+     * @param  PurchaseOrderValidator   Validator object used when creating / updating new record.
+     */
     function __construct(PurchaseOrderValidator $validator)
     {
         $this->validator = $validator;
@@ -18,7 +26,6 @@ class PurchaseOrdersController extends \BaseController {
      */
     public function index()
     {
-        //$data = PurchaseOrder::orderBy('purchase_order_id')->get();
         $data = DB::table('purchase_order')
             ->join('vendor', 'purchase_order.vendor_id', '=', 'vendor.vendor_id')
             ->select(   'purchase_order.purchase_order_id', 'purchase_order.date_ordered',

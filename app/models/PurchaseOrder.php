@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Purchase Order Model
+ *
+ *
+ */
 class PurchaseOrder extends \Eloquent
 {
     protected $table = "purchase_order";

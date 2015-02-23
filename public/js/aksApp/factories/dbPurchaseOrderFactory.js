@@ -1,7 +1,7 @@
 /*
  Purchase Order Database Service Factory
 
- CRUD methods for sale orders
+ Sends API requests to the back-end API for purchase orders
 
  */
 aksApp.factory("dbPurchaseOrderFactory", function($http, $q) {

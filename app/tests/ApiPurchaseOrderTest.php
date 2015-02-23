@@ -1,8 +1,6 @@
 <?php
-
-
 /**
- * Tests purchase order Model Requests
+ * Test suite for the purchase order API Requests
  *
  * NOTE: for testing, purchase order id numbers start at 1
  *

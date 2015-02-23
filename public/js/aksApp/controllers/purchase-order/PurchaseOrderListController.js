@@ -1,15 +1,13 @@
 /*
- Controller for Purchase Order List
+ AngularJS Controller for Purchase Order List
  */
 aksApp.controller('PurchaseOrderListController',
     ['$scope', '$location', '$routeParams', '$http', 'dbPurchaseOrderFactory', 'dbVendorFactory', 'dbSalesOrderFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, dbPurchaseOrderFactory, dbVendorFactory, dbSalesOrderFactory, flashMessageService, ngDialog)
         {
-            /*
             $scope.purchaseOrders = {};
             $scope.vendors = {};
             $scope.saleOrders = {};
-            */
 
             // Get all sale orders
             dbPurchaseOrderFactory.getAllPurchaseOrders().then(function(response) {

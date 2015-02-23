@@ -1,5 +1,8 @@
 /*
- Controller for Purchase Order Details
+ AngularJS Controller for Purchase Order Details
+
+ This controller handles the "new" and "update" operations for purchase orders.
+
  */
 
 aksApp.controller('PurchaseOrderDetailController',
