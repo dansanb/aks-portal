@@ -144,7 +144,7 @@ class ApiUserTest extends TestCase {
     public function update_user_with_password()
     {
         $json = '{
-                "current_password":"' . Hash::make('1') . '",
+                "current_password":"1",
                 "new_password":"new-pass",
                 "confirm_password":"new-pass"
                 }';
@@ -198,4 +198,8 @@ class ApiUserTest extends TestCase {
 
         $this->assertEquals(false, $response->success);
     }
+
+
+
+
 }

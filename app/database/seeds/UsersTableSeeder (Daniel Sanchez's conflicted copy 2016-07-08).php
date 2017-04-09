@@ -13,14 +13,15 @@ class UsersTableSeeder extends Seeder {
 
         User::create([
             'email' => 'daniel@aquaklean.com',
-            'password' => Hash::Make('1'),
-			'display_name' => 'Daniel Da Man'
+            'password' => Hash::make('1'),
+            'display_name' => 'Daniel'
         ]);
 
-		User::create([
-			'email' => 'rachel@aquaklean.com',
-			'password' => Hash::Make('2'),
-			'display_name' => 'Baby Rachel'
+
+        User::create([
+            'email' => 'shane@aquaklean.com',
+            'password' => Hash::make('1'),
+            'display_name' => 'Shane'
         ]);
 
 	}

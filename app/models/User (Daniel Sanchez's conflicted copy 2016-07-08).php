@@ -4,10 +4,8 @@ use Illuminate\Auth\UserTrait;
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\Reminders\RemindableInterface;
-use Toddish\Verify\Models\User as VerifyUser;
 
-
-class User extends VerifyUser implements UserInterface, RemindableInterface {
+class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	use UserTrait, RemindableTrait;
 
@@ -16,14 +14,14 @@ class User extends VerifyUser implements UserInterface, RemindableInterface {
 	 *
 	 * @var string
 	 */
-	protected $table = 'users';
+	protected $table = 'user';
 
 	/**
 	 * List fields that are mass-fillable during store / update operations
 	 *
 	 * @var array
      */
-	protected $fillable = array('username', 'email', 'display_name');
+	protected $fillable = array('email', 'display_name');
 
 
 	/**
@@ -31,6 +29,6 @@ class User extends VerifyUser implements UserInterface, RemindableInterface {
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password', 'remember_token', 'salt');
+	protected $hidden = array('password', 'remember_token');
 
 }
