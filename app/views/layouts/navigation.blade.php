@@ -8,7 +8,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#/dashboard">ds Fast Books</a>
+                <a class="navbar-brand" href="#/dashboard">dsFastBooks</a>
             </div>
 
         <div class="navbar-collapse collapse" id="navbar-collapse-1"">

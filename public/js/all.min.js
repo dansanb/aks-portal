@@ -1,5 +1,5 @@
 /*
-    dsFastBooksApp
+    dsFastBooksApp - An application to keep track of sale orders, purchase orders, vendors and customers
 
     Entry Point.
  */
@@ -97,8 +97,6 @@ dsFastBooksApp.config(['$routeProvider', function($routeProvider) {
             controller: 'UserChangePasswordController'
         }).
 
-
-
         otherwise({
             // send them to login page
             redirectTo: '/login'
@@ -139,6 +137,8 @@ dsFastBooksApp.run(
             }
         });
 }]);
+
+
 // converts a mysql date to ISO format
 // can do things in html files like:
 // {{salesOrder.date_ordered | dateToISO | date:'mm/dd/yyyy'}}
@@ -352,7 +352,7 @@ dsFastBooksApp.factory("dbCustomerFactory", function($http, $q) {
 /*
  Purchase Order Database Service Factory
 
- CRUD methods for sale orders
+ Sends API requests to the back-end API for purchase orders
 
  */
 dsFastBooksApp.factory("dbPurchaseOrderFactory", function($http, $q) {
@@ -1034,6 +1034,50 @@ dsFastBooksApp.service("flashMessageService", function($rootScope) {
     }
 });
 /*
+    Header Controller
+
+    Controller to access site-wide functionality, such as flash message
+ */
+dsFastBooksApp.controller('HeaderController',
+    ['$scope', '$location', 'flashMessageService', 'dbUserFactory',
+    function ($scope, $location, flashMessageService, dbUserFactory)
+    {
+        $scope.getFlashMessage = function() {
+            return flashMessageService.getMessage();
+        };
+
+        $scope.getFlashAlertType = function() {
+            return flashMessageService.getAlertType();
+        };
+
+        $scope.getDisplayName = function() {
+            return dbUserFactory.getDisplayName();
+        };
+
+        $scope.getUserId = function() {
+            return dbUserFactory.getUserId();
+        };
+
+        $scope.isUserLoggedIn = function() {
+            return dbUserFactory.isLoggedIn();
+        };
+
+        $scope.logout = function() {
+
+            dbUserFactory.logout().then(function(data) {
+                flashMessageService.setMessage('You have been logged out.', 'success');
+                $location.path('/login');
+            });
+        };
+
+        $scope.isActive = function (viewLocation) {
+            return viewLocation === $location.path();
+        };
+
+
+
+    }]);
+/*
  Controller for Vendor Details
  */
 
@@ -1213,51 +1257,10 @@ dsFastBooksApp.controller('CustomerListController',
             };
         }]);
 /*
-    Header Controller
+ AngularJS Controller for Purchase Order Details
 
-    Controller to access site-wide functionality, such as flash message
- */
-dsFastBooksApp.controller('HeaderController',
-    ['$scope', '$location', 'flashMessageService', 'dbUserFactory',
-    function ($scope, $location, flashMessageService, dbUserFactory)
-    {
-        $scope.getFlashMessage = function() {
-            return flashMessageService.getMessage();
-        };
+ This controller handles the "new" and "update" operations for purchase orders.
 
-        $scope.getFlashAlertType = function() {
-            return flashMessageService.getAlertType();
-        };
-
-        $scope.getDisplayName = function() {
-            return dbUserFactory.getDisplayName();
-        };
-
-        $scope.getUserId = function() {
-            return dbUserFactory.getUserId();
-        };
-
-        $scope.isUserLoggedIn = function() {
-            return dbUserFactory.isLoggedIn();
-        };
-
-        $scope.logout = function() {
-
-            dbUserFactory.logout().then(function(data) {
-                flashMessageService.setMessage('You have been logged out.', 'success');
-                $location.path('/login');
-            });
-        };
-
-        $scope.isActive = function (viewLocation) {
-            return viewLocation === $location.path();
-        };
-
-
-
-    }]);
-/*
- Controller for Purchase Order Details
  */
 
 dsFastBooksApp.controller('PurchaseOrderDetailController',
@@ -1355,17 +1358,15 @@ dsFastBooksApp.controller('PurchaseOrderDetailController',
 
         }]);
 /*
- Controller for Purchase Order List
+ AngularJS Controller for Purchase Order List
  */
 dsFastBooksApp.controller('PurchaseOrderListController',
     ['$scope', '$location', '$routeParams', '$http', 'dbPurchaseOrderFactory', 'dbVendorFactory', 'dbSalesOrderFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, dbPurchaseOrderFactory, dbVendorFactory, dbSalesOrderFactory, flashMessageService, ngDialog)
         {
-            /*
             $scope.purchaseOrders = {};
             $scope.vendors = {};
             $scope.saleOrders = {};
-            */
 
             // Get all sale orders
             dbPurchaseOrderFactory.getAllPurchaseOrders().then(function(response) {
@@ -1654,8 +1655,8 @@ dsFastBooksApp.controller('UserLoginController',
         {
             // pre-fill for testing
             $scope.user = {};
-            $scope.user.email = "daniel@aquaklean.com";
-            $scope.user.password = "1";
+            $scope.user.email = "daniel@dsfastbooks.com";
+            $scope.user.password = "password";
 
             $scope.login = function() {
                 // attempt to login

@@ -8,8 +8,8 @@ dsFastBooksApp.controller('UserLoginController',
         {
             // pre-fill for testing
             $scope.user = {};
-            $scope.user.email = "daniel@aquaklean.com";
-            $scope.user.password = "1";
+            $scope.user.email = "daniel@dsfastbooks.app";
+            $scope.user.password = "password";
 
             $scope.login = function() {
                 // attempt to login
