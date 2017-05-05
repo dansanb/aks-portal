@@ -16,7 +16,7 @@ dsFastBooksApp.controller('UserLoginController',
                 dbUserFactory.login($scope.user).then(function(response) {
 
                     if (response.success === true) {
-                        flashMessageService.setMessage('Welcome ' + response.data.display_name + '!', 'success');
+                        //flashMessageService.setMessage('Welcome ' + response.data.display_name + '!', 'success');
                         $location.path("/dashboard");
                     }
                     else {

@@ -24,6 +24,7 @@ class VerifyUserSeeder extends Seeder {
 			'email' => 'daniel@dsfastbooks.app',
 			'password' => '$2a$08$rqN6idpy0FwezH72fQcdqunbJp7GJVm8j94atsTOqCeuNvc3PzH3m',
 			'salt' => 'a227383075861e775d0af6281ea05a49',
+			'display_name' => 'Dan',
 			'verified' => 1,
 			'disabled' => 0,
 			'created_at' => date('Y-m-d H:i:s'),

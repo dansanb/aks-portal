@@ -3,7 +3,6 @@
     @section('head')
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
     {{ HTML::script('js/libs/jquery.min.js');}}
     {{ HTML::script('js/libs/bootstrap.min.js'); }}
     {{ HTML::script('js/libs/angular.min.js'); }}
@@ -19,13 +18,10 @@
 
     {{ HTML::style('css/style.css'); }}
 
-
-
     @show
 
   </head>
-  <body>            
-
+  <body>
 
     <div class="container">
         <div ng-controller="HeaderController">
