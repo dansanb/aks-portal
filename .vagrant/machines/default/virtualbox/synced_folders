@@ -1,0 +1,1 @@
+{"virtualbox":{"/home/vagrant/dsFastBooks":{"type":null,"mount_options":["uid=900","gid=900"],"guestpath":"/home/vagrant/dsFastBooks","hostpath":"/Users/dan/Sites/dsFastBooks","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/dan/Sites/dsFastBooks","disabled":false,"__vagrantfile":true}}}

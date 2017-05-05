@@ -23,7 +23,7 @@ class User extends VerifyUser implements UserInterface, RemindableInterface {
 	 *
 	 * @var array
      */
-	protected $fillable = array('username', 'email', 'display_name');
+	protected $fillable = array('email', 'display_name');
 
 
 	/**

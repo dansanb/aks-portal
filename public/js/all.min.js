@@ -1,22 +1,22 @@
 /*
-    aksApp
+    dsFastBooksApp
 
     Entry Point.
  */
 
-var aksApp = angular.module('aksApp', [
+var dsFastBooksApp = angular.module('dsFastBooksApp', [
     'ngRoute',
     'ngDialog',
     'ui.bootstrap'
 ]);
 
 // configure angular ui components
-aksApp.config(['datepickerConfig', function(datepickerConfig) {
+dsFastBooksApp.config(['datepickerConfig', function(datepickerConfig) {
     datepickerConfig.showWeeks = false;
 }]);
 
 // routes
-aksApp.config(['$routeProvider', function($routeProvider) {
+dsFastBooksApp.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
 
 
@@ -105,11 +105,11 @@ aksApp.config(['$routeProvider', function($routeProvider) {
         });
 }]);
 
-aksApp.config(['$httpProvider', function($httpProvider) {
+dsFastBooksApp.config(['$httpProvider', function($httpProvider) {
     $httpProvider.interceptors.push('httpInterceptor');
 }]);
 
-aksApp.run(
+dsFastBooksApp.run(
     ['$rootScope', '$location', 'flashMessageService', 'dbUserFactory',
     function($rootScope, $location, flashMessageService, dbUserFactory)
     {
@@ -142,7 +142,7 @@ aksApp.run(
 // converts a mysql date to ISO format
 // can do things in html files like:
 // {{salesOrder.date_ordered | dateToISO | date:'mm/dd/yyyy'}}
-aksApp.filter('dateToISO', function() {
+dsFastBooksApp.filter('dateToISO', function() {
     return function(input) {
         input = new Date(input).toISOString();
         return input;
@@ -154,7 +154,7 @@ aksApp.filter('dateToISO', function() {
  CRUD methods for customer and customer contacts
 
  */
-aksApp.factory("dbCustomerFactory", function($http, $q) {
+dsFastBooksApp.factory("dbCustomerFactory", function($http, $q) {
 
     // public API.
     return({
@@ -355,7 +355,7 @@ aksApp.factory("dbCustomerFactory", function($http, $q) {
  CRUD methods for sale orders
 
  */
-aksApp.factory("dbPurchaseOrderFactory", function($http, $q) {
+dsFastBooksApp.factory("dbPurchaseOrderFactory", function($http, $q) {
 
     // public API.
     return({
@@ -459,7 +459,7 @@ aksApp.factory("dbPurchaseOrderFactory", function($http, $q) {
  CRUD methods for sale orders
 
  */
-aksApp.factory("dbSalesOrderFactory", function($http, $q) {
+dsFastBooksApp.factory("dbSalesOrderFactory", function($http, $q) {
 
     // public API.
     return({
@@ -581,7 +581,7 @@ aksApp.factory("dbSalesOrderFactory", function($http, $q) {
  CRUD methods for vendor and vendor contacts
 
  */
-aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
+dsFastBooksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
 
 
     var displayName = "";
@@ -727,7 +727,7 @@ aksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
  CRUD methods for vendor and vendor contacts
 
  */
-aksApp.factory("dbVendorFactory", function($http, $q) {
+dsFastBooksApp.factory("dbVendorFactory", function($http, $q) {
 
     // public API.
     return({
@@ -941,7 +941,7 @@ aksApp.factory("dbVendorFactory", function($http, $q) {
     }
 });
 // register the interceptor as a service
-aksApp.factory('httpInterceptor', function($rootScope, $q, $location) {
+dsFastBooksApp.factory('httpInterceptor', function($rootScope, $q, $location) {
 
 
 
@@ -1001,7 +1001,7 @@ aksApp.factory('httpInterceptor', function($rootScope, $q, $location) {
     Used to send flash notifications across redirects.
 
  */
-aksApp.service("flashMessageService", function($rootScope) {
+dsFastBooksApp.service("flashMessageService", function($rootScope) {
     var messageQueue = [];
     var alertQueue = [];
 
@@ -1037,7 +1037,7 @@ aksApp.service("flashMessageService", function($rootScope) {
  Controller for Vendor Details
  */
 
-aksApp.controller('CustomerDetailController',
+dsFastBooksApp.controller('CustomerDetailController',
     ['$scope', '$location', '$routeParams', '$http', '$route', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, $route,  dbCustomerFactory, flashMessageService, ngDialog) {
 
@@ -1174,7 +1174,7 @@ aksApp.controller('CustomerDetailController',
 /*
  Controller for Customer List
  */
-aksApp.controller('CustomerListController',
+dsFastBooksApp.controller('CustomerListController',
     ['$scope', '$location', '$routeParams', '$http', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, dbCustomerFactory, flashMessageService, ngDialog)
         {
@@ -1217,7 +1217,7 @@ aksApp.controller('CustomerListController',
 
     Controller to access site-wide functionality, such as flash message
  */
-aksApp.controller('HeaderController',
+dsFastBooksApp.controller('HeaderController',
     ['$scope', '$location', 'flashMessageService', 'dbUserFactory',
     function ($scope, $location, flashMessageService, dbUserFactory)
     {
@@ -1260,7 +1260,7 @@ aksApp.controller('HeaderController',
  Controller for Purchase Order Details
  */
 
-aksApp.controller('PurchaseOrderDetailController',
+dsFastBooksApp.controller('PurchaseOrderDetailController',
     ['$scope', '$location', '$routeParams', '$http', '$route', 'dbPurchaseOrderFactory', 'dbVendorFactory', 'dbSalesOrderFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, $route, dbPurchaseOrderFactory, dbVendorFactory, dbSalesOrderFactory, flashMessageService, ngDialog) {
 
@@ -1357,7 +1357,7 @@ aksApp.controller('PurchaseOrderDetailController',
 /*
  Controller for Purchase Order List
  */
-aksApp.controller('PurchaseOrderListController',
+dsFastBooksApp.controller('PurchaseOrderListController',
     ['$scope', '$location', '$routeParams', '$http', 'dbPurchaseOrderFactory', 'dbVendorFactory', 'dbSalesOrderFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, dbPurchaseOrderFactory, dbVendorFactory, dbSalesOrderFactory, flashMessageService, ngDialog)
         {
@@ -1417,7 +1417,7 @@ aksApp.controller('PurchaseOrderListController',
  Controller for Sales Order Details
  */
 
-aksApp.controller('SalesOrderDetailController',
+dsFastBooksApp.controller('SalesOrderDetailController',
     ['$scope', '$location', '$routeParams', '$http', '$route', 'dbSalesOrderFactory', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, $route, dbSalesOrderFactory, dbCustomerFactory, flashMessageService, ngDialog) {
 
@@ -1504,7 +1504,7 @@ aksApp.controller('SalesOrderDetailController',
 /*
  Controller for Sales Order List
  */
-aksApp.controller('SalesOrderListController',
+dsFastBooksApp.controller('SalesOrderListController',
     ['$scope', '$location', '$routeParams', '$http', 'dbSalesOrderFactory', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, dbSalesOrderFactory, dbCustomerFactory, flashMessageService, ngDialog)
         {
@@ -1551,7 +1551,7 @@ aksApp.controller('SalesOrderListController',
  Controller for Login
  */
 
-aksApp.controller('UserChangePasswordController',
+dsFastBooksApp.controller('UserChangePasswordController',
     ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
         {
@@ -1596,7 +1596,7 @@ aksApp.controller('UserChangePasswordController',
  Controller for User Dashboard
  */
 
-aksApp.controller('UserDashboardController',
+dsFastBooksApp.controller('UserDashboardController',
     ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
         {
@@ -1607,7 +1607,7 @@ aksApp.controller('UserDashboardController',
  Controller for Login
  */
 
-aksApp.controller('UserDetailController',
+dsFastBooksApp.controller('UserDetailController',
     ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
         {
@@ -1648,7 +1648,7 @@ aksApp.controller('UserDetailController',
  Controller for Login
  */
 
-aksApp.controller('UserLoginController',
+dsFastBooksApp.controller('UserLoginController',
     ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
         function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
         {
@@ -1677,7 +1677,7 @@ aksApp.controller('UserLoginController',
     Controller for Vendor Details
  */
 
-aksApp.controller('VendorDetailController',
+dsFastBooksApp.controller('VendorDetailController',
     ['$scope', '$location', '$routeParams', '$http', '$route', 'dbVendorFactory', 'flashMessageService', 'ngDialog',
     function($scope, $location, $routeParams, $http, $route, dbVendorFactory, flashMessageService, ngDialog) {
 
@@ -1816,7 +1816,7 @@ aksApp.controller('VendorDetailController',
     Controller for Vendor List
  */
 
-aksApp.controller('VendorListController',
+dsFastBooksApp.controller('VendorListController',
     ['$scope', '$location', '$routeParams', '$http', 'dbVendorFactory', 'flashMessageService', 'ngDialog',
     function($scope, $location, $routeParams, $http, dbVendorFactory, flashMessageService, ngDialog)
     {

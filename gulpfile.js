@@ -10,17 +10,19 @@ var rename = require('gulp-rename');
 var livereload = require('gulp-livereload');
 
 var pathSourceJS = [
-                    'public/js/aksApp/aksApp.js',
-                    'public/js/aksApp/filters/**/*.js',
-                    'public/js/aksApp/directives/**/*.js',
-                    'public/js/aksApp/factories/**/*.js',
-                    'public/js/aksApp/services/**/*.js',
-                    'public/js/aksApp/controllers/**/*.js'
+                    'public/js/dsFastBooksApp/dsFastBooksApp.js',
+                    'public/js/dsFastBooksApp/filters/**/*.js',
+                    'public/js/dsFastBooksApp/directives/**/*.js',
+                    'public/js/dsFastBooksApp/factories/**/*.js',
+                    'public/js/dsFastBooksApp/services/**/*.js',
+                    'public/js/dsFastBooksApp/controllers/**/*.js'
                     ];
 var pathDestJS = 'public/js';
 var concatJSFile = 'all';   // 2 files will be created: all.js and all.min.js
 var pathSourceSass = 'public/sass/*.sass';
 var pathDestCss = 'public/css';
+
+
 
 // Lint Task
 gulp.task('lint', function() {

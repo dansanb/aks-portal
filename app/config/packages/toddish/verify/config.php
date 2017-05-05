@@ -1,7 +1,7 @@
 <?php
 return [
 
-    'identified_by' => ['username', 'email'],
+    'identified_by' => ['email'],
 
     // The Super Admin role
     // (returns true for all permissions)
