@@ -24,7 +24,6 @@ dsFastBooksApp.controller('UserDetailController',
                 // update user in database
                 dbUserFactory.updateUser($scope.user).then(function(response) {
                     // customer has been updated, redirect with flash message
-                    console.log(response);
                     if (response.success === true) {
                         flashMessageService.setMessage('You have updated your profile, ' + response.data.display_name, 'success');
                         //$location.path("/dashboard");

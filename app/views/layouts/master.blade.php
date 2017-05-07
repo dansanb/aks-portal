@@ -8,6 +8,7 @@
     {{ HTML::script('js/libs/angular.min.js'); }}
     {{ HTML::script('js/libs/angular-route.min.js'); }}
     {{ HTML::script('js/libs/ngDialog.min.js'); }}
+    {{ HTML::script('js/libs/angular-cookies.js'); }}
     {{ HTML::script('js/libs/ui-bootstrap-tpls-0.12.0.js'); }}
     {{ HTML::script('js/all.js'); }}
 

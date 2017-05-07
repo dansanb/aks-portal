@@ -29,7 +29,6 @@ dsFastBooksApp.controller('SalesOrderDetailController',
             // Get sales order details
             dbSalesOrderFactory.getSalesOrder($scope.salesOrderId).then(function(response) {
                 $scope.salesOrder = response.data;
-                console.log($scope.salesOrder);
             });
 
 

@@ -4,16 +4,14 @@
  CRUD methods for vendor and vendor contacts
 
  */
-dsFastBooksApp.factory("dbUserFactory", function($http, $q, $rootScope, $location) {
+//dsFastBooksApp.factory("AuthenticationService",['$location', '$cookies', 'setUserCreds', function($location, $cookies, setUserCreds) {
+dsFastBooksApp.factory("dbUserFactory", ['$http', '$q', '$rootScope', '$location', '$cookieStore', 
+    function($http, $q, $rootScope, $location, $cookieStore) {
 
-
-    var displayName = "";
-    var userId = 1;
     var loggedIn = false;
-
-
-
-
+    var loggedIn = $cookieStore.get('loggedIn');
+    var userId = $cookieStore.get('userId');
+    var displayName = $cookieStore.get('displayName');
 
     // public API.
     return({
@@ -42,6 +40,10 @@ dsFastBooksApp.factory("dbUserFactory", function($http, $q, $rootScope, $locatio
                     displayName = response.data.display_name;
                     userId = response.data.id;
                     loggedIn = true;
+
+                    $cookieStore.put('loggedIn', loggedIn);
+                    $cookieStore.put('userId', userId);
+                    $cookieStore.put('displayName', displayName);
                 }
                 deferred.resolve(response);
             })
@@ -65,6 +67,11 @@ dsFastBooksApp.factory("dbUserFactory", function($http, $q, $rootScope, $locatio
                 userName = "";
                 userId = null;
                 loggedIn = false;
+
+                // delete cookie data
+                $cookieStore.remove('displayName');
+                $cookieStore.remove('userId');
+                $cookieStore.remove('loggedIn');
 
                 deferred.resolve(data);
             })
@@ -143,4 +150,4 @@ dsFastBooksApp.factory("dbUserFactory", function($http, $q, $rootScope, $locatio
 
 
 
-});
+}]);

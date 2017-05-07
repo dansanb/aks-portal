@@ -152,7 +152,7 @@ class UsersController extends \BaseController {
     public function logout()
     {
         Auth::logout();
-
+        
         return $this->successfulResponse();
     }
 

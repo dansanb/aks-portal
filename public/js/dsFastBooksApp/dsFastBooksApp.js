@@ -7,6 +7,7 @@
 var dsFastBooksApp = angular.module('dsFastBooksApp', [
     'ngRoute',
     'ngDialog',
+    'ngCookies',
     'ui.bootstrap'
 ]);
 

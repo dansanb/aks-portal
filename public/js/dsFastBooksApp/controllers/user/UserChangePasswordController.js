@@ -28,7 +28,6 @@ dsFastBooksApp.controller('UserChangePasswordController',
                 // update user password in database
                 dbUserFactory.changeUserPassword($scope.user).then(function(response) {
                     // user password has been updated, display flash message
-                    console.log(response);
                     if (response.success === true) {
                         flashMessageService.setMessage('Your password has been updated.', 'success');
                         //$location.path("/dashboard");
