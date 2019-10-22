@@ -25,7 +25,8 @@
   <body>
 
     <div class="container">
-        <div ng-controller="HeaderController">
+        
+        <div ng-controller="HeaderController" ng-show="isUserLoggedIn()">
             @include('layouts.navigation')
             <div class="alert alert-@{{ getFlashAlertType() }}" ng-show="getFlashMessage()">
                 <span class="glyphicon glyphicon-info-sign"></span> @{{ getFlashMessage() }}

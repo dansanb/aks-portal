@@ -23,9 +23,9 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'dsFastBooks',
+			'database'  => 'dsfastbooks',
 			'username'  => 'homestead',
-			'password'  => 'new-secret',
+			'password'  => 'secret',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

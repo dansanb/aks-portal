@@ -1039,185 +1039,6 @@ dsFastBooksApp.service("flashMessageService", function($rootScope) {
     }
 });
 /*
- Controller for Vendor Details
- */
-
-dsFastBooksApp.controller('CustomerDetailController',
-    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, $route,  dbCustomerFactory, flashMessageService, ngDialog) {
-
-            $scope.customerId =  $routeParams.customer_id;
-            $scope.customerContacts = {};
-            $scope.customer = {};
-
-            // Get customer details
-            dbCustomerFactory.getCustomer($scope.customerId).then(function(response) {
-                $scope.customer = response.data;
-            });
-
-            // get list of customer contacts
-            dbCustomerFactory.getAllCustomerContacts($scope.customerId).then(function(response) {
-                $scope.customerContacts = response.data;
-            });
-
-
-            //********************************************************************
-            // update customer to database and redirect to vendor list
-            //********************************************************************
-            $scope.updateCustomer = function () {
-
-                // update customer contact in database
-                dbCustomerFactory.updateCustomer($scope.customer).then(function(response) {
-                    // customer has been updated, redirect with flash message
-                    if (response.success === true) {
-                        flashMessageService.setMessage('Customer has been updated.', 'success');
-                        //$location.path("/customers");
-                    }
-                    else {
-                        flashMessageService.setMessage(response.message, 'danger');
-                    }
-                    $route.reload();
-                });
-            };
-
-            //********************************************************************
-            // delete customer from database and redirect to customer list
-            //********************************************************************
-            $scope.deleteCustomer = function () {
-
-                $scope.dialogMessage = "Deleting this customer will also delete all it's contacts. Are you sure you want to delete this customer?";
-                ngDialog.openConfirm({
-                    template: 'partials/dialog-yes-no.html',
-                    showClose: false,
-                    scope: $scope
-                }).then (function (dialogData) {  // clicked yes
-                    // delete customer
-                    dbCustomerFactory.deleteCustomer($scope.customerId).then(function(response) {
-
-                        // customer has been deleted, redirect with flash message
-                        if (response.success === true) {
-                            flashMessageService.setMessage('Customer has been deleted.', 'success');
-                            $location.path("/customers");
-                        }
-                        else {
-                            flashMessageService.setMessage(response.message, 'danger');
-                        }
-
-                    });
-                });
-            };
-
-            //********************************************************************
-            // Handle "Add customer contact" Button Click
-            //********************************************************************
-            $scope.addCustomerContact = function () {
-                // display "edit contact" dialog
-                $scope.contactCopy = {};
-                $scope.contactCopy.customer_id = $scope.customerId;
-                $scope.dialogTitle = 'New Customer Contact';
-
-                ngDialog.openConfirm({
-                    template: 'partials/vendor-contact-form.html',
-                    showClose: false,
-                    scope: $scope
-                }).then (function (dialogData) {  // clicked save
-                    // update vendor contact in database
-                    dbCustomerFactory.addCustomerContact($scope.contactCopy).then(function(response) {
-                        // update customer contact in cache data
-                        $scope.customerContacts.push($scope.contactCopy);
-                        $scope.contactCopy = {};
-                    });
-                });
-            };
-
-            //********************************************************************
-            // Handle "Edit customer Contact" Button Click
-            //********************************************************************
-            $scope.editCustomerContact = function ( contact ) {
-                // display "edit contact" dialog
-                $scope.contactCopy = angular.copy(contact);
-                $scope.contactCopyIndex = $scope.customerContacts.indexOf(contact);
-                $scope.dialogTitle = 'Edit Customer Contact';
-
-                ngDialog.openConfirm({
-                    template: 'partials/vendor-contact-form.html',
-                    showClose: false,
-                    scope: $scope
-                }).then (function (dialogData) {  // clicked save
-                    // update customer contact in database
-                    dbCustomerFactory.updateCustomerContact($scope.contactCopy).then(function(response) {
-                        // update customer contact in cache data
-                        $scope.customerContacts[ $scope.contactCopyIndex ] = $scope.contactCopy;
-                        $scope.contactCopy = {};
-                        $scope.contactCopyIndex = null;
-                    });
-                });
-            };
-
-            //********************************************************************
-            // Handle "Delete customer Contact" Button Click
-            //********************************************************************
-            $scope.deleteCustomerContact = function ( contact ) {
-                $scope.dialogMessage = "Are you sure you want to delete this customer?";
-                ngDialog.openConfirm({
-                    template: 'partials/dialog-yes-no.html',
-                    showClose: false,
-                    scope: $scope
-                }).then (function (dialogData) {  // clicked yes
-                    // delete customer contact
-                    dbCustomerFactory.deleteCustomerContact(contact.customer_contact_id).then(function(response) {
-                        // refresh customer contact list
-                        dbCustomerFactory.getAllCustomerContacts($scope.customerId).then(function(response) {
-                            $scope.customerContacts = response.data;
-                        });
-
-                    });
-                });
-            };
-
-        }]);
-/*
- Controller for Customer List
- */
-dsFastBooksApp.controller('CustomerListController',
-    ['$scope', '$location', '$routeParams', '$http', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, dbCustomerFactory, flashMessageService, ngDialog)
-        {
-            // Get all customers
-            dbCustomerFactory.getAllCustomers().then(function(response) {
-                $scope.customers = response.data;
-            });
-
-
-            //********************************************************************
-            // Handle "Add Contact" Button Click
-            //********************************************************************
-            $scope.addCustomer = function() {
-
-                // display "add customer name" dialog to get started
-                $scope.dialogMessage = 'What is the name of new customer?';
-                $scope.dialogModel = {};
-                $scope.dialogModel.inputValue = "";
-
-                ngDialog.openConfirm({
-                    template: 'partials/dialog-create-input.html',
-                    showClose: false,
-                    scope: $scope
-                }).then (function (dialogData) {  // clicked create
-
-                    // create a new customer
-                    var customer = {};
-                    customer.company_name =  $scope.dialogModel.inputValue;
-
-                    // add it to database, and redirect to
-                    // details page to finish adding the details
-                    dbCustomerFactory.addCustomer(customer).then(function(response) {
-                        $location.path("/customers/" + response.data.customer_id);
-                    });
-                });
-            };
-        }]);
-/*
     Header Controller
 
     Controller to access site-wide functionality, such as flash message
@@ -1420,6 +1241,309 @@ dsFastBooksApp.controller('PurchaseOrderListController',
             };
         }]);
 /*
+ Controller for Vendor Details
+ */
+
+dsFastBooksApp.controller('CustomerDetailController',
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, $route,  dbCustomerFactory, flashMessageService, ngDialog) {
+
+            $scope.customerId =  $routeParams.customer_id;
+            $scope.customerContacts = {};
+            $scope.customer = {};
+
+            // Get customer details
+            dbCustomerFactory.getCustomer($scope.customerId).then(function(response) {
+                $scope.customer = response.data;
+            });
+
+            // get list of customer contacts
+            dbCustomerFactory.getAllCustomerContacts($scope.customerId).then(function(response) {
+                $scope.customerContacts = response.data;
+            });
+
+
+            //********************************************************************
+            // update customer to database and redirect to vendor list
+            //********************************************************************
+            $scope.updateCustomer = function () {
+
+                // update customer contact in database
+                dbCustomerFactory.updateCustomer($scope.customer).then(function(response) {
+                    // customer has been updated, redirect with flash message
+                    if (response.success === true) {
+                        flashMessageService.setMessage('Customer has been updated.', 'success');
+                        //$location.path("/customers");
+                    }
+                    else {
+                        flashMessageService.setMessage(response.message, 'danger');
+                    }
+                    $route.reload();
+                });
+            };
+
+            //********************************************************************
+            // delete customer from database and redirect to customer list
+            //********************************************************************
+            $scope.deleteCustomer = function () {
+
+                $scope.dialogMessage = "Deleting this customer will also delete all it's contacts. Are you sure you want to delete this customer?";
+                ngDialog.openConfirm({
+                    template: 'partials/dialog-yes-no.html',
+                    showClose: false,
+                    scope: $scope
+                }).then (function (dialogData) {  // clicked yes
+                    // delete customer
+                    dbCustomerFactory.deleteCustomer($scope.customerId).then(function(response) {
+
+                        // customer has been deleted, redirect with flash message
+                        if (response.success === true) {
+                            flashMessageService.setMessage('Customer has been deleted.', 'success');
+                            $location.path("/customers");
+                        }
+                        else {
+                            flashMessageService.setMessage(response.message, 'danger');
+                        }
+
+                    });
+                });
+            };
+
+            //********************************************************************
+            // Handle "Add customer contact" Button Click
+            //********************************************************************
+            $scope.addCustomerContact = function () {
+                // display "edit contact" dialog
+                $scope.contactCopy = {};
+                $scope.contactCopy.customer_id = $scope.customerId;
+                $scope.dialogTitle = 'New Customer Contact';
+
+                ngDialog.openConfirm({
+                    template: 'partials/vendor-contact-form.html',
+                    showClose: false,
+                    scope: $scope
+                }).then (function (dialogData) {  // clicked save
+                    // update vendor contact in database
+                    dbCustomerFactory.addCustomerContact($scope.contactCopy).then(function(response) {
+                        // update customer contact in cache data
+                        $scope.customerContacts.push($scope.contactCopy);
+                        $scope.contactCopy = {};
+                    });
+                });
+            };
+
+            //********************************************************************
+            // Handle "Edit customer Contact" Button Click
+            //********************************************************************
+            $scope.editCustomerContact = function ( contact ) {
+                // display "edit contact" dialog
+                $scope.contactCopy = angular.copy(contact);
+                $scope.contactCopyIndex = $scope.customerContacts.indexOf(contact);
+                $scope.dialogTitle = 'Edit Customer Contact';
+
+                ngDialog.openConfirm({
+                    template: 'partials/vendor-contact-form.html',
+                    showClose: false,
+                    scope: $scope
+                }).then (function (dialogData) {  // clicked save
+                    // update customer contact in database
+                    dbCustomerFactory.updateCustomerContact($scope.contactCopy).then(function(response) {
+                        // update customer contact in cache data
+                        $scope.customerContacts[ $scope.contactCopyIndex ] = $scope.contactCopy;
+                        $scope.contactCopy = {};
+                        $scope.contactCopyIndex = null;
+                    });
+                });
+            };
+
+            //********************************************************************
+            // Handle "Delete customer Contact" Button Click
+            //********************************************************************
+            $scope.deleteCustomerContact = function ( contact ) {
+                $scope.dialogMessage = "Are you sure you want to delete this customer?";
+                ngDialog.openConfirm({
+                    template: 'partials/dialog-yes-no.html',
+                    showClose: false,
+                    scope: $scope
+                }).then (function (dialogData) {  // clicked yes
+                    // delete customer contact
+                    dbCustomerFactory.deleteCustomerContact(contact.customer_contact_id).then(function(response) {
+                        // refresh customer contact list
+                        dbCustomerFactory.getAllCustomerContacts($scope.customerId).then(function(response) {
+                            $scope.customerContacts = response.data;
+                        });
+
+                    });
+                });
+            };
+
+        }]);
+/*
+ Controller for Customer List
+ */
+dsFastBooksApp.controller('CustomerListController',
+    ['$scope', '$location', '$routeParams', '$http', 'dbCustomerFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, dbCustomerFactory, flashMessageService, ngDialog)
+        {
+            // Get all customers
+            dbCustomerFactory.getAllCustomers().then(function(response) {
+                $scope.customers = response.data;
+            });
+
+
+            //********************************************************************
+            // Handle "Add Contact" Button Click
+            //********************************************************************
+            $scope.addCustomer = function() {
+
+                // display "add customer name" dialog to get started
+                $scope.dialogMessage = 'What is the name of new customer?';
+                $scope.dialogModel = {};
+                $scope.dialogModel.inputValue = "";
+
+                ngDialog.openConfirm({
+                    template: 'partials/dialog-create-input.html',
+                    showClose: false,
+                    scope: $scope
+                }).then (function (dialogData) {  // clicked create
+
+                    // create a new customer
+                    var customer = {};
+                    customer.company_name =  $scope.dialogModel.inputValue;
+
+                    // add it to database, and redirect to
+                    // details page to finish adding the details
+                    dbCustomerFactory.addCustomer(customer).then(function(response) {
+                        $location.path("/customers/" + response.data.customer_id);
+                    });
+                });
+            };
+        }]);
+/*
+ Controller for Login
+ */
+
+dsFastBooksApp.controller('UserChangePasswordController',
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
+        {
+            $scope.user = {};
+            $scope.userId =  $routeParams.user_id;
+
+            // Get user details
+            dbUserFactory.getUser($scope.userId).then(function(response) {
+                $scope.user = response.data;
+
+                // add additional members to the user object to allow for password change
+                $scope.user.current_password = "";
+                $scope.user.new_password = "";
+                $scope.user.confirm_password = "";
+            });
+
+
+            //********************************************************************
+            // update user password
+            //********************************************************************
+            $scope.changeUserPassword = function () {
+
+                // update user password in database
+                dbUserFactory.changeUserPassword($scope.user).then(function(response) {
+                    // user password has been updated, display flash message
+                    if (response.success === true) {
+                        flashMessageService.setMessage('Your password has been updated.', 'success');
+                        //$location.path("/dashboard");
+                    }
+                    else {
+                        flashMessageService.setMessage(response.message, 'danger');
+                        //$route.reload();
+                    }
+                    $route.reload();
+                });
+            };
+
+
+        }]);
+/*
+ Controller for User Dashboard
+ */
+
+dsFastBooksApp.controller('UserDashboardController',
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
+        {
+        	$scope.userDisplayName = dbUserFactory.getDisplayName();
+
+        }]);
+/*
+ Controller for Login
+ */
+
+dsFastBooksApp.controller('UserDetailController',
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
+        {
+            $scope.user = {};
+            $scope.userId =  $routeParams.user_id;
+
+
+            // Get user details
+            dbUserFactory.getUser($scope.userId).then(function(response) {
+                $scope.user = response.data;
+            });
+
+
+            //********************************************************************
+            // update user to database and redirect to dashboard
+            //********************************************************************
+            $scope.updateUser = function () {
+
+                // update user in database
+                dbUserFactory.updateUser($scope.user).then(function(response) {
+                    // customer has been updated, redirect with flash message
+                    if (response.success === true) {
+                        flashMessageService.setMessage('You have updated your profile, ' + response.data.display_name, 'success');
+                        //$location.path("/dashboard");
+                    }
+                    else {
+                        flashMessageService.setMessage(response.message, 'danger');
+                        //$location.path("/user/" + $scope.user.id);
+                    }
+                    $route.reload();
+                });
+            };
+
+
+        }]);
+/*
+ Controller for Login
+ */
+
+dsFastBooksApp.controller('UserLoginController',
+    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
+        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
+        {
+            // pre-fill for testing
+            $scope.user = {};
+            $scope.user.email = "daniel@dsfastbooks.app";
+            $scope.user.password = "password";
+
+            $scope.login = function() {
+                // attempt to login
+                dbUserFactory.login($scope.user).then(function(response) {
+
+                    if (response.success === true) {
+                        //flashMessageService.setMessage('Welcome ' + response.data.display_name + '!', 'success');
+                        $location.path("/dashboard");
+                    }
+                    else {
+                        flashMessageService.setMessage('Invalid email / password. Please try again.', 'danger');
+                        $route.reload();
+                    }
+                });
+            };
+
+        }]);
+/*
  Controller for Sales Order Details
  */
 
@@ -1551,130 +1675,6 @@ dsFastBooksApp.controller('SalesOrderListController',
                     });
                 });
             };
-        }]);
-/*
- Controller for Login
- */
-
-dsFastBooksApp.controller('UserChangePasswordController',
-    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
-        {
-            $scope.user = {};
-            $scope.userId =  $routeParams.user_id;
-
-            // Get user details
-            dbUserFactory.getUser($scope.userId).then(function(response) {
-                $scope.user = response.data;
-
-                // add additional members to the user object to allow for password change
-                $scope.user.current_password = "";
-                $scope.user.new_password = "";
-                $scope.user.confirm_password = "";
-            });
-
-
-            //********************************************************************
-            // update user password
-            //********************************************************************
-            $scope.changeUserPassword = function () {
-
-                // update user password in database
-                dbUserFactory.changeUserPassword($scope.user).then(function(response) {
-                    // user password has been updated, display flash message
-                    if (response.success === true) {
-                        flashMessageService.setMessage('Your password has been updated.', 'success');
-                        //$location.path("/dashboard");
-                    }
-                    else {
-                        flashMessageService.setMessage(response.message, 'danger');
-                        //$route.reload();
-                    }
-                    $route.reload();
-                });
-            };
-
-
-        }]);
-/*
- Controller for User Dashboard
- */
-
-dsFastBooksApp.controller('UserDashboardController',
-    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
-        {
-        	$scope.userDisplayName = dbUserFactory.getDisplayName();
-
-        }]);
-/*
- Controller for Login
- */
-
-dsFastBooksApp.controller('UserDetailController',
-    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
-        {
-            $scope.user = {};
-            $scope.userId =  $routeParams.user_id;
-
-
-            // Get user details
-            dbUserFactory.getUser($scope.userId).then(function(response) {
-                $scope.user = response.data;
-            });
-
-
-            //********************************************************************
-            // update user to database and redirect to dashboard
-            //********************************************************************
-            $scope.updateUser = function () {
-
-                // update user in database
-                dbUserFactory.updateUser($scope.user).then(function(response) {
-                    // customer has been updated, redirect with flash message
-                    if (response.success === true) {
-                        flashMessageService.setMessage('You have updated your profile, ' + response.data.display_name, 'success');
-                        //$location.path("/dashboard");
-                    }
-                    else {
-                        flashMessageService.setMessage(response.message, 'danger');
-                        //$location.path("/user/" + $scope.user.id);
-                    }
-                    $route.reload();
-                });
-            };
-
-
-        }]);
-/*
- Controller for Login
- */
-
-dsFastBooksApp.controller('UserLoginController',
-    ['$scope', '$location', '$routeParams', '$http', '$route', 'dbUserFactory', 'flashMessageService', 'ngDialog',
-        function($scope, $location, $routeParams, $http, $route, dbUserFactory, flashMessageService, ngDialog)
-        {
-            // pre-fill for testing
-            $scope.user = {};
-            $scope.user.email = "daniel@dsfastbooks.app";
-            $scope.user.password = "password";
-
-            $scope.login = function() {
-                // attempt to login
-                dbUserFactory.login($scope.user).then(function(response) {
-
-                    if (response.success === true) {
-                        //flashMessageService.setMessage('Welcome ' + response.data.display_name + '!', 'success');
-                        $location.path("/dashboard");
-                    }
-                    else {
-                        flashMessageService.setMessage('Invalid email / password. Please try again.', 'danger');
-                        $route.reload();
-                    }
-                });
-            };
-
         }]);
 /*
     Controller for Vendor Details
